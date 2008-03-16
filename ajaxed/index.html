@@ -1,0 +1,2071 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-16">
+<title>
+				ajaxed Library 0.3 Documentation  
+				</title>
+<style>
+					body {
+						padding:0; margin:0;
+						overflow:hidden;
+					}
+					* {
+						font-size:12px;
+						font-family:arial;
+					}
+					#menu {
+						overflow:auto;
+						height:400px;
+						padding:20px;
+					}
+					.menuItem {
+						margin-bottom:5px;
+						font-weight:bold;
+					}
+					.label {
+						font-weight:bold;
+					}
+					.cDescription {
+						font-size:16px;
+						margin:10px 0px;
+					}
+					h1 {
+						background-color:#8DB2FF;
+						padding:5px;
+						margin:15px 0px;
+					}
+					h2 {
+						background-color:#eee;
+						font-size:14px;
+						font-weight:bold;
+						padding:4px;
+						margin-bottom:0;
+					}
+					.method {
+						margin:5px 0px;
+					}
+					.table {
+						width:100%;
+						border-collapse:collapse;
+					}
+					.table td, .table th {
+						border:1px solid #eee;
+						text-align:left;
+					}
+					legend {
+						font-size:20px;
+						font-weight:bold;
+					}
+					fieldset {
+						padding:10px;
+						margin:10px 0;
+					}
+
+					.type, .type * {
+						font-family:courier;
+					}
+					.cDescription {
+						text-align:justify;
+					}
+					.mdetails {
+						margin:10px;
+						padding:10px;
+						border:2px inset #bbb;
+						background-color:#F7F7F7;
+					}
+					.button {
+						width:70px;
+						padding:2px;
+						font-family:tahoma;
+					}
+					
+					a:hover, a:link, a:visited, a:active {
+						color:#0000FF;
+					}
+					.obsolete, .obsolete *, .obsolete a:link, .obsolete a:visited, .obsolete a:active, .obsolete a {
+						white-space: nowrap;
+						font-weight: normal;
+						color:#E10000;
+					}
+					
+					/* this is just for Firefox */
+					html>body #content {
+						overflow:auto;
+						overflow-x: hidden;
+					}
+					
+					.class {
+						width:680px;
+						text-align:left;
+					}
+				</style>
+<style media="print">
+					body {
+						overflow:auto;
+					}
+					.notForPrint {
+						display:none;
+					}
+					.alwaysPrint {
+						display:block;
+					}
+					.class {
+						width:auto;
+						page-break-before:always;
+					}
+					fieldset {
+						border:0px;
+					}
+					#content {
+						overflow:visible;
+						height:auto;
+					}
+				</style><script>
+					function toggle(eID) {
+						el = document.getElementById(eID);
+						if (el) el.style.display = (el.style.display == 'none') ? 'block' : 'none';
+					}
+				</script></head>
+<body>
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr><td class="notForPrint" valign="top" width="250" style="background-color:#eee;">
+<fieldset style="margin:20px;background-color:#fff;">
+<div id="menu">
+<div class="menuItem"><a href="#class_1">AjaxedPage</a></div>
+<div class="menuItem"><a href="#class_2">Database</a></div>
+<div class="menuItem"><a href="#class_3">JSON</a></div>
+<div class="menuItem"><a href="#class_4">Library</a></div>
+<div class="menuItem"><a href="#class_5">StringOperations</a></div>
+</div>
+<div style="margin-top:20px;"><button class="button" accesskey="p" onclick="window.print()"><u>P</u>rint</button><button class="button" accesskey="c" onclick="window.close()"><u>C</u>lose</button><div style="font-size:10px;margin-top:8px;">
+						documented with<br>
+						GabLibrary Documentor.<br>
+						(7/16/2007 10:09:47 PM)
+					</div>
+</div>
+</fieldset>
+</td><td style="padding-left:20px;">
+<div id="content"><a name="top"></a><br><br><a name="class_1"></a><fieldset class="class">
+<legend>
+						Class AjaxedPage <a class="notForPrint" href="#top" style="text-decoration:none;">^</a></legend>
+<div class="cDescription">Represents a page which Provides the functionality to call server-side ASP procedures
+directly from client-side. When using the class be sure the draw() method is the first
+which is called before any response has been done.
+init(), main() and callback() need to be implemented within the page. init() is always
+called first and allows preperation before any content is written to the response e.g.
+security checks and stuff which is necessary for main() and callback() should be placed
+into the init(). After the init whether main() or callback() is called. They are never
+called both within one page execution.
+main() = common state for the page which shows the user's presentation
+callback() = handles all client requests
+callback() needs to be defined with an parameter which holds the actual action to perform.
+so the signature should be sub callback(action)
+- REFER TO demo.asp FOR A SAMPLE USAGE.
+- Requires Prototype JavaScript library (available at prototypejs.org)</div>
+<table cellspacing="0" cellpadding="3" border="0">
+<tr>
+<td class="label">Version:</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td class="label">Author:</td>
+<td>Michal Gabrukiewicz - gabru at grafix.at on 2007-06-28 20:32</td>
+</tr>
+<tr>
+<td class="label">Last modified:</td>
+<td>16.07.2007 21:51:24</td>
+</tr>
+<tr>
+<td class="label">Path:</td>
+<td>/ajaxed/class_ajaxedPage/ajaxedPage.asp</td>
+</tr>
+</table>
+<h2><span onclick="toggle('props_1')" style="cursor:pointer">Properties</span> <a href="#class_1" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="props_1" style="display:none" class="table alwaysPrint" cellspacing="0" cellpadding="3" border="0">
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr valign="top">
+<td class="property">buffering</td>
+<td class="type"><span class="type">bool</span> </td>
+<td>turns the response.buffering on or off (no affect on callback). default = true&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">contentType</td>
+<td class="type"><span class="type">string</span> </td>
+<td>contenttype of the response. default = empty&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">DBConnection</td>
+<td class="type"><span class="type">bool</span> </td>
+<td>indicates if a database connection should be opened automatically for the page.
+If yes then a connection with the configured connectionstring is established and can be used
+within the init(), callback() and main() procedures. default = false&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">debug</td>
+<td class="type"><span class="type">bool</span> </td>
+<td>turns debugging on of. default = false&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">loadPrototypeJS</td>
+<td class="type"><span class="type">bool</span> </td>
+<td>should protypeJS library be loaded. turn this off if you've done it manually. default = true&nbsp;</td>
+</tr>
+</table>
+<h2><span onclick="toggle('meths_1')" style="cursor:pointer">Methods</span> <a href="#class_1" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="meths_1" class="table alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAFQI0" onclick="toggle('mdetails_1IDAFQI0')">[error]
+										(
+										 msg 
+										)
+									</a></div>
+<div class="obsolete">(This method is obsolete)</div>
+<div class="mDesc">OBSOLETE! use lib.error() instead.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAFQI0"><br><div><strong> msg</strong>
+												: </div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAWKI0" onclick="toggle('mdetails_1IDAWKI0')">draw
+										(
+										 
+										)
+									</a></div>
+<div class="mDesc">Draws the page. Must be the first call on a page</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAWKI0">The lifecycle is the following after executing draw().
+1. setting the HTTP Headers (response)
+2. init()
+3. main() or callback(action) - action is trimmed to 255 chars (for security reasons)
+- dont forget to provide your HTML, HEAD and BODY tags. The page does not do this for you ;)<br></div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAIPI0" onclick="toggle('mdetails_1IDAIPI0')">execJS
+										(
+										 JSCode 
+										)
+									</a></div>
+<div class="mDesc">executes a given javascript. input may be a string or an array. each field = a line</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAIPI0"><br><div><strong> JSCode</strong><span class="type">
+													(
+														<span class="type">string. array</span> 
+													)
+													</span>
+												: your javascript-code. e.g. window.location.reload()</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAMYI0" onclick="toggle('mdetails_1IDAMYI0')">getLocation
+										(
+										 format withQS 
+										)
+									</a></div>
+<div class="mDesc">gets the location of the page you are in. virtual, physical, file or the full URL of the page</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAMYI0"><br><div><strong>byVal format</strong>
+												: </div>
+<div><strong> withQS</strong><span class="type">
+													(
+														<span class="type">bool</span> 
+													)
+													</span>
+												: should the querystring be appended or not?</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the location of the executing page in the wanted format</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA5WI0" onclick="toggle('mdetails_1IDA5WI0')">iif
+										(
+										 i j k 
+										)
+									</a></div>
+<div class="obsolete">(This method is obsolete)</div>
+<div class="mDesc"></div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDA5WI0">OBSOLETE! use lib.iif instead<br><br><div><strong> i</strong>
+												: </div>
+<div><strong> j</strong>
+												: </div>
+<div><strong> k</strong>
+												: </div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAENI0" onclick="toggle('mdetails_1IDAENI0')">isPostback
+										(
+										 
+										)
+									</a></div>
+<div class="mDesc">Returns wheather the page was already sent to server or not.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAENI0">It should be the same as the isPostback() from asp.net.<br><div><strong>Return </strong>
+											(
+											<span class="type">bool</span> 
+											) :
+											posted back (true) or not (false)</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA1VI0" onclick="toggle('mdetails_1IDA1VI0')">loadCSSFile
+										(
+										 url media 
+										)
+									</a></div>
+<div class="mDesc">Loads a specified stylesheet-file</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDA1VI0">does not work on callback()<br><br><div><strong> url</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: url of your stylesheet</div>
+<div><strong> media</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: what media is this stylesheet for. screen, etc.
+leave it blank if its for every media</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDABVI0" onclick="toggle('mdetails_1IDABVI0')">loadJSFile
+										(
+										 url 
+										)
+									</a></div>
+<div class="mDesc">Loads a specified javscript-file</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDABVI0">it will load the file only if it has not been already loaded on the page before.
+so you can load the file and dont have to worry if it will be loaded more than once.
+differentiation between the files is the filename (case-sensitive!).
+does not work on callback()<br><br><div><strong> url</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: url of your javascript-file</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAHUI0" onclick="toggle('mdetails_1IDAHUI0')">QS
+										(
+										 name 
+										)
+									</a></div>
+<div class="mDesc">just an equivalent for request.querystring. if empty then returns whole querystring.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAHUI0"><br><div><strong> name</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: name of the value you want to get. leave it empty to get the whole querystring</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											value from the request-querystring-collection</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAGLI0" onclick="toggle('mdetails_1IDAGLI0')">return
+										(
+										 val 
+										)
+									</a></div>
+<div class="mDesc">returns a value on callback()</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAGLI0">those values are accessible on the javascript callback function defined in ajaxed.callback()<br><br><div><strong> val</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: check JSON.toJSON() for more details</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAAMI0" onclick="toggle('mdetails_1IDAAMI0')">returnValue
+										(
+										 name val 
+										)
+									</a></div>
+<div class="mDesc">returns a named value on callback(). call this within the callback() sub</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAAMI0">this method can be called more than once because the value will be named and therefore more
+values can be returned.<br><br><div><strong> name</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: name of the value (accessible within the javascript callback)</div>
+<div><strong> val</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: refer to JSON.toJSON() method for details</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA5QI0" onclick="toggle('mdetails_1IDA5QI0')">RF
+										(
+										 name 
+										)
+									</a></div>
+<div class="mDesc">gets the value from a given form field after postback</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDA5QI0">just an equivalent for request.form.<br><br><div><strong> name</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: name of the value you want to get</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											value from the request-form-collection.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAZRI0" onclick="toggle('mdetails_1IDAZRI0')">RFE
+										(
+										 name 
+										)
+									</a></div>
+<div class="mDesc">gets the value from a given form field and encodes the string into HTML.
+useful if you want the value be HTML encoded. e.g. inserting into value fields</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAZRI0"><br><div><strong> name</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: name of the value you want to get</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											value from the request-form-collection</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDANTI0" onclick="toggle('mdetails_1IDANTI0')">RFHas
+										(
+										 name 
+										)
+									</a></div>
+<div class="mDesc">returns true if a given value exists in the request.form</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDANTI0"><br><div><strong> name</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: name of the value you want to get</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">bool</span> 
+											) :
+											false if there is not value returned. true if yes</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDATSI0" onclick="toggle('mdetails_1IDATSI0')">RFT
+										(
+										 name 
+										)
+									</a></div>
+<div class="mDesc">gets the value of a given form field and trims it automatically.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDATSI0"><br><div><strong> name</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: name of the formfield you want to get</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											value from the request-form-collection</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAQZI0" onclick="toggle('mdetails_1IDAQZI0')">throwError
+										(
+										 args 
+										)
+									</a></div>
+<div class="obsolete">(This method is obsolete)</div>
+<div class="mDesc">OBSOLETE! use lib.throwError instead</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAQZI0"><br><div><strong> args</strong>
+												: </div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAUNI0" onclick="toggle('mdetails_1IDAUNI0')">write
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">writes a string to the output in the same line</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAUNI0">just a wrapper to str.write<br><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: output string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAOOI0" onclick="toggle('mdetails_1IDAOOI0')">writeln
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">writes a line to the output</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAOOI0">just a wrapper to str.writeln<br><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: output string</div>
+</div>
+</td>
+</tr>
+</table>
+</fieldset><br><br><a name="class_2"></a><fieldset class="class">
+<legend>
+						Class Database <a class="notForPrint" href="#top" style="text-decoration:none;">^</a></legend>
+<div class="cDescription">This class offers methods for database access. All of them are accessible
+directly through "db" without creating an own instance. The AjaxedPage
+offers a property "DBConnection" which automatically opens and closes the connection
+within a page.</div>
+<table cellspacing="0" cellpadding="3" border="0">
+<tr>
+<td class="label">Version:</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td class="label">Author:</td>
+<td>Michal Gabrukiewicz on 2007-07-16 21:01</td>
+</tr>
+<tr>
+<td class="label">Last modified:</td>
+<td>16.07.2007 22:09:31</td>
+</tr>
+<tr>
+<td class="label">Static:</td>
+<td>db</td>
+</tr>
+<tr>
+<td class="label">Path:</td>
+<td>/ajaxed/class_database/database.asp</td>
+</tr>
+</table>
+<h2><span onclick="toggle('props_2')" style="cursor:pointer">Properties</span> <a href="#class_2" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="props_2" style="display:none" class="table alwaysPrint" cellspacing="0" cellpadding="3" border="0">
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr valign="top">
+<td class="property">connection</td>
+<td class="type"><span class="type">ADODB.Connection</span> </td>
+<td>holds the database connection&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">numberOfDBAccess</td>
+<td class="type"><span class="type">int</span> </td>
+<td>GET:  gets the number which indicates how many database accesses has been made till now&nbsp;</td>
+</tr>
+</table>
+<h2><span onclick="toggle('meths_2')" style="cursor:pointer">Methods</span> <a href="#class_2" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="meths_2" class="table alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAU2I0" style="text-decoration:none">close
+										(
+										 
+										)
+									</a></div>
+<div class="mDesc">Closes the current database connection</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDAU2I0">
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAE3I0" onclick="toggle('mdetails_2IDAE3I0')">getRecordset
+										(
+										 sql 
+										)
+									</a></div>
+<div class="mDesc">Default method which should be always used to get a LOCKED recordset. Example for use:
+set RS = db.getRecordset("SELECT * FROM user")</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDAE3I0"><br><div><strong> sql</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: Your SQL query</div>
+<div><strong>Return </strong>
+											(
+											<a class="type" href="http://www.w3schools.com/ado/ado_ref_recordset.asp" target="_blank">Recordset</a> 
+											) :
+											recordset-Object</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAY4I0" onclick="toggle('mdetails_2IDAY4I0')">getScalar
+										(
+										 sql alternative 
+										)
+									</a></div>
+<div class="mDesc">executes a given sql-query and returns the first value of the first row.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDAY4I0">if there is no record given then the alternative will be returned.
+the returned value (if available) will be converted to the type of which the alternative is.
+example: calling getScalar("...", 0) will convert the returned value into an integer. if no record
+then 0 will be returned<br><br><div><strong> sql</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: sql-query to be executed</div>
+<div><strong> alternative</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: what should be returned when there is no record returned</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">variant</span> 
+											) :
+											the first value of the result converted to the type of alternative
+or the alternative itself if no records available</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA43I0" onclick="toggle('mdetails_2IDA43I0')">getUnlockedRecordset
+										(
+										 sql 
+										)
+									</a></div>
+<div class="mDesc">Default method which should be always used to get an UNLOCKED recordset. Example for use:
+set RS = db.getUnlockedRecordset("SELECT * FROM user")</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDA43I0"><br><div><strong> sql</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: Your SQL query</div>
+<div><strong>Return </strong>
+											(
+											<a class="type" href="http://www.w3schools.com/ado/ado_ref_recordset.asp" target="_blank">Recordset</a> 
+											) :
+											returns a recordset object (adOpenStatic &amp; adUseClient)</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA01I0" onclick="toggle('mdetails_2IDA01I0')">open
+										(
+										 connectionString 
+										)
+									</a></div>
+<div class="mDesc">Opens a database connection with a given connection string</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDA01I0">- The connection is available afterwards in the connection property
+- if the connection is already opened then it gets closed a the new is opened<br><br><div><strong> connectionString</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: a connection string</div>
+</div>
+</td>
+</tr>
+</table>
+</fieldset><br><br><a name="class_3"></a><fieldset class="class">
+<legend>
+						Class JSON <a class="notForPrint" href="#top" style="text-decoration:none;">^</a></legend>
+<div class="cDescription">Comes up with functionality for JSON (http://json.org) to use within ASP.
+Correct escaping of characters, generating JSON Grammer out of ASP datatypes and structures</div>
+<table cellspacing="0" cellpadding="3" border="0">
+<tr>
+<td class="label">Version:</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td class="label">Author:</td>
+<td>Michal Gabrukiewicz (gabru at grafix.at), Michael Rebec on 2007-04-26 12:46</td>
+</tr>
+<tr>
+<td class="label">Last modified:</td>
+<td>01.07.2007 23:14:40</td>
+</tr>
+<tr>
+<td class="label">Path:</td>
+<td>/ajaxed/class_JSON/JSON.asp</td>
+</tr>
+</table>
+<h2><span onclick="toggle('props_3')" style="cursor:pointer">Properties</span> <a href="#class_3" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="props_3" style="display:none" class="table alwaysPrint" cellspacing="0" cellpadding="3" border="0">
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr valign="top">
+<td class="property">toResponse</td>
+<td class="type"><span class="type">bool</span> </td>
+<td>should generated results be directly written to the response? default = false&nbsp;</td>
+</tr>
+</table>
+<h2><span onclick="toggle('meths_3')" style="cursor:pointer">Methods</span> <a href="#class_3" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="meths_3" class="table alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAXDJ0" onclick="toggle('mdetails_3IDAXDJ0')">clone
+										(
+										 str n 
+										)
+									</a></div>
+<div class="mDesc"></div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAXDJ0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> n</strong>
+												: </div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDADBJ0" onclick="toggle('mdetails_3IDADBJ0')">escape
+										(
+										 val 
+										)
+									</a></div>
+<div class="mDesc">STATIC! takes a given string and makes it JSON valid</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDADBJ0">all characters which needs to be escaped are beeing replaced by their
+unicode representation according to the
+RFC4627#2.5 - http://www.ietf.org/rfc/rfc4627.txt?number=4627<br><br><div><strong> val</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: value which should be escaped</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											JSON valid string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA3BJ0" onclick="toggle('mdetails_3IDA3BJ0')">toJSON
+										(
+										 name val nested 
+										)
+									</a></div>
+<div class="mDesc">generates a representation of a name value pair in JSON grammer</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDA3BJ0">the generation is done fully recursive so the value can be a complex datatype as well. e.g.
+toJSON("n", array(array(), 2, true), false) or toJSON("n", array(RS, dict, false), false), etc.<br><br><div><strong> name</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: name of the value (accessible with javascript afterwards). leave empty to get just the value</div>
+<div><strong> val</strong><span class="type">
+													(
+														<span class="type">variant</span> <span class="type">int</span> <span class="type">float</span> <span class="type">array</span> <span class="type">object</span> <a class="type" href="http://www.w3schools.com/asp/asp_ref_dictionary.asp" target="_blank">dictionary</a> <a class="type" href="http://www.w3schools.com/ado/ado_ref_recordset.asp" target="_blank">recordset</a> 
+													)
+													</span>
+												: value which needs
+to be generated. Conversation of the data types (ASP datatype -&gt; Javascript datatype):
+NOTHING, NULL -&gt; null, ARRAY -&gt; array, BOOL -&gt; bool, OBJECT -&gt; name of the type,
+DICTIONARY -&gt; valuepairs. each key is accessible as property afterwards
+RECORDSET -&gt; array where each row of the recordset represents a field in the array.
+fields have properties named after the column names of the recordset (LOWERCASED!)
+e.g. generate(RS) can be used afterwards r[0].ID
+INT, FLOAT -&gt; number
+OBJECT with reflect() method -&gt; returned as object which can be used within JavaScript</div>
+<div><strong> nested</strong><span class="type">
+													(
+														<span class="type">bool</span> 
+													)
+													</span>
+												: is the value pair already nested within another? if yes then the {} are left out.</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											returns a JSON representation of the given name value pair
+(if toResponse is on then the return is written directly to the response and nothing is returned)</div>
+</div>
+</td>
+</tr>
+</table>
+</fieldset><br><br><a name="class_4"></a><fieldset class="class">
+<legend>
+						Class Library <a class="notForPrint" href="#top" style="text-decoration:none;">^</a></legend>
+<div class="cDescription">This class holds all general methods used within the library. They are accessible
+through an already existing instance called "lib". It represents the Library itself somehow.
+Thats why e.g. its possible to get the current version of the library using lib.version</div>
+<table cellspacing="0" cellpadding="3" border="0">
+<tr>
+<td class="label">Version:</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td class="label">Author:</td>
+<td>Michal Gabrukiewicz - gabru @ grafix.at on 12.09.2003</td>
+</tr>
+<tr>
+<td class="label">Last modified:</td>
+<td>08.07.2007 17:57:04</td>
+</tr>
+<tr>
+<td class="label">Static:</td>
+<td>lib</td>
+</tr>
+<tr>
+<td class="label">Path:</td>
+<td>/ajaxed/class_library/library.asp</td>
+</tr>
+</table>
+<h2><span onclick="toggle('props_4')" style="cursor:pointer">Properties</span> <a href="#class_4" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="props_4" style="display:none" class="table alwaysPrint" cellspacing="0" cellpadding="3" border="0">
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr valign="top">
+<td class="property">browser</td>
+<td class="type"><span class="type">string</span> </td>
+<td>GET:  gets the browser (uppercased shortcut) which is used. version is ignored. e.g. FF, IE, etc. empty if unknown&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">page</td>
+<td class="type"><a class="type" href="#class_1">AjaxedPage</a> </td>
+<td>holds the current executing page. Nothing if there is not page&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">version</td>
+<td class="type"><span class="type">string</span> </td>
+<td>GET:  gets the version of the whole library&nbsp;</td>
+</tr>
+</table>
+<h2><span onclick="toggle('meths_4')" style="cursor:pointer">Methods</span> <a href="#class_4" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="meths_4" class="table alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAOIJ0" onclick="toggle('mdetails_4IDAOIJ0')">[error]
+										(
+										 msg 
+										)
+									</a></div>
+<div class="mDesc">writes an error and ends the response. for unexpected errors</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAOIJ0">this error should be used for any unexpected errors. In comparison to throwError
+it should only be used if a common error message should be displayed to the user instead of
+raising a real ASP error (throwError).
+- if buffering is turned off then the already written response won't be cleared.<br><br><div><strong> msg</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: error message</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAIJJ0" onclick="toggle('mdetails_4IDAIJJ0')">getGUID
+										(
+										 
+										)
+									</a></div>
+<div class="mDesc">gets a new globally unique Identifier.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAIJJ0">
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											new guid without hyphens. (hexa-decimal)</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAWLJ0" onclick="toggle('mdetails_4IDAWLJ0')">getUniqueID
+										(
+										 
+										)
+									</a></div>
+<div class="mDesc">Returns an unique ID for each pagerequest, starting with 1</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAWLJ0">
+<div><strong>Return </strong>
+											(
+											<span class="type">int</span> 
+											) :
+											uniqueID : the unique id</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAANJ0" onclick="toggle('mdetails_4IDAANJ0')">iif
+										(
+										 i j k 
+										)
+									</a></div>
+<div class="mDesc"></div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAANJ0">This will replace the IIf function that is missing from the intrinsic functions of ASP<br><br><div><strong> i</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: condition</div>
+<div><strong> j</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: expression 1</div>
+<div><strong> k</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: expression 2</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAYJJ0" onclick="toggle('mdetails_4IDAYJJ0')">init
+										(
+										 var default 
+										)
+									</a></div>
+<div class="mDesc">initializes a variable with a default value if the variable is not set set (isEmpty)</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAYJJ0"><br><div><strong> var</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: some variable</div>
+<div><strong> default</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: the default value which should be taken if the var is not set</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">variant</span> 
+											) :
+											if var is set then the var otherwise the default value.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAVGJ0" onclick="toggle('mdetails_4IDAVGJ0')">newDict
+										(
+										 values 
+										)
+									</a></div>
+<div class="mDesc">gets a new dictionary filled with a list of values</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAVGJ0"><br><div><strong> values</strong><span class="type">
+													(
+														<span class="type">array</span> 
+													)
+													</span>
+												: values to fill into the dictionary. array( array(key, value), arrray(key, value) )
+if the fields are not arrays (valuepairs) then the key is generated automatically. if no array
+provided then an empty dictionary is returned</div>
+<div><strong>Return </strong>
+											(
+											<a class="type" href="http://www.w3schools.com/asp/asp_ref_dictionary.asp" target="_blank">dictionary</a> 
+											) :
+											dictionary with values.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA2KJ0" onclick="toggle('mdetails_4IDA2KJ0')">sleep
+										(
+										 seconds 
+										)
+									</a></div>
+<div class="mDesc">Sleeps for a specified time. for a while :)</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDA2KJ0"><br><div><strong> seconds</strong><span class="type">
+													(
+														<span class="type">int</span> 
+													)
+													</span>
+												: how many seconds. Minmum 1, Maximum 20. Value will be autochanged if value
+is incorrect.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAPHJ0" onclick="toggle('mdetails_4IDAPHJ0')">throwError
+										(
+										 args 
+										)
+									</a></div>
+<div class="mDesc">throws an ASP runtime Error which can be handled with on error resume next</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAPHJ0">if you want to throw an error where just the user should be notified use lib.error instead<br><br><div><strong> args</strong><span class="type">
+													(
+														<span class="type">array</span> <span class="type">string</span> 
+													)
+													</span>
+												: 
+- if array then fields =&gt; number, source, description
+- The number range for user errors is 512 (exclusive) - 1024 (exclusive)
+- if args is a string then its handled as the description and an error is raised with the
+number 1024 (highest possible number for user defined VBScript errors)</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAGMJ0" onclick="toggle('mdetails_4IDAGMJ0')">URLDecode
+										(
+										 endcodedText 
+										)
+									</a></div>
+<div class="mDesc">Opposite of server.URLEncode</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAGMJ0">If you store a variable in the queryString then the variables input will be automatically
+encoded. Sometimes you need a function to decode this %20%2H, etc.<br><br><div><strong> endcodedText</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: your string which should be decoded. e.g: Haxn%20Text (%20 = Space)</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											decoded string</div>
+</div>
+</td>
+</tr>
+</table>
+</fieldset><br><br><a name="class_5"></a><fieldset class="class">
+<legend>
+						Class StringOperations <a class="notForPrint" href="#top" style="text-decoration:none;">^</a></legend>
+<div class="cDescription">Collection of various useful string operations. An instance of this class
+called "str" is created when loading the page. Thus all methods can easily be
+accessed using str.methodName.</div>
+<table cellspacing="0" cellpadding="3" border="0">
+<tr>
+<td class="label">Version:</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td class="label">Author:</td>
+<td>Michal Gabrukiewicz - gabru @ grafix.at, Michael Rebec on 11.12.2003</td>
+</tr>
+<tr>
+<td class="label">Last modified:</td>
+<td>09.07.2007 22:53:30</td>
+</tr>
+<tr>
+<td class="label">Static:</td>
+<td>str</td>
+</tr>
+<tr>
+<td class="label">Path:</td>
+<td>/ajaxed/class_stringOperations/stringOperations.asp</td>
+</tr>
+</table>
+<h2><span onclick="toggle('props_5')" style="cursor:pointer">Properties</span> <a href="#class_5" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="props_5" style="display:none" class="table alwaysPrint" cellspacing="0" cellpadding="3" border="0">
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</table>
+<h2><span onclick="toggle('meths_5')" style="cursor:pointer">Methods</span> <a href="#class_5" class="notForPrint" style="text-decoration:none;">^</a></h2>
+<table id="meths_5" class="table alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
+<tr>
+<td>
+<div class="mName"><a href="#method_IDATDK0" style="text-decoration:none">[end]
+										(
+										 
+										)
+									</a></div>
+<div class="mDesc">stops to response</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDATDK0">
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAKKK0" onclick="toggle('mdetails_5IDAKKK0')">arrayToString
+										(
+										 arr seperator 
+										)
+									</a></div>
+<div class="mDesc">Converts an array to a string</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAKKK0"><br><div><strong>byVal arr</strong>
+												: </div>
+<div><strong> seperator</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: seperator between the array-fields</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											concated array</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAHXK0" onclick="toggle('mdetails_5IDAHXK0')">ASCIICode
+										(
+										 str 
+										)
+									</a></div>
+<div class="mDesc">Encodes a string into ASCII Characters</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAHXK0">This function takes a string (for example an email-address) and converts it to
+standardized ASCII Character codes, thus blocking bots/spiders from reading your
+email address, while yet allowing visitors to continue to read and use your proper
+address via mailto links, etc.<br><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the ASCII Encoded String</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDALVK0" onclick="toggle('mdetails_5IDALVK0')">capitalize
+										(
+										 inputStr 
+										)
+									</a></div>
+<div class="mDesc">Makes every first letter of every word to upper-case.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDALVK0">Good for Names or cities. Example: "axel schweis" will result in "Axel Schweis"<br><br><div><strong> inputStr</strong>
+												: </div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											changed string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAZQJ0" onclick="toggle('mdetails_5IDAZQJ0')">change
+										(
+										 source find replaceWith 
+										)
+									</a></div>
+<div class="mDesc">an extension of the common replace() function. basically the same
+but you can replace more parts in one go.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAZQJ0">find (array) -&gt; replaceWith (string): every match of 'find' will be replaced with the string
+find (array[n]) -&gt; replaceWith (array[n]): must be same size! every field will be replaced by the field
+of replaceWith with the same index.
+find (array[n]) -&gt; replaceWith (array[m]): n &gt; m! for the missing fields the last one will be taken
+for replacement. e.g. find  = array(1, 2), replaceWith = array(3) means that the 1 will be replaced with
+3 and the 2 will also be replaced with 3 because there is no equivalent for the 2<br><br><div><strong>byVal source</strong>
+												: </div>
+<div><strong> find</strong><span class="type">
+													(
+														<span class="type">string</span> <span class="type">array</span> 
+													)
+													</span>
+												: what you are looking for.</div>
+<div><strong> replaceWith</strong><span class="type">
+													(
+														<span class="type">string</span> <span class="type">array</span> 
+													)
+													</span>
+												: the value you want to replace the matches with.</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the replaced source string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAEPK0" onclick="toggle('mdetails_5IDAEPK0')">clone
+										(
+										 str n 
+										)
+									</a></div>
+<div class="mDesc">Concats a string "n" times</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAEPK0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> n</strong><span class="type">
+													(
+														<span class="type">int</span> 
+													)
+													</span>
+												: the number of concats</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the concated string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAA0J0" onclick="toggle('mdetails_5IDAA0J0')">defuseHTML
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">defuses the HTML of  given string. so html code wont be recognized as HTML code by browser</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAA0J0"><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the value which should be defused</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											defused value</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAPCK0" onclick="toggle('mdetails_5IDAPCK0')">divide
+										(
+										 inputStr partitionLength 
+										)
+									</a></div>
+<div class="mDesc">divides a string into several string-paritions of a given length</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAPCK0">string "HAXN" will result (partitionlength=2) in the following array:
+a(0) = "HA"; a(1) = "XN"<br><br><div><strong> inputStr</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: string which should be divided</div>
+<div><strong>byVal partitionLength</strong>
+												: </div>
+<div><strong>Return </strong>
+											(
+											<span class="type">array</span> 
+											) :
+											array with all partitions</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAAOK0" onclick="toggle('mdetails_5IDAAOK0')">endsWith
+										(
+										 str chars 
+										)
+									</a></div>
+<div class="mDesc">Checks if the string ends with ...</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAAOK0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> chars</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the compare char/string</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">bool</span> 
+											) :
+											true if the two strings are equal</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA5GK0" onclick="toggle('mdetails_5IDA5GK0')">ensureSlash
+										(
+										 pathString 
+										)
+									</a></div>
+<div class="mDesc">adds a slash "/" at the end of the string if there isnt one.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDA5GK0">Good use for urls or paths if you want to be sure that there is a slash at the end
+of an url or a path.<br><br><div><strong> pathString</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: The string (url, path) you want to check</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the new url. with a slash at the end.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDALSJ0" onclick="toggle('mdetails_5IDALSJ0')">existsIn
+										(
+										 aString anArray caseSensitive 
+										)
+									</a></div>
+<div class="mDesc">checks if a given string can be found in a given array</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDALSJ0">all values in the array are treated as strings when comparing<br><br><div><strong>byVal aString</strong>
+												: </div>
+<div><strong>byVal anArray</strong>
+												: </div>
+<div><strong> caseSensitive</strong><span class="type">
+													(
+														<span class="type">bool</span> 
+													)
+													</span>
+												: should the search be case sensitive?</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">int</span> 
+											) :
+											index of the first found field within the array. -1 if not found</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDADWK0" onclick="toggle('mdetails_5IDADWK0')">format
+										(
+										 str arr 
+										)
+									</a></div>
+<div class="mDesc">Replaces all {n} values in a given string through the n-index field of an array.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDADWK0">Its just like the string.format method in .NET. so if you provide "my Name is {0}" as
+your input then the {0} will be replaced by the first field of your array. and so on.<br><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> arr</strong><span class="type">
+													(
+														<span class="type">array</span> 
+													)
+													</span>
+												: the array with your values</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											changed string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAO2J0" onclick="toggle('mdetails_5IDAO2J0')">getHiddenInput
+										(
+										 name value 
+										)
+									</a></div>
+<div class="mDesc">generates a hidden input field and returns the HTML for it</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAO2J0"><br><div><strong> name</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the name of the value</div>
+<div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the value it should hold</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAM4J0" onclick="toggle('mdetails_5IDAM4J0')">HTMLEncode
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">encodes a value so that any special chars will be transformed into html entities.
+e.g. " will be &amp;quot;</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAM4J0"><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the value you want to encode</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAXTK0" onclick="toggle('mdetails_5IDAXTK0')">isAlphabetic
+										(
+										 character 
+										)
+									</a></div>
+<div class="mDesc">Checks if a char is an alphabetic character or not. A-Z or a-z</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAXTK0"><br><div><strong>byVal character</strong>
+												: </div>
+<div><strong>Return </strong>
+											(
+											<span class="type">bool</span> 
+											) :
+											Wether the char is alphabetic or not.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAG5J0" onclick="toggle('mdetails_5IDAG5J0')">isValidEmail
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">checks if a given string is a syntactically valid email</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAG5J0"><br><div><strong> value</strong>
+												: </div>
+<div><strong>Return </strong>
+											(
+											<span class="type">bool</span> 
+											) :
+											true if it is valid</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAU1J0" onclick="toggle('mdetails_5IDAU1J0')">JSEncode
+										(
+										 val 
+										)
+									</a></div>
+<div class="mDesc"></div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAU1J0">Makes a string javascript persistent. Changes special characters, etc.<br><br><div><strong>byVal val</strong>
+												: </div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											encoded string which can be used within javascript strings.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAOLK0" onclick="toggle('mdetails_5IDAOLK0')">multiArrayToString
+										(
+										 arr seperator dimension 
+										)
+									</a></div>
+<div class="mDesc">Converts a part of a multidimensional array to a string</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAOLK0"><br><div><strong>byVal arr</strong>
+												: </div>
+<div><strong> seperator</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: seperator between the array-fields</div>
+<div><strong> dimension</strong><span class="type">
+													(
+														<span class="type">int</span> 
+													)
+													</span>
+												: the dimension index in the array -&gt; e.g. you have an
+array of the size (5, 2) -&gt; with dimension 2 you get the array fields
+(0, 2), (1, 2), ..., (4, 2) as the string object, savvy ?</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											concated array</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA45J0" onclick="toggle('mdetails_5IDA45J0')">nullIfEmpty
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">returns null if the input is empty.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDA45J0"><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: the value you are dealing with</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">variant</span> 
+											) :
+											null if the value is empty, otherwise the value itself</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDABXJ0" onclick="toggle('mdetails_5IDABXJ0')">padLeft
+										(
+										 value totalLength paddingChar 
+										)
+									</a></div>
+<div class="mDesc">right-aligns a given value by padding left a given character to a totalsize</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDABXJ0">example: input: 22 -&gt; output: 00022 (padded to total length of 5 with the paddingchar 0)<br><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the value which should be aligned right</div>
+<div><strong> totalLength</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: whats the total Length of the result string</div>
+<div><strong> paddingChar</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the char which is taken for padding</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											right aligned string.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDASYJ0" onclick="toggle('mdetails_5IDASYJ0')">padRight
+										(
+										 value totalLength paddingChar 
+										)
+									</a></div>
+<div class="mDesc">left-aligns a given value by padding right a given character to a totalsize</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDASYJ0">example: input: 22 -&gt; output: 22000 (padded to total length of 5 with the paddingchar 0)<br><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the value which should be aligned left</div>
+<div><strong> totalLength</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: whats the total Length of the result string</div>
+<div><strong> paddingChar</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the char which is taken for padding</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											left aligned string.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAZTJ0" onclick="toggle('mdetails_5IDAZTJ0')">parse
+										(
+										 value alternative 
+										)
+									</a></div>
+<div class="mDesc">tries to parse a given value into the datatype of the alternative. If it cannot be parsed
+then the alternative is passed through</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAZTJ0">it ALWAYS returns the type of the alternative<br><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: value which should be parsed</div>
+<div><strong> alternative</strong><span class="type">
+													(
+														<span class="type">variant</span> 
+													)
+													</span>
+												: alternative value if converting is not possible
+- if a float value is needed then use a comma. e.g. 0.0</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">variant</span> 
+											) :
+											the string parsed into the alternative type or the alternative itself</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDADEK0" onclick="toggle('mdetails_5IDADEK0')">shorten
+										(
+										 str maxChars overflowString 
+										)
+									</a></div>
+<div class="mDesc">shortens a string and adds a custom string at the end if string is longer than a given value.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDADEK0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> maxChars</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: whats the maximum allowed length of chars</div>
+<div><strong> overflowString</strong><span class="type">
+													(
+														<span class="type">int</span> 
+													)
+													</span>
+												: what string should be added at the end of the string if it has been cutted</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											cutted string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDARFK0" onclick="toggle('mdetails_5IDARFK0')">splitValue
+										(
+										 stringToSplit delimiter returnIndex 
+										)
+									</a></div>
+<div class="mDesc">splits a string and returns a specified field of the array</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDARFK0">it uses the split function but immediately returns you the field you want.<br><br><div><strong> stringToSplit</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the string you want to split</div>
+<div><strong> delimiter</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: whats the delimiter for splitting</div>
+<div><strong> returnIndex</strong><span class="type">
+													(
+														<span class="type">int</span> 
+													)
+													</span>
+												: what index should be returned after spliting?. -1 = get the last index</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											string content for the wanted field of the array</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA00J0" onclick="toggle('mdetails_5IDA00J0')">SQLSafe
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">makes a given string safe for the use within sql statements</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDA00J0">e.g. if its necessary to pass through an user input directly into a sql-query<br><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the value which should be made "safe"</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											safe value. e.g. ' are escaped with '', etc.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA2MK0" onclick="toggle('mdetails_5IDA2MK0')">startsWith
+										(
+										 str chars 
+										)
+									</a></div>
+<div class="mDesc">Checks if the string begins with ...</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDA2MK0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> chars</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the compare char/string</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">bool</span> 
+											) :
+											true if the two strings are equal</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAVBK0" onclick="toggle('mdetails_5IDAVBK0')">stripTags
+										(
+										 inputStr 
+										)
+									</a></div>
+<div class="mDesc">removes all Tags from a given string</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAVBK0">Tags are defined as string-parts surrounded by a &lt; and a &gt;. example: &lt;sample&gt;<br><br><div><strong> inputStr</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: string where the Tags should be removed</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the input-String without any Tags</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDARUK0" onclick="toggle('mdetails_5IDARUK0')">swapCase
+										(
+										 str 
+										)
+									</a></div>
+<div class="mDesc">Swaps the Case of a String. Lower to Upper and vice a versa</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDARUK0"><br><div><strong> str</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the source string</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the swapped string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAQJK0" onclick="toggle('mdetails_5IDAQJK0')">toCharArray
+										(
+										 str 
+										)
+									</a></div>
+<div class="mDesc">Converts a string to a "char" array</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAQJK0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong>Return </strong>
+											(
+											<span class="type">array</span> 
+											) :
+											a "char" array</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA3UJ0" onclick="toggle('mdetails_5IDA3UJ0')">toFloat
+										(
+										 value alternative 
+										)
+									</a></div>
+<div class="obsolete">(This method is obsolete)</div>
+<div class="mDesc">OBSOLETE! use parse() instead</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDA3UJ0"><br><div><strong> value</strong>
+												: </div>
+<div><strong> alternative</strong>
+												: </div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA5VJ0" onclick="toggle('mdetails_5IDA5VJ0')">toInt
+										(
+										 value alternative 
+										)
+									</a></div>
+<div class="obsolete">(This method is obsolete)</div>
+<div class="mDesc">OBSOLETE! use parse() instead</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDA5VJ0"><br><div><strong> value</strong>
+												: </div>
+<div><strong> alternative</strong>
+												: </div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDA1AK0" onclick="toggle('mdetails_5IDA1AK0')">trimComplete
+										(
+										 inputStr 
+										)
+									</a></div>
+<div class="mDesc">removes all non-printable chars from the end and the beginning of the string</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDA1AK0">spaces, returns, line-feeds, tabs, etc. will be removed<br><br><div><strong> inputStr</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: string to be trimmed</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											trimmed string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAPRK0" onclick="toggle('mdetails_5IDAPRK0')">trimEnd
+										(
+										 str n 
+										)
+									</a></div>
+<div class="mDesc">Removes characters from the end of a string</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAPRK0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> n</strong><span class="type">
+													(
+														<span class="type">int</span> 
+													)
+													</span>
+												: the number of characters you want to remove</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the trimmed string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDALQK0" onclick="toggle('mdetails_5IDALQK0')">trimStart
+										(
+										 str n 
+										)
+									</a></div>
+<div class="mDesc">Removes characters from the begin of a string</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDALQK0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> n</strong><span class="type">
+													(
+														<span class="type">int</span> 
+													)
+													</span>
+												: the number of characters you want to remove</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the trimmed string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDATSK0" onclick="toggle('mdetails_5IDATSK0')">trimString
+										(
+										 str stringToTrim 
+										)
+									</a></div>
+<div class="mDesc">Removes characters from a given string with all occurencies of a matching string</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDATSK0"><br><div><strong>byVal str</strong>
+												: </div>
+<div><strong> stringToTrim</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the "find" string which will be trimmed out of the string</div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											the trimmed string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAIPJ0" onclick="toggle('mdetails_5IDAIPJ0')">URL
+										(
+										 path params anchor 
+										)
+									</a></div>
+<div class="mDesc">returns a full URL with a given file and given parameters</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAIPJ0">it encodes automatically the values of the parameters.<br><br><div><strong> path</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the path to the file. e.g. /file.asp, f.asp, http://domain.com/f.asp</div>
+<div><strong> params</strong><span class="type">
+													(
+														<span class="type">string</span> <span class="type">array</span> 
+													)
+													</span>
+												: the parameters for the url (querystring). if its an array
+then every even field is the name and every odd field is the value. if its a string
+then its treated as jusst one parameter value for the URL. e.g. file.asp?oneValue</div>
+<div><strong> anchor</strong>
+												: </div>
+<div><strong>Return </strong>
+											(
+											<span class="type">string</span> 
+											) :
+											an URL build with the parameters and fully URL-encoded. example: /file.asp?x=10</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAZHK0" onclick="toggle('mdetails_5IDAZHK0')">write
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">writes a string to the output in the same line</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAZHK0"><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: output string</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAS3J0" onclick="toggle('mdetails_5IDAS3J0')">writeEnd
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">writes a value to the output and stops the response.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAS3J0">The response will be stopped after writing the value. good for debuging.<br><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: the value you want to write</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAWIK0" onclick="toggle('mdetails_5IDAWIK0')">writeln
+										(
+										 value 
+										)
+									</a></div>
+<div class="mDesc">writes a line to the output</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_5IDAWIK0"><br><div><strong> value</strong><span class="type">
+													(
+														<span class="type">string</span> 
+													)
+													</span>
+												: output string</div>
+</div>
+</td>
+</tr>
+</table>
+</fieldset>
+</div>
+</td>
+</tr>
+</table>
+</body>
+<style>
+				#content {
+					height:expression(document.body.offsetHeight);
+					overflow:auto;
+				}
+				@media print {
+					#content {
+						padding:0px;margin:0px;
+						overflow:visible;
+						height:auto;
+					}
+				}
+			</style>
+</html>

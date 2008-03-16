@@ -1,0 +1,9 @@
+ajaxed library
+
+1. do changes (dont remove any public interfaces)
+2. comment all public interfaces
+3. add test to the test/test.asp
+4. run tests
+5. add the changes to changes.txt
+6. Update the documentation index.html in the root
+7. increase version if necessary (lib.version)

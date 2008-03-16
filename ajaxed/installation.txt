@@ -1,0 +1,15 @@
+AJAXED
+
+1. copy the whole folder (ajaxed) into your web root
+2. open http://yourserver.com/ajaxed/demo/ to check if everything works
+3. OPTIONAL: check the config.asp to perform any conifgurations
+4. OPTIONAL: check http://yourserver.com/ajaxed/index.html for the documentation
+5. OPTIONAL: you can set the style of the loading indicator by defining a css class called "ajaxLoadingIndicator"
+6. OPTIONAL: you may want to delete the "test" and "demo" folder if you dont want to have them in your production environment
+
+IMPORTANT NOTE: in order that special chars and german umlaute work fine you need to save your files with UTF-8 encoding!!
+
+HAVE FUN!
+
+for updates, suggestions, bug reports
+http://www.webdevbros.net 
