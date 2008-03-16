@@ -30,6 +30,7 @@ class AjaxedPage
 
 	'private members
 	private status, jason, callbackFlagName, loadedSources, componentLocation, loadingText, connectionString
+	private ajaxHeaderDrawn
 	
 	'public members
 	public loadPrototypeJS		''[bool] should protypeJS library be loaded. turn this off if you've done it manually. default = true
@@ -61,6 +62,7 @@ class AjaxedPage
 		DBConnection = lib.init(AJAXED_DBCONNECTION, false)
 		debug = false
 		plain = false
+		ajaxHeaderDrawn = false
 	end sub
 	
 	'**********************************************************************************************************
@@ -100,7 +102,10 @@ class AjaxedPage
 	'* drawHeader
 	'******************************************************************************************************************
 	private sub drawHeader()
-		if not plain then %><!--#include virtual="/ajaxedConfig/header.asp"--><% end if
+		if not plain then %>
+			<!--#include virtual="/ajaxedConfig/header.asp"--><%
+			if not ajaxHeaderDrawn then lib.throwError("ajaxedHeader(params) must be called within the /ajaxedConfig/header.asp.")
+		end if
 	end sub
 	
 	'******************************************************************************************************************
@@ -122,6 +127,7 @@ class AjaxedPage
 			"ajaxed.prototype.debug = " & lib.iif(debug, "true", "false") & ";",_
 			"ajaxed.prototype.indicator.innerHTML = '" & loadingText & "';"_
 		))
+		ajaxHeaderDrawn = true
 	end sub
 	
 	'******************************************************************************************************************
