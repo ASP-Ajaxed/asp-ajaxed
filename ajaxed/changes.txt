@@ -1,3 +1,12 @@
+v 0.4
+
+- MD5 hash class added
+- moved configuration to /ajaxedConfig ... this makes the updating process easier
+	- you need to create a folder called "ajaxedConfig" and move the config.asp from "ajaxed" folder to there
+	- moreover put a header.asp and footer.asp into the ajaxedConfig folder as well
+- footer and header added
+- ajaxedPage has a plain- and title-property
+
 v 0.3
 
 [18 December, 2007]

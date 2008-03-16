@@ -39,6 +39,9 @@ class AjaxedPage
 	public DBConnection			''[bool] indicates if a database connection should be opened automatically for the page.
 								''If yes then a connection with the configured connectionstring is established and can be used
 								''within the init(), callback() and main() procedures. default = false
+	public plain				''[bool] indicates if the page should be a plain page. means that no header(s) and footer(s) are included.
+								''Useful for page which are actually only parts of pages and loaded with an XHR. default = false
+	public title				''[string] title for the page (useful to use within the header.asp)
 	
 	'**********************************************************************************************************
 	'* constructor 
@@ -57,6 +60,7 @@ class AjaxedPage
 		connectionString = lib.init(AJAXED_CONNSTRING, empty)
 		DBConnection = lib.init(AJAXED_DBCONNECTION, false)
 		debug = false
+		plain = false
 	end sub
 	
 	'**********************************************************************************************************
@@ -85,15 +89,39 @@ class AjaxedPage
 				writeln(vbcrlf & "}")
 			end if
 		else
-			if loadPrototypeJS then loadJSFile(loc("prototypejs/prototype.js"))
-			loadJSFile(loc("class_ajaxedPage/ajaxed.js"))
-			execJS(array(_
-				"ajaxed.prototype.debug = " & lib.iif(debug, "true", "false") & ";",_
-				"ajaxed.prototype.indicator.innerHTML = '" & loadingText & "';"_
-			))
+			drawHeader()
 			main()
+			drawFooter()
 		end if
 		if DBConnection then db.close()
+	end sub
+	
+	'******************************************************************************************************************
+	'* drawHeader
+	'******************************************************************************************************************
+	private sub drawHeader()
+		if not plain then %><!--#include virtual="/ajaxedConfig/header.asp"--><% end if
+	end sub
+	
+	'******************************************************************************************************************
+	'* drawFooter
+	'******************************************************************************************************************
+	private sub drawFooter()
+		if not plain then %><!--#include virtual="/ajaxedConfig/footer.asp"--><% end if
+	end sub
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION:	draws all necessary headers for ajaxed (js, css, etc.)
+	'' @DESCRIPTION:	call this method within the HEAD-tag of your header.asp
+	'' @PARAM:			params [array]: not used yet (provide empty array)
+	'******************************************************************************************************************
+	public sub ajaxedHeader(params)
+		if loadPrototypeJS then loadJSFile(loc("prototypejs/prototype.js"))
+		loadJSFile(loc("class_ajaxedPage/ajaxed.js"))
+		execJS(array(_
+			"ajaxed.prototype.debug = " & lib.iif(debug, "true", "false") & ";",_
+			"ajaxed.prototype.indicator.innerHTML = '" & loadingText & "';"_
+		))
 	end sub
 	
 	'******************************************************************************************************************

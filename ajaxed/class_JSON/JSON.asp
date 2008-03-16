@@ -15,7 +15,7 @@
 '' 					Correct escaping of characters, generating JSON Grammer out of ASP datatypes and structures
 '' @REQUIRES:		-
 '' @OPTIONEXPLICIT:	yes
-'' @VERSION:		1.4
+'' @VERSION:		1.4.1
 
 '**************************************************************************************************************
 class JSON
@@ -117,6 +117,7 @@ class JSON
 			end if
 		else
 			'bool
+			dim varTyp
 			varTyp = varType(val)
 			if varTyp = 11 then
 				if val then write("true") else write("false")

@@ -1,4 +1,4 @@
-<!--#include file="config.asp"-->
+<!--#include virtual="/ajaxedConfig/config.asp"-->
 <!--#include file="class_library/library.asp"-->
 <!--#include file="class_stringOperations/stringOperations.asp"-->
 <!--#include file="class_JSON/JSON.asp"-->
