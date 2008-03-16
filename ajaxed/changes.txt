@@ -1,0 +1,36 @@
+v 0.3
+
+[18 December, 2007]
+- working with prototype 1.6
+- working with JSON utility class 1.4
+	- there used to be an error when returning custom objects which were processed recursively. it resulted in outputing only '}'
+	- vartype = 19 is undocumented but comes as integer from mysql. this vartype is treated as integer now
+	- vartype 7 added which was not recognized as float
+- loading indicator has no styles applied anymore.. they need to be defined by you in your css file by definined the css class 'ajaxLoadingIndicator'
+	if you want back the old style, then put this into your global stylesheet
+		.ajaxLoadingIndicator {
+			background-color: #cc0000;
+			color: #fff;
+			margin:2px;
+			right: 0px;
+		}
+- more test have been added (also for recordsets)
+- added AJAXED_DBCONNECTION to the config.asp => you can open the DB connection automatically now for each page by default
+- loading indicator stays now always on top of the screen. before it used to disappear if page scroll was not at the top
+- renamed demo/index.asp to demo/default.asp because iis default installation has this already set
+
+v 0.2
+
+[8 July, 2007]
+- added a "Database" class which offers functionality to work with databases.
+- prototypejs: using version 1.5.1.1 instead of 1.5.1_rc1 now
+- AjaxedPage.iif, AjaxedPage.error, AjaxedPage.throwError are obsolete and use the appropriate library methods now.
+- added a "library" class which holds "global" and general functions which are needed through the whole library. check the documentation for new functions
+- added a "stringOperations" class which adds a lot of additional and useful string manipulation functions to the library
+- created a "test" folder which holds unit tests for the library.
+- created a folder "prototypejs" and moved the prototype JavaScript library there
+- created a folder for each VBScript class (class_ajaxedPage, class_JSON). Prefixed the folder with "class_"
+
+v 0.1
+
+initial release
