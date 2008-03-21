@@ -79,7 +79,7 @@ class AjaxedPage
 			if isEmpty(connectionString) then lib.throwError("No connectionstring configured.")
 			db.open(connectionString)
 		end if
-		init()
+		lib.exec "init", empty
 		if isCallback() then
 			writeln("{ ""root"": {")
 			status = 0
