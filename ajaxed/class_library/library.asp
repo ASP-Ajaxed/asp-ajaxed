@@ -62,9 +62,8 @@ class Library
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	calls a given function/sub if it exists
 	'' @DESCRIPTION:	tries to call a given function/sub with the given parameters.
-	''					the scope is the scope when calling exec.
-	'' @PARAM:			functionName [string]: name of the function name
-	'' @PARAM:			params [variant]: you choose how you provide your params
+	''					the scope is the scope when calling exec. 
+	'' @PARAM:			params [variant]: you choose how you provide your params. provide empty to call a procedure without parameters
 	'' @RETURN:			[variant] whatever the function returns
 	'**********************************************************************************************************
 	function exec(functionName, params)
@@ -72,7 +71,13 @@ class Library
 		set func = getRef(functionName)
 		available = (err = 0)
 		on error goto 0
-		if available then exec = func(params)
+		if available then
+			if isEmpty(params) then
+				exec = func
+			else
+				exec = func(params)
+			end if
+		end if
 	end function
 	
 	'**********************************************************************************************************
