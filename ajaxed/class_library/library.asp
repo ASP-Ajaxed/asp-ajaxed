@@ -23,6 +23,7 @@ class Library
 	
 	'public members
 	public page			''[AjaxedPage] holds the current executing page. Nothing if there is not page
+	public fso			''[FileSystemObject] holds a filesystemobject instance for global use
 	
 	public property get browser	''[string] gets the browser (uppercased shortcut) which is used. version is ignored. e.g. FF, IE, etc. empty if unknown
 		if p_browser = "" then
@@ -48,7 +49,31 @@ class Library
 		p_browser = ""
 		set me.page = nothing
 		errorCaption = init(AJAXED_ERRORCAPTION, "Erroro: ")
+		set fso = server.createObject("scripting.filesystemobject")
 	end sub
+	
+	'***********************************************************************************************************
+	'* destructor
+	'***********************************************************************************************************
+	public sub class_terminate()
+		set fso = nothing
+	end sub
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	calls a given function/sub if it exists
+	'' @DESCRIPTION:	tries to call a given function/sub with the given parameters.
+	''					the scope is the scope when calling exec.
+	'' @PARAM:			functionName [string]: name of the function name
+	'' @PARAM:			params [variant]: you choose how you provide your params
+	'' @RETURN:			[variant] whatever the function returns
+	'**********************************************************************************************************
+	function exec(functionName, params)
+		on error resume next
+		set func = getRef(functionName)
+		available = (err = 0)
+		on error goto 0
+		if available then exec = func(params)
+	end function
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	gets a new dictionary filled with a list of values
