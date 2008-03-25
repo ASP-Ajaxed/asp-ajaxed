@@ -1,5 +1,6 @@
 v 0.4
 
+- str.parse returns a string if alternative type is a string .. before it throwed exception
 - lib.exec() function added. with this you can call a function if it exists. if not then its not called
 	- good usage is e.g. in the header.asp when you want to execute something within the head-tag on some pages
 	- the init() sub does not necessarily need to be included. just leave it if you dont use it
