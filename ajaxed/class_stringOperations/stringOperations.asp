@@ -104,19 +104,21 @@ class StringOperations
 	'' @RETURN:			[variant] the string parsed into the alternative type or the alternative itself
 	'******************************************************************************************************************
 	public function parse(value, alternative)
-		value = trim(value & "")
+		val = trim(value & "")
 		parse = alternative
-		if value = "" then exit function
+		if val = "" then exit function
 		on error resume next
 		select case varType(parse)
 			case 2, 3 'integer, long
-				parse = cLng(value)
+				parse = cLng(val)
 			case 4, 5 'single, double
-				parse = cdbl(value)
+				parse = cdbl(val)
 			case 7 'date
-				parse = cDate(value)
+				parse = cDate(val)
 			case 11 'bool
-				parse = cBool(value)
+				parse = cBool(val)
+			case 8 'string
+				parse = value & ""
 			case else
 				on error goto 0
 				lib.throwError("Type not supported for string parsing.")
