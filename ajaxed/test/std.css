@@ -1,0 +1,108 @@
+﻿* {
+	font:11pt tahoma;
+}
+h1 {
+	font:20pt georgia;
+}
+h2 {
+	font:18pt georgia;
+	margin-top:1.5em;
+}
+strong {
+	font-weight:bold;
+}
+em {
+	font-style:italic;
+}
+.ajaxLoadingIndicator {
+	background-color: #cc0000;
+	color: #fff;
+	margin:2px;
+	padding:2px;
+	right: 0px;
+}
+.small, .small * {
+	font-size:8pt;
+}
+.indent {
+	margin-left:2em;
+}
+code {
+	font-family:courier;
+	color:#5B5B5B;
+}
+.code {
+	margin:1em;
+	padding:1.5em;
+	border:1px outset #000;
+}
+pre {
+	margin:0px;
+}
+.code, .code * {
+	font-family:courier;
+	color:#000;
+	background:#eee;
+}
+.comment {
+	color:#008000;
+	font-family:courier;
+}
+
+.console, .console * {
+	font-family:courier;
+	background:#000;
+	color:#fff;
+}
+.console {
+	border:2px inset #fff;
+	padding:1em;
+	height:150px;
+	overflow:auto;
+}
+.console .error {
+	background:#f00;
+}
+
+/* tabs from http://woork.blogspot.com/2008/03/clean-tab-bar-digg-like-using-css.html */ 
+ul.tab, ul.tab li{border:0; margin:0; padding:0; list-style:none;}
+ul.tab{
+border-bottom:solid 1px #DEDEDE;
+height:29px;
+padding-left:20px;
+}
+ul.tab li{float:left; margin-right:2px;}
+
+.tab a:link, .tab a:visited{
+background:url(img/tab-round.png) right 60px;
+color:#666666;
+display:block;
+font-weight:bold;
+height:30px;
+line-height:30px;
+text-decoration:none;
+}
+.tab a span{
+background:url(img/tab-round.png) left 60px;
+display:block;
+height:30px;
+margin-right:14px;
+padding-left:14px;
+}
+.tab a:hover{
+background:url(img/tab-round.png) right 30px;
+display:block;
+}
+.tab a:hover span{
+background:url(img/tab-round.png) left 30px;
+display:block;
+}
+
+/* -------------------------------- */
+/* ACTIVE ELEMENTS */
+.active a:link, .active a:visited, .active a:visited, .active a:hover{
+background:url(img/tab-round.png) right 0 no-repeat;
+}
+.active a span, .active a:hover span{
+background:url(img/tab-round.png) left 0 no-repeat;
+}
