@@ -14,6 +14,9 @@
 '*** The vitual location to the ajaxed folder. must end AND start with an SLASH! (/)
 'const AJAXED_LOCATION = "/ajaxed/"
 
+'*** The environment. choose between LIVE or DEV. no setting always results in DEV
+'const AJAXED_ENVIRONMENT = "DEV"
+
 '*** The text which appears when a callback is being performed and the user has to wait
 'const AJAXED_LOADINGTEXT = "loading..."
 

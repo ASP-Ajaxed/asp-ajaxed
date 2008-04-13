@@ -18,6 +18,22 @@
 class StringOperations
 
 	'******************************************************************************************
+	'' @SDESCRIPTION:	checks if a given string is matching a given regular expression pattern
+	'' @PARAM:			val [string]: the value which needs to be checked against the pattern
+	'' @PARAM:			ignoreCase [bool]: ignore the case on comparison
+	'' @PARAM:			pattern [string]: regular expression pattern
+	'' @RETURN:			[bool] true if val matches the pattern otherwise false
+	'******************************************************************************************
+	public function matching(val, pattern, ignoreCase)
+		set re = new regexp
+		re.ignorecase = ignoreCase
+		re.global = true
+		re.pattern = pattern & ""
+		matching = re.test(val & "")
+		set re = nothing
+	end function
+	
+	'******************************************************************************************
 	'' @SDESCRIPTION:	returns a full URL with a given file and given parameters
 	'' @DESCRIPTION:	it encodes automatically the values of the parameters.
 	'' @PARAM:			path [string]: the path to the file. e.g. /file.asp, f.asp, http://domain.com/f.asp

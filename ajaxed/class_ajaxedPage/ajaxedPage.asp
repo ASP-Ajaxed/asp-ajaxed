@@ -9,7 +9,9 @@
 '' @CLASSTITLE:		AjaxedPage
 '' @CREATOR:		Michal Gabrukiewicz - gabru at grafix.at
 '' @CREATEDON:		2007-06-28 20:32
-'' @CDESCRIPTION:	Represents a page which Provides the functionality to call server-side ASP procedures
+'' @CDESCRIPTION:	Represents a page which is located in each physical file (e.g. index.asp). In 95% of cases
+''					each of your pages will hold one instance of it which defines the page.
+''					Furthermore it provides the functionality to call server-side ASP procedures
 ''					directly from client-side. When using the class be sure the draw() method is the first
 ''					which is called before any response has been done.
 ''					init(), main() and callback() need to be implemented within the page. init() is always
@@ -21,15 +23,15 @@
 ''					callback() = handles all client requests
 ''					callback() needs to be defined with an parameter which holds the actual action to perform.
 ''					so the signature should be sub callback(action)
-''					- REFER TO demo.asp FOR A SAMPLE USAGE.
-''					- Requires Prototype JavaScript library (available at prototypejs.org)
+''					- REFER TO /demo/default.asp FOR A SAMPLE USAGE.
+''					- Requires Prototype JavaScript library (available at prototypejs.org) but can be turned on from the config
 '' @VERSION:		0.1
 
 '**************************************************************************************************************
 class AjaxedPage
 
 	'private members
-	private status, jason, callbackFlagName, loadedSources, componentLocation, loadingText, connectionString
+	private status, jason, callbackFlagName, loadedSources, componentLocation, loadingText
 	private ajaxHeaderDrawn
 	
 	'public members
@@ -38,11 +40,17 @@ class AjaxedPage
 	public contentType			''[string] contenttype of the response. default = empty
 	public debug				''[bool] turns debugging on of. default = false
 	public DBConnection			''[bool] indicates if a database connection should be opened automatically for the page.
-								''If yes then a connection with the configured connectionstring is established and can be used
+								''If yes then a connection with the configured connectionstring (ajaxed config) is established and can be used
 								''within the init(), callback() and main() procedures. default = false
 	public plain				''[bool] indicates if the page should be a plain page. means that no header(s) and footer(s) are included.
 								''Useful for page which are actually only parts of pages and loaded with an XHR. default = false
 	public title				''[string] title for the page (useful to use within the header.asp)
+	public onlyDev				''[bool] should the page only be rendered on the development environment? default = false
+	public defaultStructure		''[bool] should the header and the footer be generated automatically by the Page itself?
+								''if true then it will load a default header.asp and footer.asp which holds the common HTML elements
+								''like HTML, BODY, doctype, etc. This is useful when you dont really care about an own structure.
+								''(e.g. the ajaxed console uses this). If false then the header.asp and footer.asp from the "ajaxedConfig"
+								''is loaded. default = false
 	
 	'**********************************************************************************************************
 	'* constructor 
@@ -58,27 +66,42 @@ class AjaxedPage
 		set loadedSources = server.createObject("scripting.dictionary")
 		componentLocation = lib.init(AJAXED_LOCATION, "/ajaxed/")
 		loadingText = lib.init(AJAXED_LOADINGTEXT, "loading...")
-		connectionString = lib.init(AJAXED_CONNSTRING, empty)
 		DBConnection = lib.init(AJAXED_DBCONNECTION, false)
 		debug = false
 		plain = false
 		ajaxHeaderDrawn = false
+		onlyDev = false
+		defaultStructure = false
 	end sub
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	Draws the page. Must be the first call on a page
 	'' @DESCRIPTION:	The lifecycle is the following after executing draw().
 	''					1. setting the HTTP Headers (response)
-	''					2. init()
-	''					3. main() or callback(action) - action is trimmed to 255 chars (for security reasons)
-	''					- dont forget to provide your HTML, HEAD and BODY tags. The page does not do this for you ;)
+	''					2. init() (will be only called if exists in your page)
+	''					3. main() or callback(action) - action is trimmed to 255 chars (for security reasons),
+	''					ajaxed.callback(theAction, func, params, onComplete, url) is the Javascript function
+	''					which can be used within your HTML to call serverside functions. The params are described
+	''					as followed:
+	''					theAction: is the action which will be passed as parameter to the server-side
+	''					callback function e.g. 'do'.
+	''					func: the client-side javascript function which will be called after server-side finished
+	''					processing SUCCESSFULLY. e.g. done
+	''					params (optional): javascript hash with POST parameters you want to pass to the callback function. 
+	''					They are accessible with e.g. lib.RF on within the callback function. e.g. {a:1,b:2}
+	''					if there is a form called "frm" with your page then all its values are passed as POST values to 
+	''					the callback (if you havent specified any params manually). 
+	''					onComplete (optional): client-side function which should be invoked when the server-side processing has
+	''					been completed. This is called even if there was an error (same as with native XMLHttpRequest).
+	''					url (optional): you can specify the url where the callback sub is located. Normally the page itself
+	''					is called but you could also call callbacks of other pages. Note: use this also if you use
+	''					callbacks on pages which are recognized as default in a folder. So when a user can call them
+	''					without specifying the file itself. e.g. /demo/ (bug in iis6: http://support.microsoft.com/kb/216493)
 	'**********************************************************************************************************
 	public sub draw()
+		if onlyDev and not lib.DEV then lib.error("Wrong environment.")
 		setHTTPHeader()
-		if DBConnection then
-			if isEmpty(connectionString) then lib.throwError("No connectionstring configured.")
-			db.open(connectionString)
-		end if
+		if DBConnection then db.openDefault()
 		lib.exec "init", empty
 		if isCallback() then
 			writeln("{ ""root"": {")
@@ -92,7 +115,9 @@ class AjaxedPage
 			end if
 		else
 			drawHeader()
-			main()
+			set mainFunc = lib.getFunction("main")
+			if mainFunc is nothing then lib.throwError("no main() sub found.")
+			mainFunc()
 			drawFooter()
 		end if
 		if DBConnection then db.close()
@@ -102,8 +127,12 @@ class AjaxedPage
 	'* drawHeader
 	'******************************************************************************************************************
 	private sub drawHeader()
-		if not plain then %>
-			<!--#include virtual="/ajaxedConfig/header.asp"--><%
+		if not plain then
+			if defaultStructure then %>
+				<!--#include file="header.asp"-->
+			<% else %>
+				<!--#include virtual="/ajaxedConfig/header.asp"-->
+			<% end if
 			if not ajaxHeaderDrawn then lib.throwError("ajaxedHeader(params) must be called within the /ajaxedConfig/header.asp.")
 		end if
 	end sub
@@ -112,7 +141,13 @@ class AjaxedPage
 	'* drawFooter
 	'******************************************************************************************************************
 	private sub drawFooter()
-		if not plain then %><!--#include virtual="/ajaxedConfig/footer.asp"--><% end if
+		if not plain then
+			if defaultStructure then %>
+				<!--#include file="footer.asp"-->
+			<% else %>
+				<!--#include virtual="/ajaxedConfig/footer.asp"-->
+			<% end if %>
+		<% end if
 	end sub
 	
 	'******************************************************************************************************************

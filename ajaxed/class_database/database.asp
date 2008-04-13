@@ -10,7 +10,7 @@
 ''					within a page.
 '' @STATICNAME:		db
 '' @REQUIRES:		-
-'' @VERSION:		0.1
+'' @VERSION:		0.2
 
 '**************************************************************************************************************
 class Database
@@ -23,6 +23,10 @@ class Database
 	
 	public property get numberOfDBAccess ''[int] gets the number which indicates how many database accesses has been made till now
 		numberOfDBAccess = p_numberOfDBAccess
+	end property
+	
+	public property get defaultConnectionString ''[string] gets the default connectionsstring which can be configured in the ajaxed config. if no configured then empty
+		defaultConnectionString = lib.init(AJAXED_CONNSTRING, empty)
 	end property
 	
 	'******************************************************************************************************************
@@ -46,6 +50,16 @@ class Database
 	end sub
 	
 	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	Opens the connection to the default database
+	'' @DESCRIPTION:	- uses open() for it
+	''					- throws an error if no default connectionstring is configured
+	'******************************************************************************************************************
+	public sub openDefault()
+		if isEmpty(defaultConnectionString) then lib.throwError("No default connectionstring configured.")
+		open(defaultConnectionString)
+	end sub
+	
+	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Closes the current database connection
 	'******************************************************************************************************************
 	public sub close()
@@ -54,6 +68,105 @@ class Database
 			set connection = nothing
 		end if
 	end sub
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	deletes a record from a given database table.
+	'' @DESCRIPTION:	- its required that the id column is named "id" if condition is used with int.
+	''					- ID is parsed and only ID greater 0 are recognized
+	'' @PARAM:			tablename [string]: the name of the table you want to delete the record from
+	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. "id = 20 AND cool = 1"
+	''					- if condition is a string then you need to ensure sql-safety with str.sqlsafe yourself.
+	'******************************************************************************************************************
+	public sub delete(tablename, condition)
+		if trim(tablename) = "" then lib.throwError(array(100, "lib.delete", "tablename cannot be empty"))
+		if condition = "" then exit sub
+		getRecordset("DELETE FROM " & str.sqlSafe(tablename) & getWhereClause(condition))
+	end sub
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	inserts a record into a given database table and returns the record ID
+	'' @DESCRIPTION:	- primary key column must be named ID
+	''					- the values are not type converted in any way. you need to do it yourself
+	'' @PARAM:			tablename [string]: name of the table
+	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. array("name", "jack johnson")
+	''					- length must be even otherwise error is thrown
+	'' @RETURN:			[int] ID of the inserted record
+	'******************************************************************************************************************
+	public function insert(tablename, data)
+		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
+		if (uBound(data) + 1) mod 2 <> 0 then lib.throwError(array(100, "lib.insert", "data length must be even. array(column, value, ...) "))
+		set aRS = server.createObject("ADODB.Recordset")
+		aRS.open tablename, connection, 1, 2, 2
+		aRS.addNew()
+		for i = 0 to ubound(data) step 2
+			aRS(data(i)) = data(i + 1)
+		next
+		aRS.update()
+		insert = aRS("id")
+		aRS.close()
+		set aRS = nothing
+		p_numberOfDBAccess = p_numberOfDBAccess + 1
+	end function
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	updates a record in a given database table
+	'' @DESCRIPTION:	- primary key column must be named ID if condition is int
+	''					- the values are not type converted in any way. you need to do it yourself
+	'' @PARAM:			tablename [string]: name of the table
+	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. array("name", "jack johnson")
+	''					- length must be even otherwise error is thrown
+	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. "id = 20 AND cool = 1"
+	''					- if condition is a string then you need to ensure sql-safety with str.sqlsafe yourself.
+	'******************************************************************************************************************
+	public sub update(tablename, data, condition)
+		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
+		set aRS = server.createObject("ADODB.Recordset")
+		aRS.open "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition), connection, 1, 2
+		for i = 0 to ubound(data) step 2
+			aRS(data(i)) = data(i + 1)
+		next
+		aRS.update()
+		aRS.close()
+		set aRS = nothing
+		p_numberOfDBAccess = p_numberOfDBAccess + 1
+	end sub
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	gets the recordcount for a given table.
+	'' @PARAM:			tablename [string]: name of the table
+	'' @PARAM:			condition [string]: condition for the count. e.g. "deleted = 0". leave empty to get all
+	'' @RETURN:			[int] number of records
+	'******************************************************************************************************************
+	public function count(tablename, condition)
+		if trim(tablename) = "" then lib.throwError(array(100, "lib.count", "tablename cannot be empty"))
+		count = getScalar("SELECT COUNT(*) FROM " & str.SQLSafe(tablename) & lib.iif(condition <> "", " WHERE " & condition, ""), 0)
+	end function
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	toggles the state of a flag column. if the value is 1 its turned into 0 and vicaversa.
+	'' @DESCRIPTION:	useful if you dont delete records but mark them deleted. e.g. toggle("user", "deleted", 10)
+	'' @PARAM:			tablename [string]: name of the table
+	'' @PARAM:			columnName [string]: name of the flag column. must be a numeric column accepting 1 and 0
+	'' @PARAM:			condition [string], [int]: if number then treated as ID of the record otherwise condition for WHERE clause.
+	'******************************************************************************************************************
+	public sub toggle(tablename, columnName, condition)
+		if trim(tablename) = "" then lib.throwError(array(100, "lib.toggle", "tablename cannot be empty"))
+		if trim(columnName) = "" then lib.throwError(array(100, "lib.toggle", "columnname cannot be empty"))
+		sql = "UPDATE " & str.SQLSafe(tablename) & " SET " & str.SQLSafe(columnName) & " = not " & str.SQLSafe(columnName) & getWhereClause(condition)
+		getRecordset(sql)
+	end sub
+	
+	'******************************************************************************************************************
+	'* getWhereClause - generates the where clause for SQL queries 
+	'******************************************************************************************************************
+	private function getWhereClause(condition)
+		getWhereClause = trim(condition)
+		if isNumeric(condition) then
+			rID = str.parse(condition, 0)
+			if rID > 0 then getWhereClause = "id = " & rID
+		end if
+		if getWhereClause <> "" then getWhereClause = " WHERE " & getWhereClause
+	end function
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Default method which should be always used to get a LOCKED recordset. Example for use:
@@ -115,7 +228,6 @@ class Database
 		set aRS = getRecordset(sql)
 		if not aRS.eof then getScalar = str.parse(aRS(0) & "", alternative)
 		set aRS = nothing
-		p_numberOfDBAccess = p_numberOfDBAccess + 1
 	end function
 
 end class

@@ -1,16 +1,40 @@
-v 0.4
+v 1.0
 
-- str.parse returns a string if alternative type is a string .. before it throwed exception
-- lib.exec() function added. with this you can call a function if it exists. if not then its not called
-	- good usage is e.g. in the header.asp when you want to execute something within the head-tag on some pages
-	- the init() sub does not necessarily need to be included. just leave it if you dont use it
-- lib.fso property added. for quick access to the filesystemobject
-- MD5 hash class added
+- ajaxedPage has a plain- and title-property
 - moved configuration to /ajaxedConfig ... this makes the updating process easier
 	- you need to create a folder called "ajaxedConfig" and move the config.asp from "ajaxed" folder to there
 	- moreover put a header.asp and footer.asp into the ajaxedConfig folder as well
 - footer and header added
-- ajaxedPage has a plain- and title-property
+	- footer.asp and header.asp can be found in "ajaxedConfig". Modify them as you wish
+- ajaxedPage.defaultStructure property added. With this its possible to load a page with a default header and footer. thus they are not loaded from the ajaxedConfig then
+	- this is here if you need a valid HTML document but dont really care about the nitty gritty stuff.
+- MD5 hash class added
+- lib.fso property added. for quick access to the filesystemobject
+- lib.getFunction() gives the possibility to get a function by name and the possibility to check if it exists
+- lib.exec() function added. with this you can call a function if it exists. if not then its not called
+	- good usage is e.g. in the header.asp when you want to execute something within the head-tag on some pages
+	- the init() sub does not necessarily need to be included. just leave it if you dont use it
+- str.parse returns a string if alternative type is a string .. before it throwed exception
+- str.matching for quick execution of regex
+- implemented environments support. lib.env returns the current environment. LIVE is production and DEV is development
+	- by default its always development
+	- AJAXED_ENVIRONMENT can be set in the config.asp
+	- lib.DEV and lib.LIVE are helpers to indicate the environment
+	- ajaxedPage.onlyDev property can protect pages against being available on the live environment
+	- tests cannot be run by default on the live environment (security reason)
+	- if you run /test/ then it looks for tests everywhere on the server. testfiles must start with "test_" and have the extension .asp
+- TestFixture class added. Its possible to write tests now. Tests for the library are available and you can write your own for your applications
+	- Fixture is implemented as other common fixtures on the market
+- Cache class added. With it you can cache data which is "expensive" to get. see webdevbros.net for a tutorial about it.
+- error is now thrown if there is no main() sub in the page. 
+- created an own ajaxed console which is a place for tools for the developer
+	- available through /ajaxed/console/ and only on the DEV environment.
+	- contains a regular expression tool
+	- contains the documentor which creates documentation for VBScript classes
+- documentation works now in FF and IE. formatting has been updated a bit. and printing is nicer as well
+- db.insert, db.update, db.count, db.delete, db.toggle added
+	- makes code nicer and quick CRUD operations easier
+- added TextTemplate component. It parses templates. Useful for sending emails (email component will follow)
 
 v 0.3
 
