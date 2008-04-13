@@ -15,7 +15,7 @@ Ajax.Responders.register({
 	}
 });
 
-//optional: onComplete, url (because of bug in iis5 http://support.microsoft.com/kb/216493)
+//optional: url (also because of bug in iis5 http://support.microsoft.com/kb/216493)
 ajaxed.callback = function(theAction, func, params, onComplete, url) {
 	if (params) {
 		params = $H(params);
@@ -30,6 +30,8 @@ ajaxed.callback = function(theAction, func, params, onComplete, url) {
 	uri = window.location.href;
 	if (ajaxed.prototype.debug) ajaxed.debug("Action (to be handled in callback):\n\n" + theAction);
 	if (uri.endsWith('/') && url) uri += url;
+	if (url) uri = url;
+	if (ajaxed.prototype.debug) ajaxed.debug("URL called:\n\n" + uri);
 	if (ajaxed.prototype.debug) ajaxed.debug("Params passed to xhr:\n\n" + params.toJSON());
 	new Ajax.Request(uri, {
 		method: 'post',

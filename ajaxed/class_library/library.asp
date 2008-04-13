@@ -1,4 +1,4 @@
-<%
+﻿<%
 '**************************************************************************************************************
 '* License refer to license.txt		
 '**************************************************************************************************************
@@ -38,7 +38,21 @@ class Library
 	end property
 	
 	public property get version ''[string] gets the version of the whole library
-		version = "0.3"
+		version = "1.0"
+	end property
+	
+	public property get env ''[string] gets the current environment. LIVE or DEV
+		env = lib.init(AJAXED_ENVIRONMENT, "DEV")
+		'always return development unless its really live
+		if env <> "LIVE" then env = "DEV"
+	end property
+	
+	public property get LIVE ''[bool] indicates if the environment is the live env (production)
+		LIVE = env = "LIVE"
+	end property
+	
+	public property get DEV ''[bool] indicates if the environment is the development evn
+		DEV = env = "DEV"
 	end property
 	
 	'***********************************************************************************************************
@@ -60,24 +74,49 @@ class Library
 	end sub
 	
 	'**********************************************************************************************************
+	'' @SDESCRIPTION:	generates an array for a range of values which are defined by its start and end.
+	'' @PARAM:			startingWith [float], [int]: the start of the range (incl)
+	'' @PARAM:			endsWith [float], [int]: the end of the range (incl)
+	'' @PARAM:			interval [float], [int]: the step for the incremental increase of the starting value
+	'' @RETURN:			[array] array with numbers where each value is a value between the boundaries (incl)
+	'**********************************************************************************************************
+	public function range(startsWith, endsWith, interval)
+		if interval = 0 then lib.throwError("interval cannot be 0")
+		arr = array()
+		for i = startsWith to endsWith step interval
+			redim preserve arr(uBound(arr) + 1)
+			arr(uBound(arr)) = i
+		next
+		range = arr
+	end function
+	
+	'**********************************************************************************************************
 	'' @SDESCRIPTION:	calls a given function/sub if it exists
 	'' @DESCRIPTION:	tries to call a given function/sub with the given parameters.
 	''					the scope is the scope when calling exec. 
 	'' @PARAM:			params [variant]: you choose how you provide your params. provide empty to call a procedure without parameters
 	'' @RETURN:			[variant] whatever the function returns
 	'**********************************************************************************************************
-	function exec(functionName, params)
-		on error resume next
-		set func = getRef(functionName)
-		available = (err = 0)
-		on error goto 0
-		if available then
-			if isEmpty(params) then
-				exec = func
-			else
-				exec = func(params)
-			end if
+	public function exec(functionName, params)
+		set func = getFunction(functionName)
+		if func is nothing then exit function
+		if isEmpty(params) then
+			exec = func
+		else
+			exec = func(params)
 		end if
+	end function
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	gets a reference to a function/sub by a given name.
+	'' @DESCRIPTION:	if function was found it can be executed afterwards. eg. set f = getFunction("test") : f
+	'' @RETURN:			[object] reference to the function/sub or nothing if not found
+	'**********************************************************************************************************
+	public function getFunction(functionName)
+		set getFunction = nothing
+		on error resume next
+		set getFunction = getRef(functionName)
+		on error goto 0
 	end function
 	
 	'**********************************************************************************************************
