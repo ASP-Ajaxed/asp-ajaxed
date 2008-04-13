@@ -6,7 +6,7 @@
 '**************************************************************************************************************
 
 '' @CLASSTITLE:		Library
-'' @CREATOR:		Michal Gabrukiewicz - gabru @ grafix.at
+'' @CREATOR:		Michal Gabrukiewicz - gabru at grafix.at
 '' @CREATEDON:		12.09.2003
 '' @STATICNAME:		lib
 '' @CDESCRIPTION:	This class holds all general methods used within the library. They are accessible

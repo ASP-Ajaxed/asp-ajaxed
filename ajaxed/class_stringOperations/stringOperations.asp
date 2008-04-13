@@ -6,7 +6,7 @@
 '**************************************************************************************************************
 
 '' @CLASSTITLE:		StringOperations
-'' @CREATOR:		Michal Gabrukiewicz - gabru @ grafix.at, Michael Rebec
+'' @CREATOR:		Michal Gabrukiewicz - gabru at grafix.at, Michael Rebec
 '' @CREATEDON:		11.12.2003
 '' @STATICNAME:		str
 '' @CDESCRIPTION:	Collection of various useful string operations. An instance of this class

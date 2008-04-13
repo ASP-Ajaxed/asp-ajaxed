@@ -1,0 +1,32 @@
+﻿Email Subject <<< NAME >>>
+<table>
+<tr>
+	<td>Text Parser:</td>
+	<td><<< VERSION >>></td>
+</tr>
+<tr>
+	<td>Date modified:</td>
+	<td><<< MoDIFIED >>></td>
+</tr>
+<tr>
+	<td>Modified by:</td>
+	<td><<< NAME >>></td>
+</tr>
+<<< BLOCK WEEKDAYS >>>
+<tr valign="top">
+	<td><<< WEEKDAY >>>:</td>
+	<td><<< VALUE >>></td>
+</tr>
+<<< ENDBLOCK WEEKDAYS >>>
+
+<<< BLOCK TEST >>>
+<tr valign="top">
+	<td><<< WEEKDAY >>>:</td>
+	<td><<< VALUE >>></td>
+</tr>
+<<< ENDBLOCK TEST >>>
+</table>
+
+<<< BLOCK WEEKDAYS >>>
+	<strong><<< WEEKDAY >>></strong> (<<< VALUE >>>)&nbsp;
+<<< ENDBLOCK WEEKDAYS >>>

@@ -7,7 +7,7 @@
 '**************************************************************************************************************
 
 '' @CLASSTITLE:		MD5
-'' @CREATOR:		Michal Gabrukiewicz - gabru @ grafix.at
+'' @CREATOR:		Michal Gabrukiewicz - gabru at grafix.at
 '' @CREATEDON:		29.12.2007
 '' @CDESCRIPTION:	Thats a class for MD5 encryption.
 ''					MD5: Derived from the RSA Data Security, Inc. MD5 Message-Digest Algorithm,
