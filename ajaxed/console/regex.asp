@@ -96,7 +96,7 @@ sub main() %>
 	
 	<div style="float:left;width:50%">
 		<strong>Pattern:</strong><br>
-		<div><textarea rows="2" style="width:90%;" name="pattern">^$</textarea></div>
+		<div><textarea rows="2" style="width:90%;" class="code" name="pattern">^$</textarea></div>
 		<br>
 		<a href="http://msdn2.microsoft.com/en-us/library/ms974570.aspx" target="_blank">Regex Reference</a>
 		<br><br>
@@ -138,7 +138,7 @@ sub main() %>
 	</div>
 	<div style="float:left;width:50%">
 		<strong>Search string:</strong><br>
-		<div><textarea rows="2" style="width:100%" name="searchstring"></textarea></div>
+		<div><textarea rows="2" class="code" style="width:100%" name="searchstring"></textarea></div>
 		<br><br>
 		<div class="console" id="regexConsole">&gt; Ready.</div>
 		<a href="javascript:void(0)" onclick="$('regexConsole').update('&gt; Ready.')">clear console</a>

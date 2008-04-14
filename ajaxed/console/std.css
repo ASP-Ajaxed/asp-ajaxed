@@ -1,4 +1,4 @@
-﻿* {
+* {
 	font:11pt tahoma;
 }
 h1 {
@@ -21,28 +21,35 @@ em {
 	padding:2px;
 	right: 0px;
 }
+button {
+	padding:0.1em 1em;
+}
 .small, .small * {
 	font-size:8pt;
 }
 .indent {
 	margin-left:2em;
 }
+pre {
+	margin:0px;
+}
 code {
 	font-family:courier;
 	color:#5B5B5B;
 }
-.code {
+span.code, div.code {
 	margin:1em;
 	padding:1.5em;
 	border:1px outset #000;
-}
-pre {
-	margin:0px;
 }
 .code, .code * {
 	font-family:courier;
 	color:#000;
 	background:#eee;
+}
+input.code, textarea.code {
+	font-family:courier;
+	background:#fff;
 }
 .comment {
 	color:#008000;
@@ -67,42 +74,43 @@ pre {
 /* tabs from http://woork.blogspot.com/2008/03/clean-tab-bar-digg-like-using-css.html */ 
 ul.tab, ul.tab li{border:0; margin:0; padding:0; list-style:none;}
 ul.tab{
-border-bottom:solid 1px #DEDEDE;
-height:29px;
-padding-left:20px;
+	border-bottom:solid 1px #DEDEDE;
+	height:29px;
+	padding-left:20px;
+	cursor:pointer;
 }
 ul.tab li{float:left; margin-right:2px;}
 
 .tab a:link, .tab a:visited{
-background:url(img/tab-round.png) right 60px;
-color:#666666;
-display:block;
-font-weight:bold;
-height:30px;
-line-height:30px;
-text-decoration:none;
+	background:url(img/tab-round.png) right 60px;
+	color:#666666;
+	display:block;
+	font-weight:bold;
+	height:30px;
+	line-height:30px;
+	text-decoration:none;
 }
 .tab a span{
-background:url(img/tab-round.png) left 60px;
-display:block;
-height:30px;
-margin-right:14px;
-padding-left:14px;
+	background:url(img/tab-round.png) left 60px;
+	display:block;
+	height:30px;
+	margin-right:14px;
+	padding-left:14px;
 }
 .tab a:hover{
-background:url(img/tab-round.png) right 30px;
-display:block;
+	background:url(img/tab-round.png) right 30px;
+	display:block;
 }
 .tab a:hover span{
-background:url(img/tab-round.png) left 30px;
-display:block;
+	background:url(img/tab-round.png) left 30px;
+	display:block;
 }
 
 /* -------------------------------- */
 /* ACTIVE ELEMENTS */
 .active a:link, .active a:visited, .active a:visited, .active a:hover{
-background:url(img/tab-round.png) right 0 no-repeat;
+	background:url(img/tab-round.png) right 0 no-repeat;
 }
 .active a span, .active a:hover span{
-background:url(img/tab-round.png) left 0 no-repeat;
+	background:url(img/tab-round.png) left 0 no-repeat;
 }

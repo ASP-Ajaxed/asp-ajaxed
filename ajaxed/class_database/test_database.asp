@@ -1,4 +1,4 @@
-﻿<% AJAXED_CONNSTRING = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & server.mappath("test.accdb") & ";Persist Security Info=False;" %>
+﻿<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("test.mdb") & ";" %>
 <!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 set tf = new TestFixture

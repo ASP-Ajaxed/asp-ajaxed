@@ -1,6 +1,4 @@
-﻿<%
-AJAXED_CONNSTRING = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & server.mappath("/ajaxed/class_database/test.accdb") & ";Persist Security Info=False;"
-%>
+﻿<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("../class_database/test.mdb") & ";" %>
 <!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 'This page performs several tests in order to check the
