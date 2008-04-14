@@ -84,7 +84,15 @@ class TestFixture
 	'**********************************************************************************************************
 	public sub assert(truth, msg)
 		assertStarted()
-		if not truth then assertFailed true, false, msg
+		if not truth then assertFailed true, truth, msg
+	end sub
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION: 	expects a value to be false
+	'**********************************************************************************************************
+	public sub assertNot(expected, msg)
+		assertStarted()
+		if expected then assertFailed false, expected, msg
 	end sub
 	
 	'**********************************************************************************************************
@@ -120,7 +128,7 @@ class TestFixture
 	'**********************************************************************************************************
 	public sub assertHas(data, expected, msg)
 		assertStarted()
-		if not arrayContains(data, expected) then assertFailed expected, data, msg
+		if not lib.contains(data, expected) then assertFailed expected, data, msg
 	end sub
 	
 	'**********************************************************************************************************
@@ -129,21 +137,8 @@ class TestFixture
 	'**********************************************************************************************************
 	public sub assertHasNot(data, expected, msg)
 		assertStarted()
-		if arrayContains(data, expected) then assertFailed expected, data, msg
+		if lib.contains(data, expected) then assertFailed expected, data, msg
 	end sub
-	
-	'**********************************************************************************************************
-	'* arrayContains 
-	'**********************************************************************************************************
-	private function arrayContains(arr, val)
-		arrayContains = true
-		if isArray(arr) then
-			for each d in arr
-				if d & "" = val & "" then exit function
-			next
-		end if
-		arrayContains = false
-	end function
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	expects two values not to be equal
