@@ -68,6 +68,7 @@ sub content() %>
 		run = function(file) {
 			new Ajax.Updater('output', file, {
 				insertion: Insertion.Top,
+				evalScripts:true,
 				onSuccess: function(t) {
 					t.responseText = t.responseText.gsub(/(\([^0][\d| ]* (errors|failed)\))/, function(match) {
 						return '<span class="error">' + match[1] + '</span>'
