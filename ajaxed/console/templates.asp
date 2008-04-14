@@ -77,10 +77,10 @@ sub main() %>
 	
 	<div style="float:left;width:75%">
 		<strong>Template:</strong> (virtual path &amp; filename)<br>
-		<input type="Text" name="name" id="templateName" style="width:70%" value="" /><br>
+		<div style="width:100%"><input type="Text" name="name" id="templateName" style="width:70%" value="" /></div>
 		<br>
 		<strong>Template content:</strong><br>
-		<textarea class="code" wrap="off" rows="20" id="templateContent" style="width:90%" name="template"></textarea>
+		<div style="width:100%"><textarea class="code" wrap="off" rows="20" id="templateContent" style="width:90%" name="template"></textarea></div>
 		<br><br>
 		<button type="button" id="save" onclick="ajaxed.callback('save', done, null, null, 'templates.asp')">Save</button>
 		<button type="button" id="delete" onclick="if(confirm('Are you sure you want to delete the selected Template?\nThis cannot be undone!'))ajaxed.callback('delete', done, null, null, 'templates.asp')">Delete</button>
