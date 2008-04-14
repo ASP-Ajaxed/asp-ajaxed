@@ -59,5 +59,16 @@ sub test_3()
 	tf.assert lib.contains(array("test", "who", 3), "3"), "lib.contains"
 	tf.assertNot lib.contains("3", "3"), "lib.contains"
 	tf.assertNot lib.contains(array(1, 2, 3, 10), 11), "lib.contains"
+	
+	set d = lib.newDict(empty)
+	d.add 1, "someting"
+	d.add 2, ""
+	d.add "3", "yeah"
+	d.add "not", empty
+	tf.assert lib.contains(d, 2), "lib.contains with dictionary"
+	tf.assert lib.contains(d, "2"), "lib.contains with dictionary"
+	tf.assertNot lib.contains(d, 0), "lib.contains with dictionary"
+	tf.assertNot lib.contains(d, 3.2), "lib.contains with dictionary"
+	tf.assert lib.contains(d, "not"), "lib.contains with dictionary"
 end sub
 %>

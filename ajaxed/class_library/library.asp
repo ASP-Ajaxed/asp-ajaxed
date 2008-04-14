@@ -76,8 +76,8 @@ class Library
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	checks if a given datastructure contains a given value
 	'' @DESCRIPTION:	- returns false if the datastructure cannot be determined
-	''					- only array supported yet.
-	'' @PARAM:			data [array]: the array which should be checked against.
+	'' @PARAM:			data [array], [dictionary]: the data structure which should be checked against.
+	''					if its a dictionary then the key is used for comparison.
 	'' @RETURN:			[bool] true if it contains the value
 	'**********************************************************************************************************
 	public function contains(data, val)
@@ -85,6 +85,10 @@ class Library
 		if isArray(data) then
 			for each d in data
 				if d & "" = val & "" then exit function
+			next
+		elseif lCase(typename(data)) = "dictionary" then
+			for each k in data.keys
+				if k & "" = val & "" then exit function
 			next
 		end if
 		contains = false
