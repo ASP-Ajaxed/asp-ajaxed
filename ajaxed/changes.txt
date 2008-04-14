@@ -35,6 +35,7 @@ v 1.0
 - db.insert, db.update, db.count, db.delete, db.toggle added
 	- makes code nicer and quick CRUD operations easier
 - added TextTemplate component. It parses templates. Useful for sending emails (email component will follow)
+- lib.contains added. checks if a given value exists in an array or dictionary
 
 v 0.3
 
