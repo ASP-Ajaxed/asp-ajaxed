@@ -36,6 +36,9 @@ sub main() %>
 		<li onclick="loadContent('source.asp', this)" id="tSource">
 			<a href="#"><span>Source</span></a>
 		</li>
+		<li onclick="loadContent('templates.asp', this)" id="tTemplates">
+			<a href="#"><span>Templates</span></a>
+		</li>
 		<li onclick="loadContent('regex.asp', this)" id="tRegex">
 			<a href="#"><span>Regex</span></a>
 		</li>

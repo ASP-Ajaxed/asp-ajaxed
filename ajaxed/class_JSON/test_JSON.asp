@@ -1,6 +1,4 @@
-﻿<%
-AJAXED_CONNSTRING = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & server.mappath("/ajaxed/class_database/test.accdb") & ";Persist Security Info=False;"
-%>
+﻿<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("../class_database/test.mdb") & ";" %>
 <!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 class Person
@@ -47,14 +45,15 @@ set empty_rs = db.getRecordset("SELECT * FROM person WHERE firstname = 'sbas' OR
 %>
 <script>
 	var assertions = 1;
-	function assert(bool, msg) {
+	assert = function(bool, msg) {
 		var m = 'Success.';
-		if (!bool) m = 'Failed: ' + ((msg) ? msg : 'no error help message given.');
-		document.write(assertions + '. ' + m + '<br>');
+		if (!bool) {
+			alert('Failed: ' + ((msg) ? msg : 'no error help message given.'));
+		}
 		assertions++;
 	}
 	var jsn = <%= (new JSON).toJSON("p", p, false) %>;
-	assert(jsn.p.favNumbers[0] == 21);
+	assert(jsn.p.favNumbers[0] == 2);
 	assert(jsn.p.favNumbers[2] == 234);
 	assert(jsn.p.firstname == 'John');
 	assert(jsn.p.lastname == 'Doe');
