@@ -17,15 +17,17 @@ class Person
 	end function
 end class
 
+set db = new Database
+
 set tf = new TestFixture
 tf.run()
 
+
 sub test_1()
 	'just for completion, that it is a test and generates output
+	db.open(AJAXED_CONNSTRING)
 end sub
 
-set db = new Database
-db.open(AJAXED_CONNSTRING)
 
 set p = new Person
 p.firstname = "John"

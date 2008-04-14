@@ -2,7 +2,6 @@
 <!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 set tf = new TestFixture
-tf.debug = True
 tf.run()
 
 sub test_1()

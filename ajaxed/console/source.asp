@@ -42,7 +42,7 @@ sub content() %>
 		<li>Download and install <a href="http://tortoisesvn.tigris.org/">Tortoise SVN</a></li>
 		<li>Right-mouse click in windows explorer on the folder you want to import ajaxed sources.</li>
 		<li>Click "SVN Checkout..."</li>
-		<li>Enter <code>http://asp-ajaxed.googlecode.com/svn/trunk/ asp-ajaxed-read-only</code> as URL of repository</li>
+		<li>Enter <code>http://asp-ajaxed.googlecode.com/svn/trunk/</code> as URL of repository</li>
 	</ol>
 
 	<strong>Interested in development and contribution?</strong>

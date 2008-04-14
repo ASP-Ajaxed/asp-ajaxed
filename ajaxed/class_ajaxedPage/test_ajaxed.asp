@@ -23,14 +23,18 @@ end class
 class fooUnknown
 end class
 
-set tf = new TestFixture
-tf.run()
-
 set p = new AjaxedPage
 p.plain = true
 p.dbconnection = true
 p.onlyDev = true
-p.draw()
+
+set tf = new TestFixture
+tf.run()
+
+sub test_1
+	p.draw()
+end sub
+
 
 sub init()
 	if request.querystring = "" and p.QS(empty) <> "" then p.error("No querystring should be here")
@@ -100,7 +104,7 @@ sub main() %>
 	%>
 	
 	<script>
-		function t_dict2(r) {
+		t_dict2 = function(r) {
 			l(r.d1.name == '');
 			l(r.d1.age == '');
 			l(r.d2.arr[0] == 2);
@@ -108,43 +112,43 @@ sub main() %>
 			l(r.d2.arr[2] == false);
 			l(r.d2.d1.Country == '');
 		}
-		function t_string(r) {
+		t_string = function(r) {
 			l(r.ABC == 'ABC');
 			l(r.special == 'äöü\'"?!\\/[]_²§()~');
 		}
-		function t_bool(r) {
+		t_bool = function(r) {
 			l(r.t == true);
 			l(r.f == false);
 		}
-		function t_number(r) {
+		t_number = function(r) {
 			l(r == 10);
 		}
-		function t_float(r) {
+		t_float = function(r) {
 			l(r == 10.99);
 		}
-		function t_object(r) {
+		t_object = function(r) {
 			l(r.unknown == "fooUnknown");
 			l(r.custom.name == "michal");
 			l(r.custom.age == 26);
 			l(r.custom.Country == "austria");
 		}
-		function t_object_simple(r){
+		t_object_simple = function(r){
 			l(r.name == "michal");
 			l(r.age == 26);
 			l(r.Country == "austria");
 			l(r.favs[3] == 's');
 		}
-		function t_dict(r) {
+		t_dict = function(r) {
 			l(r.name == "");
 			l(r.age == "");
 			l(r.Country == "");
 		}
-		function t_nothings(r) {
+		t_nothings = function(r) {
 			for (i = 0; i < r.length; i++) {
 				l(!r[0]);
 			}
 		}
-		function t_rs(r) {
+		t_rs = function(r) {
 			l(r.length == 2);
 			l(r[0].firstname == 'michal');
 			l(r[0].lastname == 'gabrukiewicz');
@@ -162,35 +166,36 @@ sub main() %>
 			l(!r[1].some_null);
 			l(r[1].some_decimal == 3.345);
 		}
-		function t_empty_rs(r) {
+		t_empty_rs = function(r) {
 			l(r.length == 0);
 		}
-		function t_rs_count(r) {
+		t_rs_count = function(r) {
 			l(r.data.length == 2);
 			l(r.count == 2);
 			l(r.data[1].firstname == 'cool');
 		}
 		
-		function l(msg) {
-			$('log').innerHTML += "<br>" + msg;
+		l = function(msg) {
+			if (!msg) $('log').innerHTML += "<br>" + msg;
 		}
 	</script>
 
 	<div style="font-family:courier" id="log"></div>
 	
 	<script>
-		ajaxed.callback('bool', t_bool);
-		ajaxed.callback('string', t_string);
-		ajaxed.callback('number', t_number);
-		ajaxed.callback('float', t_float);
-		ajaxed.callback('nothings', t_nothings);
-		ajaxed.callback('object', t_object);
-		ajaxed.callback('dict', t_dict);
-		ajaxed.callback('dict2', t_dict2);
-		ajaxed.callback('object_simple', t_object_simple);
-		ajaxed.callback('rs', t_rs);
-		ajaxed.callback('empty_rs', t_empty_rs);
-		ajaxed.callback('rs_count', t_rs_count);
+		var u = '/ajaxed/class_ajaxedPage/test_ajaxed.asp';
+		ajaxed.callback('bool', t_bool, null, null, u);
+		ajaxed.callback('string', t_string, null, null, u);
+		ajaxed.callback('number', t_number, null, null, u);
+		ajaxed.callback('float', t_float, null, null, u);
+		ajaxed.callback('nothings', t_nothings, null, null, u);
+		ajaxed.callback('object', t_object, null, null, u);
+		ajaxed.callback('dict', t_dict, null, null, u);
+		ajaxed.callback('dict2', t_dict2, null, null, u);
+		ajaxed.callback('object_simple', t_object_simple, null, null, u);
+		ajaxed.callback('rs', t_rs, null, null, u);
+		ajaxed.callback('empty_rs', t_empty_rs, null, null, u);
+		ajaxed.callback('rs_count', t_rs_count, null, null, u);
 	</script>	
 
 <% end sub %>
