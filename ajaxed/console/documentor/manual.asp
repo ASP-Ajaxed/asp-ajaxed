@@ -136,7 +136,7 @@ sub content() %>
 	<div class="code">
 		<div>
 			<pre class="comment">
-'' @CLASSTITLE:		Person
+'' @<span>C</span>LASSTITLE:		Person
 '' @CREATOR:		Jack Johnson
 '' @CREATEDON:		2000-01-21 20:30
 '' @CDESCRIPTION:	Represents a user which is using the application. A user

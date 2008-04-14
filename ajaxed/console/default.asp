@@ -1,4 +1,5 @@
 <!--#include file="../ajaxed.asp"-->
+<!--#include file="../class_RSS/RSS.asp"-->
 <%
 set page = new AjaxedPage
 with page
@@ -17,11 +18,32 @@ sub header()
 end sub
 
 '******************************************************************************************
+'* getVersion 
+'******************************************************************************************
+function getVersion()
+	getVersion = ""
+	set r = new RSS
+	r.url = "http://www.grafix.at/ajaxed/console/version.asp"
+	r.load()
+	if not r.failed then getVersion = r.description
+end function
+
+'******************************************************************************************
 '* main  
 '******************************************************************************************
 sub main() %>
 	
-	<h1 id="headline">ajaxed Console</h1>
+	<% version = getVersion() %>
+	<% if lib.version <> getVersion() and version <> "" then %>
+		<div style="position:absolute;top:5px;right:10px;color:#8000FF">
+			version <strong><%= version %></strong> is available.
+			<a href="http://www.webdevbros.net/ajaxed">Update now!</a>
+		</div>
+	<% end if %>
+	
+	<h1 id="headline">
+		ajaxed Console
+	</h1>
 	
 	<ul class="tab">
 		<li onclick="loadContent('configuration.asp', this)" id="tConfig">

@@ -20,6 +20,7 @@ set page = nothing
 '* drawFiles  
 '******************************************************************************************
 function drawFiles(folder, caption)
+	if lcase(folder.name) = "ajaxed" then exit function
 	for each file in folder.files
 		if str.endsWith(file.name, ".template") then
 			path = unmapPath(file.path, "/")

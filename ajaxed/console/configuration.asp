@@ -50,18 +50,18 @@ sub content() %>
 	
 	<div style="float:left;width:40%">
 		<table cellpadding="3">
-		<% row "Ajaxed version", lib.version %>
-		<% row "Environment", lib.ENV %>
-		<% row "Scripting Engine", ScriptEngine & " " & ScriptEngineMajorVersion & "." & ScriptEngineMinorVersion & "." & ScriptEngineBuildVersion %>
-		<% row "IIS", request.ServerVariables("SERVER_SOFTWARE") %>
-		<% row "Server name", request.ServerVariables("SERVER_NAME") %>
-		<% row "Components", str.parse(str.arrayToString(getComponents(), ", "), "-") %>
-		<% row "Server time", now() %>
+		<% row "Ajaxed version", lib.version & "&nbsp;<a href=""../changes.txt"">changes</a>", false %>
+		<% row "Environment", lib.ENV, true %>
+		<% row "Scripting Engine", ScriptEngine & " " & ScriptEngineMajorVersion & "." & ScriptEngineMinorVersion & "." & ScriptEngineBuildVersion, false %>
+		<% row "IIS", request.ServerVariables("SERVER_SOFTWARE"), false %>
+		<% row "Server name", request.ServerVariables("SERVER_NAME"), false %>
+		<% row "Components", str.parse(str.arrayToString(getComponents(), ", "), "-"), false %>
+		<% row "Server time", now(), false %>
 		</table>
 	</div>
 	<div style="float:left;width:60%">
 		<table cellpadding="3">
-		<% row "Default DB", lib.iif(isEmpty(db.defaultConnectionString), "no DB configured. (DB can be configured in your /ajaxedConfig/config.asp)", db.defaultConnectionString) %>
+		<% row "Default DB", lib.iif(isEmpty(db.defaultConnectionString), "no DB configured. (DB can be configured in your /ajaxedConfig/config.asp)", db.defaultConnectionString), false %>
 		<%
 		if not isEmpty(db.defaultConnectionString) then
 			on error resume next
@@ -70,27 +70,27 @@ sub content() %>
 				if failed then description = err.description
 			on error goto 0
 			if failed then
-				row "DB Connected", "could not connect. (" & description & ")"
+				row "DB Connected", "could not connect. (" & description & ")", false
 			else
-				row "DB Connected", "successfully.	"
-				row "DBMS", db.connection.properties("DBMS Name") & " " & db.connection.properties("DBMS Version")
-				row "Provider", db.connection.properties("Provider Name") & " " & db.connection.properties("Provider Version")
-				row "OLE DB version", db.connection.properties("OLE DB Version")
+				row "DB Connected", "successfully.	", false
+				row "DBMS", db.connection.properties("DBMS Name") & " " & db.connection.properties("DBMS Version"), false
+				row "Provider", db.connection.properties("Provider Name") & " " & db.connection.properties("Provider Version"), false
+				row "OLE DB version", db.connection.properties("OLE DB Version"), false
 			end if
 		end if
 		%>
-		<% row "ADO version", server.createobject("adodb.connection").version %>
+		<% row "ADO version", server.createobject("adodb.connection").version, false %>
 		</table>
 	</div>
 	<div style="clear:both">&nbsp;</div>
 
 <% end sub %>
 
-<% sub row(name, value) %>
+<% sub row(name, value, htmlEncode) %>
 
 	<tr valign="top">
 		<td nowrap><strong><%= name %>:</strong></td>
-		<td><%= str.HTMLEncode(value) %></td>
+		<td><%= lib.iif(htmlEncode, str.HTMLEncode(value), value) %></td>
 	</tr>
 	
 <% end sub %>

@@ -11,32 +11,37 @@
 
 '**************************************************************************************************************
 
-'*** The vitual location to the ajaxed folder. must end AND start with an SLASH! (/)
+'The vitual location to the ajaxed folder. must end AND start with an SLASH! (/)
 'const AJAXED_LOCATION = "/ajaxed/"
 
-'*** The environment. choose between LIVE or DEV. no setting always results in DEV
+'The environment. choose between LIVE or DEV. no setting always results in DEV
 'const AJAXED_ENVIRONMENT = "DEV"
 
-'*** The text which appears when a callback is being performed and the user has to wait
+'The text which appears when a callback is being performed and the user has to wait
 'const AJAXED_LOADINGTEXT = "loading..."
 
-'*** should the prototype JavaScript library be automatically loaded on every page?
+'should the prototype JavaScript library be automatically loaded on every page?
 'const AJAXED_LOADPROTOTYPEJS = true
 
-'*** the caption for the errors used with error() method
+'the caption for the errors used with error() method
 'const AJAXED_ERRORCAPTION = "Erroro: "
 
-'*** sets the response.buffer for each page.
+'sets the response.buffer for each page.
 'const AJAXED_BUFFERING = true
 
-'*** ID of the form which should be used by default when no form is specified
+'ID of the form which should be used by default when no form is specified
 'const AJAXED_FORMID = "frm"
 
-'*** Should the database connection be established automatically on each page.
+'Advanced: should the codepage be set to the session directly?
+'this is only recommended if you have IIS5 or lower which does not support
+'setting the codepage directly. If you experience an codepage property error then turn this on.
+'const AJAXED_SESSION_CODEPAGE = true
+
+'Should the database connection be established automatically on each page.
 'const AJAXED_DBCONNECTION = true
 
-'*** If you want to use a database with the ajaxed Library then configure a proper connectionstring
-'*** to your database. Some are suggested below. uncomment if applicable
+'If you want to use a database with the ajaxed Library then configure a proper connectionstring
+'to your database. Some are suggested below. uncomment if applicable
 'mySQL
 'const AJAXED_CONNSTRING = "Driver={MySQL ODBC 3.51 Driver};Server=localhost;Database=YOUR_DB;User=YOUR_USER;Password=YOUR_PASSWORD;Option=3;"
 'MSSQL

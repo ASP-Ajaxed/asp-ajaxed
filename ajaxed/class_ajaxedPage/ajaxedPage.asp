@@ -32,7 +32,7 @@ class AjaxedPage
 
 	'private members
 	private status, jason, callbackFlagName, loadedSources, componentLocation, loadingText
-	private ajaxHeaderDrawn
+	private ajaxHeaderDrawn, sessionCodePage
 	
 	'public members
 	public loadPrototypeJS		''[bool] should protypeJS library be loaded. turn this off if you've done it manually. default = true
@@ -67,6 +67,7 @@ class AjaxedPage
 		componentLocation = lib.init(AJAXED_LOCATION, "/ajaxed/")
 		loadingText = lib.init(AJAXED_LOADINGTEXT, "loading...")
 		DBConnection = lib.init(AJAXED_DBCONNECTION, false)
+		sessionCodePage = lib.init(AJAXED_SESSION_CODEPAGE, false)
 		debug = false
 		plain = false
 		ajaxHeaderDrawn = false
@@ -383,8 +384,11 @@ class AjaxedPage
 	'******************************************************************************************************************
 	private sub setHTTPHeader()
 		with response
-			'UTF8 is necessary when working with prototype!
-			.codePage = 65001
+			if sessionCodePage then
+				session.codepage = 65001
+			else
+				.codePage = 65001
+			end if
 			.charset = "utf-8"
 			.expires = 0
 			if not isCallback() then .buffer = buffering
