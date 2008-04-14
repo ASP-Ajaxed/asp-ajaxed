@@ -74,6 +74,23 @@ class Library
 	end sub
 	
 	'**********************************************************************************************************
+	'' @SDESCRIPTION:	checks if a given datastructure contains a given value
+	'' @DESCRIPTION:	- returns false if the datastructure cannot be determined
+	''					- only array supported yet.
+	'' @PARAM:			data [array]: the array which should be checked against.
+	'' @RETURN:			[bool] true if it contains the value
+	'**********************************************************************************************************
+	public function contains(data, val)
+		contains = true
+		if isArray(data) then
+			for each d in data
+				if d & "" = val & "" then exit function
+			next
+		end if
+		contains = false
+	end function
+	
+	'**********************************************************************************************************
 	'' @SDESCRIPTION:	generates an array for a range of values which are defined by its start and end.
 	'' @PARAM:			startingWith [float], [int]: the start of the range (incl)
 	'' @PARAM:			endsWith [float], [int]: the end of the range (incl)

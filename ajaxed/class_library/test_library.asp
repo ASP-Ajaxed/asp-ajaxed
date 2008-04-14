@@ -51,4 +51,13 @@ sub test_2()
 	tf.assertHas lib.range(1, 20, 0.1), 20, "lib.range"
 	tf.assertHas lib.range(1, 20, 0.1), 17.6, "lib.range"
 end sub
+
+sub test_3()
+	tf.assert lib.contains(array(1, 2, 3), 2), "lib.contains"
+	tf.assert lib.contains(array(1, 2, 3), "3"), "lib.contains"
+	tf.assert lib.contains(array(1, 2, 3), 2.0), "lib.contains"
+	tf.assert lib.contains(array("test", "who", 3), "3"), "lib.contains"
+	tf.assertNot lib.contains("3", "3"), "lib.contains"
+	tf.assertNot lib.contains(array(1, 2, 3, 10), 11), "lib.contains"
+end sub
 %>
