@@ -74,6 +74,25 @@ class Library
 	end sub
 	
 	'**********************************************************************************************************
+	'' @SDESCRIPTION:	Detects the first loadable server component from a given list. 
+	'' @PARAM:			components [array]: names of the components you want to try to detect
+	'' @RETURN:			[string] name of the component which could be loaded first or empty if no one could be loaded
+	'**********************************************************************************************************
+	public function detectComponent(components)
+		tryLoadComponent = empty
+		for each c in components
+			on error resume next
+				server.createObject(c)
+				failed = err <> 0
+			on error goto 0
+			if not failed then
+				tryLoadComponent = c
+				exit for
+			end if
+		next
+	end function
+	
+	'**********************************************************************************************************
 	'' @SDESCRIPTION:	checks if a given datastructure contains a given value
 	'' @DESCRIPTION:	- returns false if the datastructure cannot be determined
 	'' @PARAM:			data [array], [dictionary]: the data structure which should be checked against.
