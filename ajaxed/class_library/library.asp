@@ -123,8 +123,14 @@ class Library
 	public function range(startsWith, endsWith, interval)
 		if interval = 0 then lib.throwError("interval cannot be 0")
 		arr = array()
+		decimals = len(str.splitValue(startsWith, ",", -1))
+		decimalsE = len(str.splitValue(endsWith, ",", -1))
+		decimalsI = len(str.splitValue(interval, ",", -1))
+		if decimalsE > decimals then decimals = decimalsE
+		if decimalsI > decimals then decimals = decimalsI
 		for i = startsWith to endsWith step interval
 			redim preserve arr(uBound(arr) + 1)
+			i = round(i, decimals)
 			arr(uBound(arr)) = i
 		next
 		range = arr
@@ -199,7 +205,7 @@ class Library
 			description = args
 			source = request.serverVariables("SCRIPT_NAME")
 			if not page is nothing then
-				if page.QS(empty) <> "" then source = source & "?" & QS(empty)
+				if page.QS(empty) <> "" then source = source & "?" & page.QS(empty)
 			end if
 		end if
 		'user errors start after 512 (VB spec)

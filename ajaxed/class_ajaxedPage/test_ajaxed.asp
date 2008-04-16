@@ -1,5 +1,5 @@
-﻿<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("../class_database/test.mdb") & ";" %>
-<!--#include file="../class_testFixture/testFixture.asp"-->
+﻿<!--#include file="../class_testFixture/testFixture.asp"-->
+<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("../class_database/test.mdb") & ";" %>
 <%
 'This page performs several tests in order to check the
 'correct functionality of AJAXED.

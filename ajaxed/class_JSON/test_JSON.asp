@@ -1,5 +1,5 @@
-﻿<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("../class_database/test.mdb") & ";" %>
-<!--#include file="../class_testFixture/testFixture.asp"-->
+﻿<!--#include file="../class_testFixture/testFixture.asp"-->
+<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("../class_database/test.mdb") & ";" %>
 <%
 class Person
 	public firstname	''[string] firstname
