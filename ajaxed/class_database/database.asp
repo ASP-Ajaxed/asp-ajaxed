@@ -94,13 +94,10 @@ class Database
 	'******************************************************************************************************************
 	public function insert(tablename, data)
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
-		if (uBound(data) + 1) mod 2 <> 0 then lib.throwError(array(100, "lib.insert", "data length must be even. array(column, value, ...) "))
 		set aRS = server.createObject("ADODB.Recordset")
 		aRS.open tablename, connection, 1, 2, 2
 		aRS.addNew()
-		for i = 0 to ubound(data) step 2
-			aRS(data(i)) = data(i + 1)
-		next
+		fillRSWithData aRS, data, "db.insert"
 		aRS.update()
 		insert = aRS("id")
 		aRS.close()
@@ -122,13 +119,29 @@ class Database
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		aRS.open "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition), connection, 1, 2
-		for i = 0 to ubound(data) step 2
-			aRS(data(i)) = data(i + 1)
-		next
+		fillRSWithData aRS, data, "db.update"
 		aRS.update()
 		aRS.close()
 		set aRS = nothing
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
+	end sub
+	
+	'******************************************************************************************************************
+	'* fillRSWithData 
+	'******************************************************************************************************************
+	private sub fillRSWithData(byRef RS, dataArray, callingFunctionName)
+		if (uBound(dataArray) + 1) mod 2 <> 0 then lib.throwError(array(100, callingFunctionName, "data length must be even. array(column, value, ...) "))
+		for i = 0 to ubound(dataArray) step 2
+			desc = ""
+			col = dataArray(i)
+			val = dataArray(i + 1)
+			on error resume next
+				RS(col) = val
+				failed = err <> 0
+				if failed then desc = err.description
+			on error goto 0
+			if failed then lib.throwError (array(100, callingFunctionName, "Error setting '" & col & "' column to value '" & val & "'. " & desc))
+		next
 	end sub
 	
 	'******************************************************************************************************************

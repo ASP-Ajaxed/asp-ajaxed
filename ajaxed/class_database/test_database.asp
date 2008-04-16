@@ -1,5 +1,5 @@
-﻿<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("test.mdb") & ";" %>
-<!--#include file="../class_testFixture/testFixture.asp"-->
+﻿<!--#include file="../class_testFixture/testFixture.asp"-->
+<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("test.mdb") & ";" %>
 <%
 set tf = new TestFixture
 tf.run()
@@ -12,6 +12,7 @@ sub test_1()
 	tf.assertEqual 2, db.getUnlockedRecordset("SELECT * FROM person").recordcount, "db.getUnlockedRecordset"
 	tf.assert db.getRecordset("SELECT * FROM person WHERE id = 0").eof, "db.getRecordset"
 	
+	ID = 1
 	ID = db.insert("person", array("firstname", "jack", "lastname", "kett", "age", 20))
 	
 	tf.assert ID > 0, "db.insert"

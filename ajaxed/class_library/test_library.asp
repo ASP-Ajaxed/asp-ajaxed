@@ -1,4 +1,4 @@
-﻿<!--#include file="../class_testFixture/testFixture.asp"-->
+<!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 set tf = new TestFixture
 tf.run()
@@ -42,14 +42,18 @@ sub test_2()
 	tf.assertHas lib.range(0, 100, 0.5), 100, "lib.range"
 	tf.assertHas lib.range(0, 100, 0.5), 0, "lib.range"
 	tf.assertHasNot lib.range(0, 100, 0.5), 100.5, "lib.range"
-	
-	'TODO: michal: lib range is not working with floats perfectly. I am leaving it for now because with int it works fine.
-	'i dunno now why it has a little offset after sometime.. uncomment next line to see the problem:
-	'str.write(str.arrayToString(lib.range(-10, -5, 0.1), " - "))
+	tf.assertHas lib.range(0.1, 10.1, 1), 10.1, "lib.range"
+	tf.assertHas lib.range(0.1, 10.1, 1), 0.1, "lib.range"
+	tf.assertHas lib.range(0.12, 10.12, 5.00), 5.12, "lib.range"
 	tf.assertHas lib.range(-10, -5, 0.1), -5.2, "lib.range"
 	tf.assertHas lib.range(1, 20, 0.1), 9.6, "lib.range"
 	tf.assertHas lib.range(1, 20, 0.1), 20, "lib.range"
+	tf.assertHas lib.range(0, 20, 0.100), 20, "lib.range"
+	tf.assertHas lib.range(0, 0, 1), 0, "lib.range"
 	tf.assertHas lib.range(1, 20, 0.1), 17.6, "lib.range"
+	tf.assertHas lib.range(1.0001, 10, 0.1), 9.9001, "lib.range"
+	tf.assertHas lib.range(1, 2, 0.01), 1.99, "lib.range"
+	tf.assertHasNot lib.range(1, 10.0001, 0.1), 11.1001, "lib.range"
 end sub
 
 sub test_3()
