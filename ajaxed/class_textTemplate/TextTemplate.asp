@@ -41,7 +41,7 @@ class TextTemplate
 	'******************************************************************************************************************
 	'* constructor 
 	'******************************************************************************************************************
-	private sub class_Initialize()
+	public sub class_Initialize()
 		set vars = server.createObject("Scripting.Dictionary")
 		set blocks = server.createObject("Scripting.Dictionary")
 		fileName = empty

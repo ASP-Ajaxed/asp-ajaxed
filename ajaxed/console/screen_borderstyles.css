@@ -1,0 +1,423 @@
+* html body {
+	behavior:url('csshover2.htc');
+}
+
+.top,
+.bottom,
+.top b,
+.bottom b {
+	display:block;
+	font:normal 1px/1px sans-serif;
+	position:relative;
+	border-style:solid;
+	border-width:0;
+}
+
+.rounded,
+.rounded_border,
+.pillar,
+.square,
+.rounded_cut,
+.diagonal,
+.flare,
+.flare_rounded,
+.balloon,
+.rounded_aa {
+	position:relative;
+	height:1%;
+	overflow:hidden;
+}
+
+.rounded .content,
+.rounded_border .content,
+.pillar .content,
+.square .content,
+.rounded_cut .content,
+.diagonal .content,
+.flare .content,
+.flare_rounded .content, 
+.balloon .content,
+.rounded_aa .content {
+	border-style:solid;
+	border-width:0;
+}
+
+.rounded_border .top,
+.rounded_border .bottom {
+	margin:0 5px;
+	height:4px;
+}
+
+.rounded_border .top {
+	border-width:1px 0 0;
+}
+
+.rounded_border .bottom {
+	border-width:0 0 1px;
+}
+
+.rounded_border .top b,
+.rounded_border .bottom b {
+	margin:0 -2px;
+	border-width:0 2px;
+	height:3px;
+}
+
+.rounded_border .top b {
+	padding-top:1px;
+}
+
+.rounded_border .bottom b {
+	padding-bottom:1px;
+}
+
+.rounded_border .top b b,
+.rounded_border .bottom b b {
+	margin:0 -3px;
+	border-width:0 1px;
+	height:2px;
+}
+
+.rounded_border .top b b b,
+.rounded_border .bottom b b b {
+	margin:0 -2px;
+	height:1px;
+}
+
+.pillar .top,
+.pillar .bottom {
+	margin:0 5px;
+	height:7px;
+}
+
+.pillar .top {
+	border-width:1px 0 0;
+}
+
+.pillar .bottom {
+	border-width:0 0 1px;
+}
+
+.pillar .top b,
+.pillar .bottom b {
+	margin:0 -2px;
+	border-width:0 2px;
+	height:5px;
+	padding:1px 0;
+}
+
+.pillar .top b b,
+.pillar .bottom b b {
+	margin:0 -3px;
+	border-width:0 1px;
+	height:3px;
+}
+
+.pillar .top b b b,
+.pillar .bottom b b b {
+	margin:0 -2px;
+	height:1px;
+}
+
+.pillar .content {
+	margin:0 5px;
+}
+
+.square .top,
+.square .bottom {
+	height:1px;
+	margin:0 8px;
+}
+
+.square .top {
+	padding-top:7px;
+	border-width:1px 1px 0;
+}
+
+.square .bottom {
+	padding-bottom:7px;
+	border-width:0 1px 1px;
+}
+
+.square .top b,
+.square .bottom b {
+	border-width:0 9px;
+	margin:0 -9px;
+	height:1px;
+}
+
+.square .top b b,
+.square .bottom b b {
+	display:none; /* make it class compatable */
+}
+
+.rounded_cut .top,
+.rounded_cut .bottom {
+	margin:0 6px;
+	height:5px;
+}
+
+.rounded_cut .top {
+	border-width:1px 1px 0;
+}
+
+.rounded_cut .bottom {
+	border-width:0 1px 1px;
+}
+
+.rounded_cut .top b,
+.rounded_cut .bottom b {
+	margin:0 -2px;
+	border-width:0 1px;
+	height:2px;
+}
+
+.rounded_cut .top b {
+	padding-top:3px;
+}
+
+.rounded_cut .bottom b {
+	padding-bottom:3px;
+}
+
+.rounded_cut .top b b {
+	height:1px;
+	padding-top:1px;
+}
+
+.rounded_cut .bottom b b {
+	height:1px;
+	padding-bottom:1px;
+}
+
+.rounded_cut .top b b b,
+.rounded_cut .bottom b b b {
+	margin:0 -4px;
+	border-width:0 3px;
+	padding:0;
+	height:1px;
+	overflow:hidden;
+}
+
+.diagonal .top,
+.diagonal .bottom {
+	margin:0 4px;
+	height:3px;
+}
+
+.diagonal .top {
+	border-width:1px 0 0;
+}
+
+.diagonal .bottom {
+	border-width:0 0 1px;
+}
+
+.diagonal .top b,
+.diagonal .bottom b {
+	margin:0 -1px;
+	border-width:0 1px;
+	height:2px;
+}
+
+.diagonal .top b {
+	padding-top:1px;
+}
+
+.diagonal .bottom b {
+	padding-bottom:1px;
+}
+
+.diagonal .top b b,
+.diagonal .bottom b b {
+	margin:0 -2px;
+	height:1px;
+}
+
+.diagonal .top b b b,
+.diagonal .bottom b b b {
+	padding:0;
+}
+
+.flare_rounded .top,
+.flare_rounded .bottom {
+	background-color:transparent !important;
+}
+
+.flare_rounded .top {
+	height:2px;
+	border-width:1px 0 0;
+	padding:2px 5px 0;
+}
+
+.flare_rounded .bottom {
+	height:2px;
+	border-width:0 0 1px;
+	padding:0 5px 2px;
+	margin-bottom:8px;
+}
+
+* html .flare_rounded .bottom {
+	border-bottom-width:2px;
+}
+
+.flare_rounded .top b,
+.flare_rounded .bottom b {
+	border-width:0 1px;
+	height:2px;
+}
+
+.flare_rounded .top b b {
+	margin:0 -2px;
+	top:-1px;
+	height:1px;
+}
+
+.flare_rounded .bottom b b {
+	margin:0 -2px;
+	top:2px;
+	height:1px;
+}
+
+.flare_rounded .top b b b,
+.flare_rounded .bottom b b b {
+	margin:0 -3px;
+	border-width:0 2px;
+}
+
+.flare_rounded .bottom b b b {
+	top:1px;
+}
+
+.flare_rounded .content {
+	margin:0 6px;
+}
+
+.balloon .top,
+.balloon .bottom {
+	margin:0 220px;
+	border-width:0px 80px;
+	height:3px;
+}
+	
+.balloon .top {
+	padding-top:1px;
+}
+
+.balloon .bottom {
+	padding-bottom:1px;
+}
+
+.balloon .top b,
+.balloon .bottom b {
+	border-width:0px 40px;
+	margin:0 -200px;
+	height:2px;
+}
+
+.balloon .top b {
+	padding-top:1px;
+}
+
+.balloon .bottom b {
+	padding-bottom:1px;
+}
+
+.balloon .top b b,
+.balloon .bottom b b {
+	border-width:0px 20px;
+	margin:0 -100px;
+	height:1px;
+}
+
+.balloon .top b b b,
+.balloon .bottom b b b {
+	border-width:0px 10px;
+	margin:0 -50px;
+	padding:0;
+}
+
+.rounded_aa .top,
+.rounded_aa .bottom {
+	margin:0 3px;
+	height:4px;
+	border-width:0 2px;
+}
+
+.rounded_aa .top {
+	padding-top:1px;
+}
+
+.rounded_aa .bottom {
+	padding-bottom:1px;
+}
+
+.rounded_aa .top b,
+.rounded_aa .bottom b {
+	margin:0 -3px;
+	height:3px;
+}
+
+.rounded_aa .top b {
+	padding-top:1px;
+}
+
+.rounded_aa .bottom b {
+	padding-bottom:1px;
+}
+
+.rounded_aa .top b b,
+.rounded_aa .bottom b b {
+	margin:0 -1px;
+	height:2px;
+}
+
+.rounded_aa .top b b b,
+.rounded_aa .bottom b b b {
+	height:1px;
+	border-width:0 1px;
+}
+
+.rounded .top,
+.rounded .bottom {
+	margin:0 5px;
+	height:4px;
+}
+
+.rounded .top,
+.rounded .top b {
+	padding-top:1px;
+}
+
+.rounded .bottom,
+.rounded .bottom b {
+	padding-bottom:1px;
+}
+
+.rounded .top b,
+.rounded .bottom b {
+	margin:0 -2px;
+	height:3px;
+}
+
+.rounded .top b b,
+.rounded .bottom b b {
+	margin:0 -1px;
+	height:2px;
+}
+
+.rounded .top b b b,
+.rounded .bottom b b b {
+	height:1px;
+}
+
+.rounded_border .content,
+.pillar .content,
+.square .content,
+.rounded_cut .content,
+.diagonal .content,
+.flare .content,
+.flare_rounded .content {
+	border-width:0 1px;
+}
+

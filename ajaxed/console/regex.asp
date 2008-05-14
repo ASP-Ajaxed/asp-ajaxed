@@ -125,11 +125,12 @@ sub main() %>
 				if (r.code) writeConsole(r.code);
 				if (r.result) writeConsole(r.result);
 				if (r.err) writeConsole(r.err);
+				scrollToFloor('regexConsole');
 			}
 			writeConsole = function(msg) {
 				if (msg == '') return;
 				var c = $('regexConsole');
-				c.insert({top: '&gt; ' + msg + '<br>'});
+				c.insert({bottom: '<br>&gt; ' + msg});
 			}
 		</script>
 		<button type="button" onclick="ajaxed.callback('exec', executed, null, null, 'regex.asp')">

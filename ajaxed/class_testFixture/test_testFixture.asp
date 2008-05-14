@@ -53,4 +53,18 @@ sub test_8()
 	tf.assertHasNot "x", "1", "assertHasNot"
 	tf.assertHasNot array(1, 2, 3, 4), 0, "assertHasNot"
 end sub
+
+sub test_9()
+	tf.assertInFile "test_file.txt", "test_testFixture.asp", "'test_testFixture.asp' should be in the test_file.txt"
+	tf.assertNotInFile "test_file.txt.no", "test_testFixture.asp", "'test_file.txt.no' does not exists and so it should not contain any matches"
+	tf.assertNotInFile "test_file.txt", "jack johnson", "test_file.txt should not contain 'jack johnson'"
+end sub
+
+sub test_10()
+	testfile = "/ajaxed/class_testFixture/testfile.asp"
+	tf.assertResponse testfile, empty, "some test file", "assertResponse() not working"
+	tf.assertResponse testfile, array("id", 10), "id=10", "assertResponse() with GET params not working"
+	tf.assertResponse array("get", testfile), array("id", 10), "id=10", "assertResponse() with GET params not working"
+	tf.assertResponse array("post", testfile), array("x", 12), "x: 12", "assertResponse() with POST params not working"
+end sub
 %>

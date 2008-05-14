@@ -18,10 +18,29 @@
 class StringOperations
 
 	'******************************************************************************************
+	'' @SDESCRIPTION:	performs a replace with a regular expression pattern
+	'' @DESCRIPTION:	e.g. surrounding all numbers of a string with brackets: <code>str.rReplace("i am 20 and he is 10", "(\d)", "($1)", true)</code>
+	'' @PARAM:			val [string]: the value you want to replace the matches
+	'' @PARAM:			pattern [string]: regular expression pattern
+	'' @PARAM:			replaceWith [string]: a string which is used for the replacement of the matches
+	''					- $1, $2, .. can be used as placeholders for grouped expressions of the regex pattern
+	'' @PARAM:			ignoreCase [bool]: ignore the case on comparison
+	'' @RETURN:			[string] returns the new string with replacements made. if no replacements made then the same string is returned as given on input
+	'******************************************************************************************
+	public function rReplace(val, pattern, replaceWith, ignoreCase)
+		set re = new regexp
+		re.ignorecase = ignoreCase
+		re.global = true
+		re.pattern = pattern & ""
+		rReplace = re.replace(val & "", replaceWith)
+		set re = nothing
+	end function
+	
+	'******************************************************************************************
 	'' @SDESCRIPTION:	checks if a given string is matching a given regular expression pattern
 	'' @PARAM:			val [string]: the value which needs to be checked against the pattern
-	'' @PARAM:			ignoreCase [bool]: ignore the case on comparison
 	'' @PARAM:			pattern [string]: regular expression pattern
+	'' @PARAM:			ignoreCase [bool]: ignore the case on comparison
 	'' @RETURN:			[bool] true if val matches the pattern otherwise false
 	'******************************************************************************************
 	public function matching(val, pattern, ignoreCase)
@@ -249,22 +268,13 @@ class StringOperations
 		HTMLEncode = server.HTMLEncode(value & "")
 	end function
 	
-	'***********************************************************************************************************
-	'' @SDESCRIPTION:	checks if a given string is a syntactically valid email
-	'' @RETURN:			[bool] true if it is valid
-	'***********************************************************************************************************
-	public function isValidEmail(value)
-		isValidEmail = false
-		set regEx = new regExp
-		
-		regEx.pattern = "^[\w-\.]{1,}\@([\da-zA-Z-]{1,}\.){1,}[\da-zA-Z-]{2,3}$" 
-		regEx.ignoreCase = true
-		retVal = regEx.test(value)
-		
-		if retVal then isValidEmail = true
-		
-		set regEx = nothing
-		
+	'******************************************************************************************
+	'' @SDESCRIPTION:	checks if a given string is a syntactically correct email address
+	'' @PARAM:			val [string]: the value to check
+	'' @RETURN:			[bool] true if string seems to be an email
+	'******************************************************************************************
+	public function isValidEmail(val)
+		isValidEmail = matching(val, "^[A-Z0-9._%-]+@[A-Z0-9._%-]+\.[A-Z]{2,4}$", true)
 	end function
 	
 	'******************************************************************************************************************
@@ -576,12 +586,13 @@ class StringOperations
 	'' @DESCRIPTION:	Its just like the string.format method in .NET. so if you provide "my Name is {0}" as
 	''					your input then the {0} will be replaced by the first field of your array. and so on.
 	'' @PARAM:			str [string]: the source string
-	'' @PARAM:			arr [array]: the array with your values
+	'' @PARAM:			values [array], [string]: your values which replace the placeholders. if string then only one value otherwise use array
 	'' @RETURN:			[string] changed string
 	'**************************************************************************************************************
-	public function format(byVal str, arr)
-		for i = 0 to ubound(arr)
-			str = replace(str, "{" & i & "}", cstr(arr(i)))
+	public function format(byVal str, byVal values)
+		if not isArray(values) then values = array(values)
+		for i = 0 to ubound(values)
+			str = replace(str, "{" & i & "}", cstr(values(i)))
 		next
 		format = str
 	end function

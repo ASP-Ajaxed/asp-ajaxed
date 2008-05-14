@@ -1,9 +1,44 @@
-﻿v 1.0.1
+﻿v 1.1
 BUGFIX: lib.range previously failed float tests are now running
 BUGFIX: database tests used to run with the default DB if available.
 BUGIFX: lib.throwError had a bug calling just QS but should call page.QS
+BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 - added error handling in db.insert and db.update to get more information about an error if one happens
-
+- updated documentor:
+	- support for lists added, because docs looked a little messed up sometimes. 
+		elements supporing lists include:
+		@CDESCRIPTION, @SDESCRIPTION, @DESCRIPTION, @PARAM, @RETURN and public properties.
+		A list item must be on one line, and start with "- "
+	- due to this change some docs have been updated for better readability
+	- removed the class path in the documentation. it made no real sense to display this. 
+	- default methods has not been supported yet. are marked in "italic" now
+	- BUGFIX: methods, properties, etc where case sensitive and it didnt recognize e.g. "Public Function" or "pUblic Property"
+	- BUGFIX: byVal parameters have been not correctly detected.
+	- removes square brackets on a methodname (reserved words)
+- added db.getRS() and db.getUnlockedRS(). those should be used instead of db.getRecordset and db.getUnlockedRecordset
+	because they can be used with parameters which will be sql-safe. e.g. db.getRS("SELECT * FROM user WHERE id = {0}", 1)
+- added some more error checks to the db class
+- added a Logger class which allows you to log all kind of things on 4 levels (debug, info, warn and error)
+	- by default dev env logs till level debug (as a result all levels) and live env only till error level
+	- logging comes with ASCII coloring which makes reading the logs easier
+	- lib.logger holds a ready-to-use instance .. debug with lib.logger.debug("some message")
+	- console has logging management
+	- ajaxed logs some useful information by default as debug. e.g. all page requests and database accesses are logged. Nice thing: every class logs in its own color - to outline the different components
+	- also warnings about e.g. obsolete methods are performed
+- code-consoles in the console scroll from top to down now. this is more logic ;)
+- updated str.isValidEmail pattern
+- TestFixture
+	- assertInFile() and assertNotInFile added
+	- assertResponse() added. with this its possible now to write tests which check if pages actually respond and work
+- str.rReplace added => performs a quick regex replace on a given string
+- str.format is simpler to use when having one placeholder
+	- instead of str.format("one {0}", array(1)) we can use str.format("one {0}", 1)
+- added a StringBuilder component which speeds up the common string concatenation.
+	- uses either a .net stringbuilder or a custom VB StringBuilder (if installed)
+	- is loaded by default and can be used e.g. ...
+	set output = new StringBuilder
+	output("test")
+	
 v 1.0
 
 - ajaxedPage has a plain- and title-property

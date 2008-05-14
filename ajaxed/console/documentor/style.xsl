@@ -16,6 +16,9 @@
 						font-size:14px;
 						font-family:tahoma;
 					}
+					code {
+						font-family:courier;
+					}
 					#menu {
 						position:absolute;
 						right:10px;
@@ -30,8 +33,9 @@
 					}
 					.label {
 						font-weight:bold;
+						padding-right:2em;
 					}
-					.cDescription {
+					.cDescription, .cDescription * {
 						font-size:16px;
 						margin:10px 0px;
 					}
@@ -78,9 +82,9 @@
 						text-align:justify;
 					}
 					.mdetails {
-						margin:10px;
-						padding:10px;
-						border:2px inset #bbb;
+						padding:1em;
+						margin-top:0.5em;
+						border:1px solid #bbb;
 						background-color:#F7F7F7;
 					}
 					.button {
@@ -96,6 +100,18 @@
 						white-space: nowrap;
 						font-weight: normal;
 						color:#E10000;
+						padding-right:0.5em;
+					}
+					.default {
+						font-style:italic;
+					}
+					.methods a {
+					}
+					.param {
+						margin-top:0.7em;
+					}
+					.return {
+						margin-top:0.7em;
 					}
 					
 					/* this is just for Firefox */
@@ -105,6 +121,13 @@
 					.class {
 						width:680px;
 						text-align:left;
+					}
+					
+					.list {
+						list-style-position: outside;
+						margin:1em 0em 1em 2em;
+						padding:0px;
+						list-style-type:disc;
 					}
 				</style>
 				
@@ -225,7 +248,7 @@
 						<xsl:text> </xsl:text><a class="notForPrint" href="#top" style="text-decoration:none;">^</a>
 					</legend>
 					
-					<div class="cDescription"><xsl:value-of select="description" disable-output-escaping="no"/></div>
+					<div class="cDescription"><xsl:value-of select="description" disable-output-escaping="yes"/></div>
 					
 					<table cellspacing="0" cellpadding="3" border="0">
 					<tr>
@@ -233,7 +256,7 @@
 						<td>
 							<xsl:value-of select="version"/>
 							<xsl:if test="@obsolete = 1">
-								<span class="obsolete">(This class is obsolete!)</span>
+								<span class="obsolete">This class is obsolete.</span>
 							</xsl:if>
 						</td>
 					</tr>
@@ -294,12 +317,6 @@
 						</td>
 					</tr>
 					</xsl:if>			
-					<xsl:if test="string-length(path/text()) &gt; 0">
-					<tr valign="top">
-						<td class="label">Path:</td>
-						<td><xsl:value-of select="path"/></td>
-					</tr>
-					</xsl:if>
 					<xsl:if test="string-length(demo/text()) &gt; 0">
 					<tr>
 						<td class="label">Demo:</td>
@@ -328,7 +345,7 @@
 							<td class="property">
 							<xsl:choose>
 								<xsl:when test="@obsolete = 1">
-									<div class="obsolete">(This property is obsolete)</div>	
+									<div class="obsolete">This property is obsolete.</div>	
 								</xsl:when>
 								<xsl:when test="@defaultProperty = 1">
 									<xsl:attribute name="style">
@@ -353,7 +370,7 @@
 								</xsl:for-each>
 							</td>
 							
-							<td><xsl:value-of select="description" /><xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text></td>
+							<td><xsl:value-of select="description" disable-output-escaping="yes" /><xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text></td>
 						</tr>	
 					</xsl:for-each>
 					</table>
@@ -363,7 +380,7 @@
 						<xsl:text> </xsl:text><a href="#class_{$currentClass}" class="notForPrint" style="text-decoration:none;">^</a>
 					</h2>
 					
-					<table id="meths_{$currentClass}" class="table alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
+					<table id="meths_{$currentClass}" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 					<xsl:for-each select="methods/method">
 						<xsl:sort select="name"/>
 						<tr>
@@ -395,11 +412,6 @@
 											<xsl:text>')</xsl:text>
 										</xsl:attribute>
 									</xsl:when>
-									<xsl:otherwise>
-										<xsl:attribute name="style">
-											<xsl:text>text-decoration:none</xsl:text>
-										</xsl:attribute>
-									</xsl:otherwise>
 									</xsl:choose>
 										<xsl:if test="@static = 1">
 											<xsl:attribute name="style">
@@ -409,6 +421,11 @@
 												<xsl:text>This is a static method</xsl:text>
 											</xsl:attribute>											
 										</xsl:if>
+										<xsl:if test="@default = 1">
+											<xsl:attribute name="class">
+												<xsl:text>default</xsl:text>
+											</xsl:attribute>
+										</xsl:if>
 										<xsl:value-of select="name"/>
 										(
 										<xsl:text> </xsl:text>
@@ -417,43 +434,41 @@
 										</xsl:for-each>
 										)
 									</a>
-									
 								</div>
-								<xsl:if test="@obsolete = 1">
-									<div class="obsolete">(This method is obsolete)</div>	
-								</xsl:if>
-								<div class="mDesc"><xsl:value-of select="shortdescription" /></div>
+								<div class="mDesc">
+									<xsl:if test="@obsolete = 1">
+										<span class="obsolete">This method is obsolete.</span>
+									</xsl:if>
+									<xsl:value-of select="shortdescription"  disable-output-escaping="yes" />
+								</div>
 								<div style="display:none" class="mdetails alwaysPrint" id="mdetails_{$currentClass}{generate-id(name)}">
 									<xsl:if test="string-length(longdescription/text()) &gt; 0">
-										<xsl:value-of select="longdescription" />
+										<xsl:value-of select="longdescription" disable-output-escaping="yes" />
 										<br />
 									</xsl:if>
 									
 									<xsl:if test="string-length(parameters/parameter/name/text()) &gt; 0">
-										<br />
 										<xsl:for-each select="parameters/parameter">
-											<div>
+											<div class="param">
 												<strong><xsl:value-of select="name/@passed" /><xsl:text> </xsl:text><xsl:value-of select="name" /></strong>
 												<xsl:if test="string-length(types/type/text()) &gt; 0">
-													<span class="type">
-													(
+													<span class="type">(
 														<xsl:for-each select="types/type">
 															<xsl:call-template name="TheTypes">
 																 <xsl:with-param name="aType" select="."/>
 																 <xsl:with-param name="aID" select="@id"/>
 															</xsl:call-template>
 														</xsl:for-each>
-													)
-													</span>
+													)</span>
 												</xsl:if>
 												:<xsl:text> </xsl:text> 
-												<xsl:value-of select="description" />
+												<xsl:value-of select="description" disable-output-escaping="yes" />
 											</div>
 										</xsl:for-each>
 									</xsl:if>
 									
 									<xsl:if test="string-length(return/type/text()) &gt; 0">
-										<div> <strong>Return </strong>
+										<div class="return"> <strong>Returns </strong>
 											(
 											<xsl:for-each select="return/type">
 												<xsl:call-template name="TheTypes">
@@ -462,7 +477,7 @@
 												</xsl:call-template>
 											</xsl:for-each>
 											) :
-											<xsl:value-of select="return/description" />
+											<xsl:value-of select="return/description" disable-output-escaping="yes"  />
 										</div>
 									</xsl:if> 
 									
@@ -482,9 +497,9 @@
 			
 					<table id="inits_{$currentClass}" class="table alwaysPrint" style="display:none; border: 1px solid #888888" cellpadding="3" cellspacing="0" border="0">
 						<tr>
+							<th>Config var.</th>
 							<th>Property</th>
-							<th>Constant</th>
-							<th>Defult</th>
+							<th>Default</th>
 						</tr>
 						<xsl:for-each select="initializations/init">
 						<xsl:sort select="property"/>
@@ -493,13 +508,13 @@
 									<xsl:attribute  name="style">background-color:#EEEEEE</xsl:attribute>
 								</xsl:if>
 								<td>
-									<div class="iProperty">
-										<xsl:value-of select="property" />
+									<div class="iConstant">
+										<xsl:value-of select="constant" />
 									</div>
 								</td>
 								<td>
-									<div class="iConstant">
-										<xsl:value-of select="constant" />
+									<div class="iProperty">
+										<xsl:value-of select="property" />
 									</div>
 								</td>
 								<td>
@@ -535,9 +550,9 @@
 		<xsl:param name="aID" />
 		<xsl:variable name="aParam" select="translate($aType,'abcdefghijklmnopqrstuvxyz','ABCDEFGHIJKLMNOPQRSTUVXYZ')" />
 			<xsl:choose>
-         			<xsl:when test="string-length($aID) &gt; 0">
+         		<xsl:when test="string-length($aID) &gt; 0">
        				<a class="type">
-						<xsl:attribute name ="href">
+						<xsl:attribute name="href">
 							<xsl:text>#class_</xsl:text>
 							<xsl:value-of select="$aID" />
 						</xsl:attribute>

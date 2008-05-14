@@ -1,10 +1,5 @@
 ﻿<%
 '**************************************************************************************************************
-'* GAB_LIBRARY Copyright (C) 2003 - This file is part of GAB_LIBRARY		
-'* For license refer to the license.txt										
-'**************************************************************************************************************
-
-'**************************************************************************************************************
 
 '' @CLASSTITLE:		JSON
 '' @CREATOR:		Michal Gabrukiewicz (gabru at grafix.at), Michael Rebec
@@ -47,7 +42,6 @@ class JSON
 		cDoubleQuote = &h22
 		cRevSolidus = &h5C
 		cSolidus = &h2F
-		
 		dim i, currentDigit
 		for i = 1 to (len(val))
 			currentDigit = mid(val, i, 1)
@@ -75,14 +69,15 @@ class JSON
 	'' @PARAM:			name [string]: name of the value (accessible with javascript afterwards). leave empty to get just the value
 	'' @PARAM:			val [variant], [int], [float], [array], [object], [dictionary], [recordset]: value which needs
 	''					to be generated. Conversation of the data types (ASP datatype -> Javascript datatype):
-	''					NOTHING, NULL -> null, ARRAY -> array, BOOL -> bool, OBJECT -> name of the type, 
-	''					MULTIDIMENSIONAL ARRAY -> generates a 1 dimensional array (flat) with all values of the multidim array
-	''					DICTIONARY -> valuepairs. each key is accessible as property afterwards
-	''					RECORDSET -> array where each row of the recordset represents a field in the array. 
-	''					fields have properties named after the column names of the recordset (LOWERCASED!)
-	''					e.g. generate(RS) can be used afterwards r[0].ID
-	''					INT, FLOAT -> number
-	''					OBJECT with reflect() method -> returned as object which can be used within JavaScript
+	''					- NOTHING, NULL -> null
+	''					- ARRAY -> array
+	''					- BOOL -> bool
+	''					- OBJECT -> name of the type (if unknown type)
+	''					- OBJECT with reflect() method -> returned as object which can be used within JavaScript
+	''					- MULTIDIMENSIONAL ARRAY -> generates a 1 dimensional array (flat) with all values of the multidim array
+	''					- DICTIONARY -> valuepairs. each key is accessible as property afterwards
+	''					- RECORDSET -> array where each row of the recordset represents a field in the array. fields have properties named after the column names of the recordset (LOWERCASED!) e.g. generate(RS) can be used afterwards r[0].ID
+	''					- INT, FLOAT -> number
 	'' @PARAM:			nested [bool]: is the value pair already nested within another? if yes then the {} are left out.
 	'' @RETURN:			[string] returns a JSON representation of the given name value pair
 	''					(if toResponse is on then the return is written directly to the response and nothing is returned)

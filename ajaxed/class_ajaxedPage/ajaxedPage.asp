@@ -9,21 +9,18 @@
 '' @CLASSTITLE:		AjaxedPage
 '' @CREATOR:		Michal Gabrukiewicz - gabru at grafix.at
 '' @CREATEDON:		2007-06-28 20:32
-'' @CDESCRIPTION:	Represents a page which is located in each physical file (e.g. index.asp). In 95% of cases
+'' @CDESCRIPTION:	Represents a page which is located in physical file (e.g. index.asp). In 95% of cases
 ''					each of your pages will hold one instance of it which defines the page.
 ''					Furthermore it provides the functionality to call server-side ASP procedures
-''					directly from client-side. When using the class be sure the draw() method is the first
-''					which is called before any response has been done.
-''					init(), main() and callback() need to be implemented within the page. init() is always
-''					called first and allows preperation before any content is written to the response e.g.
-''					security checks and stuff which is necessary for main() and callback() should be placed
-''					into the init(). After the init whether main() or callback() is called. They are never
-''					called both within one page execution.
-''					main() = common state for the page which shows the user's presentation
-''					callback() = handles all client requests
-''					callback() needs to be defined with an parameter which holds the actual action to perform.
-''					so the signature should be sub callback(action)
-''					- REFER TO /demo/default.asp FOR A SAMPLE USAGE.
+''					directly from client-side. Whenever using the class be sure the draw() method is the first
+''					call before any other response is done. 
+''					- use plain-property if your page is being used with in an XHR (there you dont need the whole basic structure)
+''					- init(), main() and callback() need to be implemented within the page.
+''					- init() is always called first and allows preperation before any content is written to the response e.g. security checks and stuff which is necessary for main() and callback() should be placed into the init().
+''					- After the init always either main() or callback() is called. They are never called both within one page execution (request).
+''					- main() = common state for the page which normally includes the page presentation (e.g. html elements)
+''					- callback() = handles all client requests done with ajaxed.callback(). callback() needs to be defined with one parameter which holds the actual action to perform. so the signature should be sub callback(action)
+''					- refer to /ajaxed/demo/ for a sample usage
 ''					- Requires Prototype JavaScript library (available at prototypejs.org) but can be turned on from the config
 '' @VERSION:		0.1
 
@@ -52,6 +49,10 @@ class AjaxedPage
 								''(e.g. the ajaxed console uses this). If false then the header.asp and footer.asp from the "ajaxedConfig"
 								''is loaded. default = false
 	
+	private property get callbackAction
+		callbackAction = left(RF(callbackFlagName), 255)
+	end property
+	
 	'**********************************************************************************************************
 	'* constructor 
 	'**********************************************************************************************************
@@ -78,28 +79,20 @@ class AjaxedPage
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	Draws the page. Must be the first call on a page
 	'' @DESCRIPTION:	The lifecycle is the following after executing draw().
-	''					1. setting the HTTP Headers (response)
-	''					2. init() (will be only called if exists in your page)
-	''					3. main() or callback(action) - action is trimmed to 255 chars (for security reasons),
+	''					- 1. setting the HTTP Headers (response)
+	''					- 2. init() (will be only called if exists in your page)
+	''					- 3. main() or callback(action) - action is trimmed to 255 chars (for security reasons),
 	''					ajaxed.callback(theAction, func, params, onComplete, url) is the Javascript function
 	''					which can be used within your HTML to call serverside functions. The params are described
 	''					as followed:
-	''					theAction: is the action which will be passed as parameter to the server-side
-	''					callback function e.g. 'do'.
-	''					func: the client-side javascript function which will be called after server-side finished
-	''					processing SUCCESSFULLY. e.g. done
-	''					params (optional): javascript hash with POST parameters you want to pass to the callback function. 
-	''					They are accessible with e.g. lib.RF on within the callback function. e.g. {a:1,b:2}
-	''					if there is a form called "frm" with your page then all its values are passed as POST values to 
-	''					the callback (if you havent specified any params manually). 
-	''					onComplete (optional): client-side function which should be invoked when the server-side processing has
-	''					been completed. This is called even if there was an error (same as with native XMLHttpRequest).
-	''					url (optional): you can specify the url where the callback sub is located. Normally the page itself
-	''					is called but you could also call callbacks of other pages. Note: use this also if you use
-	''					callbacks on pages which are recognized as default in a folder. So when a user can call them
-	''					without specifying the file itself. e.g. /demo/ (bug in iis6: http://support.microsoft.com/kb/216493)
+	''					- theAction: is the action which will be passed as parameter to the server-side callback function e.g. 'do'.
+	''					- func: the client-side javascript function which will be called after server-side finished processing SUCCESSFULLY. e.g. done
+	''					- params (optional): javascript hash with POST parameters you want to pass to the callback function. They are accessible with e.g. lib.RF on within the callback function. e.g. {a:1,b:2}. if there is a form called "frm" with your page then all its values are passed as POST values to the callback (if you havent specified any params manually). 
+	''					- onComplete (optional): client-side function which should be invoked when the server-side processing has been completed. This is called even if there was an error (same as with native XMLHttpRequest).
+	''					- url (optional): you can specify the url of the page where the callback sub is located. Normally the page itself is called but you could also call callbacks of other pages. Note: use this also if you use callbacks on pages which are recognized as default in a folder. So when a user can call them without specifying the file itself. e.g. /demo/ (bug in iis5: http://support.microsoft.com/kb/216493)
 	'**********************************************************************************************************
 	public sub draw()
+		logRequestDetails()
 		if onlyDev and not lib.DEV then lib.error("Wrong environment.")
 		setHTTPHeader()
 		if DBConnection then db.openDefault()
@@ -107,7 +100,7 @@ class AjaxedPage
 		if isCallback() then
 			writeln("{ ""root"": {")
 			status = 0
-			callback(left(RF(callbackFlagName), 255))
+			callback(callbackAction)
 			if status = 0 then write(" null ")
 			if status = 1 then
 				writeln(vbcrlf & "} }")
@@ -121,7 +114,38 @@ class AjaxedPage
 			mainFunc()
 			drawFooter()
 		end if
-		if DBConnection then db.close()
+		if DBConnection then
+			db.close()
+			doLog(db.numberOfDBAccess & " database accesses. " & getLocation("FULL", true))
+		end if
+	end sub
+	
+	'******************************************************************************************************************
+	'* logRequestDetails 
+	'******************************************************************************************************************
+	private sub logRequestDetails()
+		if not lib.dev then exit sub
+		method = request.serverVariables("request_method")
+		if isCallback() then method = "CALLBACK (" & callbackAction & ")"
+		pwd = "********"
+		lines = array(method & " " & getLocation("FULL", true))
+		for each f in request.form
+			redim preserve lines(uBound(lines) + 1)
+			'we hide all fields if they contain "password" in the fieldname
+			lines(uBound(lines)) = "RF(""" & f & """): " & lib.iif(str.matching(f, "password", true), pwd, RF(f))
+		next
+		for each f in request.queryString
+			redim preserve lines(uBound(lines) + 1)
+			lines(uBound(lines)) = "QS(""" & f & """): " & lib.iif(str.matching(f, "password", true), pwd, QS(f))
+		next
+		doLog(lines)
+	end sub
+	
+	'******************************************************************************************************************
+	'* debug 
+	'******************************************************************************************************************
+	private sub doLog(msg)
+		lib.logger.log 1, msg, 33
 	end sub
 	
 	'******************************************************************************************************************
@@ -242,13 +266,6 @@ class AjaxedPage
 	end sub
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	OBSOLETE! use lib.error() instead.
-	'******************************************************************************************************************
-	public sub [error](msg)
-		lib.error(msg)
-	end sub
-	
-	'******************************************************************************************************************
 	'' @SDESCRIPTION:	gets the value from a given form field after postback
 	'' @DESCRIPTION:	just an equivalent for request.form.
 	'' @PARAM:			name [string]: name of the value you want to get
@@ -333,13 +350,6 @@ class AjaxedPage
 	end sub
 	
 	'******************************************************************************************************************
-	'' @DESCRIPTION: 	OBSOLETE! use lib.iif instead
-	'******************************************************************************************************************
-	public function iif(i, j, k)
-    	iif = lib.iif(i, j, k)
-	end function
-	
-	'******************************************************************************************************************
 	'' @SDESCRIPTION:	gets the location of the page you are in. virtual, physical, file or the full URL of the page
 	'' @PARAM:			format [string]: the format you want the location be returned: PHYSICAL (c:\web\f.asp), VIRTUAL (/web/f.asp),
 	''					FULL (http://web/f.asp) or FILE (f.asp). Full takes the protocol into consideration (https or http)
@@ -364,13 +374,6 @@ class AjaxedPage
 			if format <> "physical" and withQS and QS("") <> "" then getLocation = getLocation & "?" & QS("")
 		end with
 	end function
-	
-	'**********************************************************************************************************
-	'' @SDESCRIPTION:	OBSOLETE! use lib.throwError instead
-	'**********************************************************************************************************
-	public sub throwError(args)
-		lib.throwError(args)
-	end sub
 	
 	'******************************************************************************************************************
 	'* isCallback 
@@ -405,6 +408,30 @@ class AjaxedPage
 	'**********************************************************************************************************
 	private function loc(path)
 		loc = componentLocation & path
+	end function
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	OBSOLETE! use lib.throwError instead
+	'**********************************************************************************************************
+	public sub throwError(args)
+		lib.logger.warn("AjaxedPage.throwError() is obsolete. lib.throwError() should be used instead.")
+		lib.throwError(args)
+	end sub
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION:	OBSOLETE! use lib.error() instead.
+	'******************************************************************************************************************
+	public sub [error](msg)
+		lib.logger.warn("AjaxedPage.error() is obsolete. lib.error() should be used instead.")
+		lib.error(msg)
+	end sub
+	
+	'******************************************************************************************************************
+	'' @DESCRIPTION: 	OBSOLETE! use lib.iif instead
+	'******************************************************************************************************************
+	public function iif(i, j, k)
+		lib.logger.warn("AjaxedPage.iif() is obsolete. lib.iif() should be used instead.")
+    	iif = lib.iif(i, j, k)
 	end function
 
 end class

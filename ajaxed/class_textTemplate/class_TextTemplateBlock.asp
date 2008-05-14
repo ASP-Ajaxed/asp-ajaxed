@@ -1,10 +1,5 @@
 ﻿<%
 '**************************************************************************************************************
-'* GAB_LIBRARY Copyright (C) 2003 - This file is part of GAB_LIBRARY		
-'* For license refer to the license.txt in the root    						
-'**************************************************************************************************************
-
-'**************************************************************************************************************
 
 '' @CLASSTITLE:		TextTemplateBlock
 '' @CREATOR:		Michal Gabrukiewicz
@@ -14,6 +9,7 @@
 ''					"begin" and the "end" of the block. Each block can hold items which will
 ''					be templated with the block
 '' @REQUIRES:		-
+'' @FRIENDOF:		TextTemplate
 '' @VERSION:		0.1
 
 '**************************************************************************************************************

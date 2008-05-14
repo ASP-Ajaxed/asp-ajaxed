@@ -1,4 +1,4 @@
-<!--#include file="../ajaxed.asp"-->
+﻿<!--#include file="../ajaxed.asp"-->
 <%
 '******************************************************************************************
 '* Creator: 	michal
@@ -67,12 +67,14 @@ sub content() %>
 		}
 		run = function(file) {
 			new Ajax.Updater('output', file, {
-				insertion: Insertion.Top,
-				evalScripts:true,
+				insertion: Insertion.Bottom,
 				onSuccess: function(t) {
 					t.responseText = t.responseText.gsub(/(\([^0][\d| ]* (errors|failed)\))/, function(match) {
 						return '<span class="error">' + match[1] + '</span>'
-					})
+					}) + '<br>';
+				},
+				onComplete: function(t) {
+					scrollToFloor('console');
 				}
 			});
 		}
@@ -117,9 +119,9 @@ sub content() %>
 		<button type="button" onclick="runAll()">run all</button>
 	</div>
 	<div style="float:left;width:70%">
-		<div class="console" style="height:300px;">
-			<div id="output"></div>
+		<div class="console" id="console" style="height:300px;">
 			<div>&gt; Ready.</div>
+			<div id="output"></div>
 		</div>
 		<a href="javascript:void(0)" onclick="$('output').update('');">clear console</a>
 	</div>

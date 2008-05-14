@@ -5,11 +5,14 @@
 '* Created on: 	2006-10-25 08:53
 '* Description: ajaxed documentor. creates a documentation for a given folder on the server
 '*				and saves it into that folder with the filename doc.html
-'*				TODO: parse new lines and lists (so documentation is formatted nicer)
+'*				TODO: - write version of ajaxed into the documentation
+'*				- make "," within the argumentslist of method signatures
+'*				- leave the ":" if no param description is given
+'*				- BUG: first method of a class cannot be opened
 '* Input:		POST params: folder (folder to parse - if no given then "ajaxed" is used)
 '******************************************************************************************
 
-set	classNames = server.createObject("scripting.Dictionary")
+set	classNames = lib.newDict(empty)
 set xml = server.createObject("MSXML2.DOMDocument.3.0")
 set page = new AjaxedPage
 with page
@@ -24,7 +27,6 @@ set page = nothing
 '******************************************************************************************
 sub main()
 	if not lib.fso.folderExists(getFolder(true)) then lib.error("Folder '" & getFolder(false) & "' could not be found on the server.")
-	
 	xml.async = false
 	set pi = xml.createProcessingInstruction("xml", "version=""1.0""")
 	xml.insertBefore pi, xml.childNodes.item(0)
@@ -115,6 +117,9 @@ end function
 '* parseFile	Parses the ASP class into an XML file
 '******************************************************************************************
 function parseFile(file)
+	const obsoletePtrn = "OBSOLETE!"
+	const staticPtrn = "(\[static\]|STATIC!)"
+	
 	if not str.endsWith(file.name, ".asp") then exit function
 	if file.size = 0 then exit function
 	set reader = file.OpenAsTextStream(1)
@@ -155,6 +160,7 @@ function parseFile(file)
 				for j = (i + 1) to ubound(lines)
 					if str.startsWith(lines(j), "''") and not str.startsWith(lines(j), "'' @") then
 						tmp = replace(lines(j), "''", "")
+						tmp = addlistItem(tmp)
 						description = description & vbcrlf & trim(tmp)
 						else
 						j = ubound(lines)
@@ -214,8 +220,7 @@ function parseFile(file)
 				set rTypes = nothing
 				set requiresNode = nothing
 			end if
-			Set fs = Server.CreateObject("Scripting.FileSystemObject")
-			if fs.FolderExists(file.parentFolder & "\demo\") then
+			if lib.fso.folderExists(file.parentFolder & "\demo\") then
 				.appendChild(getNewNode("demo", getVirtualPath(file.parentFolder & "\demo\")))
 			end if
 			.appendChild(getNewNode("path", getVirtualPath(file.path)))
@@ -234,7 +239,6 @@ function parseFile(file)
 				set FType = nothing
 				set nodefriendof = nothing
 			end if
-			Set fs = nothing
 		end with
 		
 		'read constructor
@@ -262,7 +266,6 @@ function parseFile(file)
 						for each ma in matched
 							inits = cstr(ma)
 							inits = Mid(inits, 2, (len(inits)-2)) 'Remove fist and last bracket only ()
-							inits = replace(inits, """", "")
 							a = split(inits, ",")
 							if ubound(a) > 0 then
 								iNode.appendChild(getNewNode("constant", a(0)))
@@ -286,28 +289,26 @@ function parseFile(file)
 		for i = 0 to ubound(lines)
 			aLine = trim(lines(i)) & "" 
 			aLine = replace(aLine, vbtab, "")
-			if str.startsWith(aLine, "public") then
-				aLine = replace(aLine ,"public ", "")
-				if (str.startsWith(aLine, "function ")) or (str.startsWith(aLine, "sub ")) then
+			if str.matching(aLine, "^public", true) then
+				aLine = str.rReplace(aLine ,"^public ", "", true)
+				if str.matching(aLine, "^(default ){0,1}(function |sub )", true) then
 					ExpectReturn = false
-					set initializeVars = server.createObject("Scripting.Dictionary")
-					if str.startsWith(aLine, "function ") then ExpectReturn = true
-					aLine = replace(aLine ,"function ", "")
-					aLine = replace(aLine, "sub ", "")
-					lineUpper = ucase(aLine)
+					isDefaultFunction = false
+					set initializeVars = lib.newDict(empty)
+					if str.matching(aLine, "^(default ){0,1}function ", true) then ExpectReturn = true
+					if str.matching(aLine, "^default ", true) then isDefaultFunction = true
+					aLine = str.rReplace(aLine ,"^(default ){0,1}(function |sub )", "", true)
 					'if its the constructor or destructor then skip this line...
-					if not (str.startsWith(lineUpper, "CLASS_TERMINATE") or str.startsWith(lineUpper, "CLASS_INITIALIZE")) then
-						'replace some keywords from the params.
-						Set regex = New RegExp
-						regex.pattern = "\(.*\)"
-						'get name
-						methodName = regex.replace(aLine, "")
+					if not str.matching(aLine, "^(class_terminate|class_initialize)", true) then
+						'remove brackets () and [] and params to get the name
+						methodName = str.rReplace(trim(aLine), "^\[?(.*?)\]? *\(.*\)$", "$1", true)
+						set regex = new Regexp
 						'get params
 						regex.pattern = "\(.*\)"
 						set matched = regex.execute(aLine)
 						 'Step through our matches 
-						 set params = server.createObject("Scripting.Dictionary")
-						 For Each item in matched 
+						 set params = lib.newDict(empty)
+						 For Each item in matched
 						 	x = split(item.Value, ",")
 							for a = 0 to ubound(x)
 								x(a) = replace(x(a),"(","")
@@ -342,6 +343,7 @@ function parseFile(file)
 										if str.startsWith(addLine, "''") and not str.startsWith(addLine, "'' @") then
 											lines(k) = replace(lines(k), vbtab, "")
 											lines(k) = replace(lines(k),"''", "")
+											lines(k) = addlistItem(lines(k))
 											parameter = parameter  & vbnewline & trim(lines(k))
 										else
 											exit for
@@ -349,11 +351,9 @@ function parseFile(file)
 									next
 									'loop through parameters found in method, and add description
 									for each key in params.keys
-										akey = trim(replace(ucase(key),"BYREF",""))
+										akey = trim(str.rReplace(key, "byRef|byVal", "", true))
 										if ubound(parameterFor) >=0 then
-											if akey = uCase(parameterFor(0)) then
-												params(key) = parameter
-											end if
+											if uCase(akey) = uCase(parameterFor(0)) then params(key) = parameter
 										end if
 									next
 									
@@ -368,6 +368,7 @@ function parseFile(file)
 										if str.startsWith(addLine, "''") and not str.startsWith(addLine, "'' @") then
 											lines(k) = replace(lines(k), vbtab, "")
 											lines(k) = replace(lines(k),"''", "")
+											lines(k) = addlistItem(lines(k))
 											returns = returns  & vbnewline & trim(lines(k))
 										else
 											exit for
@@ -378,7 +379,7 @@ function parseFile(file)
 									aLine = replace(aline,"'' @DESCRIPTION:", "")
 									
 									aLine = replace(aLine, vbtab, "")
-									ldescription = trim(aLine)
+									ldescription = addlistItem(aLine)
 									'get all lines for the description, if the description is breaked up in new lines
 									for k = (j + 1) to i
 										addLine = trim(lines(k))
@@ -386,6 +387,7 @@ function parseFile(file)
 										if str.startsWith(addLine, "''") and not str.startsWith(addLine, "'' @") then
 											lines(k) = replace(lines(k), vbtab, "")
 											lines(k) = replace(lines(k),"''", "")
+											lines(k) = addlistItem(lines(k))
 											ldescription = ldescription  & vbnewline & trim(lines(k))
 										else
 											exit for
@@ -395,7 +397,7 @@ function parseFile(file)
 								if str.startsWith(aLine, "'' @SDESCRIPTION:") then
 									aLine = replace(aline,"'' @SDESCRIPTION:", "")
 									aLine = replace(aLine, vbtab, "")
-									sdescription = trim(aLine)
+									sdescription = addlistItem(aLine)
 									'get all lines for the description, if the description is breaked up in new lines
 									for k = (j + 1) to i
 										addLine = trim(lines(k))
@@ -403,6 +405,7 @@ function parseFile(file)
 										if str.startsWith(addLine, "''") and not str.startsWith(addLine, "'' @") then
 											lines(k) = replace(lines(k), vbtab, "")
 											lines(k) = replace(lines(k),"''", "")
+											lines(k) = addlistItem(lines(k))
 											sdescription = sdescription  & vbnewline & trim(lines(k))
 										else
 											exit for
@@ -416,11 +419,18 @@ function parseFile(file)
 						set methodNode = getNewNode("method", "")
 						with methodNode
 							.appendChild(getNewNode("name", methodName))
-							if instr(sdescription,"OBSOLETE!") then methodNode.setAttribute "obsolete", "1"
-							if instr(sdescription,"[static]") or  instr(ldescription,"[static]") _
-								or instr(sdescription,"STATIC!") or  instr(ldescription,"STATIC!") then methodNode.setAttribute "static", "1"
+							if isDefaultFunction then methodNode.setAttribute "default", "1"
+							if str.matching(sDescription, obsoletePtrn, true) or str.matching(lDescription, obsoletePtrn, true) then
+								sDescription = str.rReplace(sDescription, obsoletePtrn, "", true)
+								lDescription = str.rReplace(lDescription, obsoletePtrn, "", true)
+								methodNode.setAttribute "obsolete", "1"
+							end if
+							if str.matching(sDescription, staticPtrn, true) or str.matching(lDescription, staticPtrn, true) then
+								sDescription = str.rReplace(sDescription, staticPtrn, "", true)
+								lDescription = str.rReplace(lDescription, staticPtrn, "", true)
+								methodNode.setAttribute "static", "1"
+							end if
 							.appendChild(getNewNode("shortdescription", sdescription))
-							if instr(ldescription,"OBSOLETE!") then methodNode.setAttribute "obsolete", "1"
 							.appendChild(getNewNode("longdescription", ldescription))
 							if ExpectReturn and trim(returns) = "" and EnforceRulz then
 								lib.error("Error in class:" & getVirtualPath(file.path) & "<br> - No return parameter provided for method<b> " & methodname & " </b>in class <b>" & title & "</b>")
@@ -433,12 +443,9 @@ function parseFile(file)
 							aType = ""
 							
 							set aParameter = getNewNode("parameter", "")
-							Set aregex = New RegExp
-							aregex.IgnoreCase = True
-							aregex.pattern = "(^byRef )|(^byval )"
-							akey = aregex.replace(key,"")
-							set aName	= getNewNode("name", trim(akey))
-							if  instr(ucase(key), "BYREF") > 0 then aName.setAttribute "passed", "byRef"
+							akey = str.rReplace(key, "(^byRef )|(^byval )", "", true)
+							set aName = getNewNode("name", trim(akey))
+							if instr(ucase(key), "BYREF") > 0 then aName.setAttribute "passed", "byRef"
 							if instr(ucase(key), "BYVAL") > 0 then aName.setAttribute "passed", "byVal"
 							
 							paramDesc = params(key)
@@ -454,7 +461,6 @@ function parseFile(file)
 							set typesNode = getNewNode("types", "")
 							types = split(getVarType(paramDesc),",")
 							if ubound(types) >= 0 then
-								
 								for a = 0 to ubound(types)
 									if not validateType(trim(types(a))) and EnforceRulz then
 										errorMessage = "Error in class:" & getVirtualPath(file.path) & "<br>Invalid type name <b>" & types(a) &"</b> in class <b>" & title
@@ -471,9 +477,9 @@ function parseFile(file)
 							set aName	= nothing
 							set aDescription = nothing
 						next
+						
 						methodNode.appendChild(parameters)
 						set returnNode = getNewNode("return", "")
-							
 						if not validateType(returnType) and EnforceRulz and ExpectReturn then
 							errorMessage = "Error in class:" & getVirtualPath(file.path) & "<br> - Invalid return type name<b>" & returnType & "</b> in class <b>" & title
 							errorMessage = errorMessage & "</b> method <b>" & methodname & "</b>"
@@ -486,17 +492,17 @@ function parseFile(file)
 					end if
 					classNode.appendChild(methodsNode)
 				else
-					
 					set classProperty = getNewNode("property","")
 					'get the properties that start with public property
-					if str.startsWith(aLine, "property get ") or str.startsWith(aLine, "property let ") or str.startsWith(aLine, "property set") or str.startsWith(aLine, "default property")then
+					propPtrn = "^(default ){0,1}property (get|let|set) "
+					isDefaultProperty = false
+					if str.matching(aLine, propPtrn, true) then
 						description = ""
-						isLetProperty = str.startsWith(aLine, "property let ")
-						isGetProperty = str.startsWith(aLine, "property get ")
-						isSetProperty = str.startsWith(aLine, "property set ")
-						aLine = replace(aLine, "property get ", "")
-						aLine = replace(aLine, "property let ", "")
-						aLine = replace(aLine, "property set ", "")
+						isLetProperty = str.matching(aLine, "^property let ", true)
+						isGetProperty = str.matching(aLine, "^property get ", true)
+						isSetProperty = str.matching(aLine, "^property set ", true)
+						isDefaultProperty = str.matching(aLine, "^default ", true)
+						aLine = str.rReplace(aLine, propPtrn, "", true)
 						propertyInfo = split(aLine, "''")
 						propertyName = trim(propertyInfo(0))
 						Set regex = New RegExp
@@ -523,9 +529,6 @@ function parseFile(file)
 						'get the properties that are just "public"
 						memberInfo = split(aLine,"''")
 						propertyName = trim(memberInfo(0))
-						propertyName = replace(propertyName, "property get", "")
-						propertyName = replace(propertyName, "property let", "")
-						propertyName = replace(propertyName, "property set", "")
 						if ubound(memberInfo) > 0 then
 							description = trim(memberInfo(1))
 							'we check if there are any comments for the membervariable in the next lines
@@ -534,7 +537,9 @@ function parseFile(file)
 								aline = trim(lines(j))
 								addLine = replace(addLine, vbtab, "")
 								if str.startsWith(aline, "''") then
-									description = description  & vbnewline & replace(aline, "''", "")
+									aLine = replace(aline, "''", "")
+									aLine = addListItem(aLine)
+									description = description  & vbnewline & aline
 								else
 									exit for
 								end if
@@ -542,40 +547,40 @@ function parseFile(file)
 						end if
 					end if
 					
-					'Now set the details for the class property node
+					'Now set the details for the property node
 					with classProperty
-					if str.startsWith(propertyName, "default ") then
-						.setAttribute "defaultProperty", "1"
-						propertyName = trim(str.trimStart(propertyName, 8))
-					end if
-					.appendChild(getNewNode("name", propertyName))
-					if instr(description,"GET") then
-						.setAttribute "readOnly", "1"
-					elseif instr(description,"SET") then
-						.setAttribute "writeOnly", "1"
-					end if
-					
-					if instr(description,"OBSOLETE!") then classProperty.setAttribute "obsolete", "1"
-					set typesNode = getNewNode("types", "")
-					types = split(getVarType(description),",")
-					for a=0 to ubound(types)
-						if not trim(types(a)) = "" then
-							if not validateType(types(a)) and enforceRulz then
-								errorMessage = "Error in class:" & getVirtualPath(file.path) & "<br>Invalid type name <b>" & types(a) &"</b> in class <b>" & title
-								errorMessage = errorMessage & "</b> method <b>" & methodname & "</b>"
-								lib.error(errorMessage)
-							end if
-							set typeNode = getNewNode("type", trim(types(a)))
-							typesNode.appendChild(typeNode)
-							set typeNode = nothing
+						if isDefaultProperty then .setAttribute "defaultProperty", "1"
+						.appendChild(getNewNode("name", propertyName))
+						if str.matching(description, "GET:", false) then
+							.setAttribute "readOnly", "1"
+						elseif str.matching(description,"SET:", false) then
+							.setAttribute "writeOnly", "1"
 						end if
-					next
-					classProperty.appendChild(typesNode)
-					set typesNode = nothing
-					if trim(removeSquareBrakets(description)) = "" and enforceRules then 
-						lib.error("Error in class:" & getVirtualPath(file.path) & "<br>No description for <b>" & propertyName & "</b> in class <b>" & title  & "</b>")
-					end if
-					.appendChild(getNewNode("description", removeSquareBrakets(description)))
+						
+						if str.matching(description, obsoletePtrn, true) then
+							classProperty.setAttribute "obsolete", "1"
+							description = str.rReplace(description, obsoletePtrn, "", true)
+						end if
+						set typesNode = getNewNode("types", "")
+						types = split(getVarType(description),",")
+						for a=0 to ubound(types)
+							if not trim(types(a)) = "" then
+								if not validateType(types(a)) and enforceRulz then
+									errorMessage = "Error in class:" & getVirtualPath(file.path) & "<br>Invalid type name <b>" & types(a) &"</b> in class <b>" & title
+									errorMessage = errorMessage & "</b> method <b>" & methodname & "</b>"
+									lib.error(errorMessage)
+								end if
+								set typeNode = getNewNode("type", trim(types(a)))
+								typesNode.appendChild(typeNode)
+								set typeNode = nothing
+							end if
+						next
+						classProperty.appendChild(typesNode)
+						set typesNode = nothing
+						if trim(removeSquareBrakets(description)) = "" and enforceRules then 
+							lib.error("Error in class:" & getVirtualPath(file.path) & "<br>No description for <b>" & propertyName & "</b> in class <b>" & title  & "</b>")
+						end if
+						.appendChild(getNewNode("description", removeSquareBrakets(description)))
 					end with
 					classProperties.appendChild(classProperty)
 				end if
@@ -615,6 +620,18 @@ function validateType(typeValue)
 	validateType = not regex.test(trim(typeValue))
 	set regex = nothing
 end function
+
+'******************************************************************************************
+'* addlistItem Appends the <li> val <li>  to your string.
+'******************************************************************************************
+function addlistItem(val)
+	addlistItem = val
+	if str.startsWith(trim(addlistItem), "- ") then 
+		addlistItem = str.trimStart(addlistItem, 2)
+		addlistItem = "<li class=""list"">" & addlistItem & "</li>"
+	end if
+end function
+
 
 '******************************************************************************************
 '* getVarType 	pass a string with the type in [] and get the type name back. 

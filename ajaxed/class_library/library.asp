@@ -1,9 +1,5 @@
 ﻿<%
 '**************************************************************************************************************
-'* License refer to license.txt		
-'**************************************************************************************************************
-
-'**************************************************************************************************************
 
 '' @CLASSTITLE:		Library
 '' @CREATOR:		Michal Gabrukiewicz - gabru at grafix.at
@@ -24,6 +20,7 @@ class Library
 	'public members
 	public page			''[AjaxedPage] holds the current executing page. Nothing if there is not page
 	public fso			''[FileSystemObject] holds a filesystemobject instance for global use
+	public logger		''[Logger] holds a logger instance which is ready-to-use for logging.
 	
 	public property get browser	''[string] gets the browser (uppercased shortcut) which is used. version is ignored. e.g. FF, IE, etc. empty if unknown
 		if p_browser = "" then
@@ -38,7 +35,7 @@ class Library
 	end property
 	
 	public property get version ''[string] gets the version of the whole library
-		version = "1.0"
+		version = "1.1"
 	end property
 	
 	public property get env ''[string] gets the current environment. LIVE or DEV
@@ -47,11 +44,11 @@ class Library
 		if env <> "LIVE" then env = "DEV"
 	end property
 	
-	public property get LIVE ''[bool] indicates if the environment is the live env (production)
+	public property get live ''[bool] indicates if the environment is the live env (production)
 		LIVE = env = "LIVE"
 	end property
 	
-	public property get DEV ''[bool] indicates if the environment is the development evn
+	public property get dev ''[bool] indicates if the environment is the development evn
 		DEV = env = "DEV"
 	end property
 	
@@ -64,6 +61,7 @@ class Library
 		set me.page = nothing
 		errorCaption = init(AJAXED_ERRORCAPTION, "Erroro: ")
 		set fso = server.createObject("scripting.filesystemobject")
+		set me.logger = nothing
 	end sub
 	
 	'***********************************************************************************************************
@@ -79,14 +77,14 @@ class Library
 	'' @RETURN:			[string] name of the component which could be loaded first or empty if no one could be loaded
 	'**********************************************************************************************************
 	public function detectComponent(components)
-		tryLoadComponent = empty
+		detectComponent = empty
 		for each c in components
 			on error resume next
 				server.createObject(c)
 				failed = err <> 0
 			on error goto 0
 			if not failed then
-				tryLoadComponent = c
+				detectComponent = c
 				exit for
 			end if
 		next
@@ -121,7 +119,7 @@ class Library
 	'' @RETURN:			[array] array with numbers where each value is a value between the boundaries (incl)
 	'**********************************************************************************************************
 	public function range(startsWith, endsWith, interval)
-		if interval = 0 then lib.throwError("interval cannot be 0")
+		if interval = 0 then throwError("interval cannot be 0")
 		arr = array()
 		decimals = len(str.splitValue(startsWith, ",", -1))
 		decimalsE = len(str.splitValue(endsWith, ",", -1))
@@ -208,6 +206,7 @@ class Library
 				if page.QS(empty) <> "" then source = source & "?" & page.QS(empty)
 			end if
 		end if
+		logger.error(description)
 		'user errors start after 512 (VB spec)
 		err.raise nr, source, description
 	end sub
@@ -218,12 +217,14 @@ class Library
 	''					it should only be used if a common error message should be displayed to the user instead of
 	''					raising a real ASP error (throwError).
 	''					- if buffering is turned off then the already written response won't be cleared.
+	''					- error is logged into the log on the dev env
 	'' @PARAM:			msg [string]: error message
 	'******************************************************************************************************************
 	public sub [error](msg)
 		if response.buffer then response.clear()
 		str.writeln(errorCaption)
 		str.writeln(str.HTMLEncode(msg))
+		me.logger.error(msg)
 		str.end()
 	end sub
 	

@@ -268,6 +268,26 @@ end function
 			</div>
 		end class
 	</div>
+	
+	<h2><a name="parsing"></a>Parsing</h2>
+	
+	You should know the following things about the parsing of documentation:
+	<ul>
+		<li>
+			Lines starting with a "<code>-</code>" are treated as list items within your documentation.
+			<div class="code">
+				<div class="comment">
+					''@DESCRIPTION: performs some action. The following needs to be considered:<br>
+					''- some list first list item<br>
+					''- and another list item. The text must stay in the same line
+				</div>
+				public sub perform()<br>
+				end sub
+			</div>
+		</li>
+		<li>all HTML markup is recognized within the documentation</li>
+	</ul>
+	
 </body>
 </html>
 	
