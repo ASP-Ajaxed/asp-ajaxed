@@ -3,6 +3,7 @@
 }
 h1 {
 	font:20pt georgia;
+	margin:1em;
 }
 h2 {
 	font:18pt georgia;
@@ -69,6 +70,16 @@ input.code, textarea.code {
 }
 .console .error {
 	background:#f00;
+}
+
+.blue .top, 
+.blue .top b, 
+.blue .bottom, 
+.blue .bottom b, 
+.blue .content {
+	color:#fff; 
+	background-color:#6FC7F7; 
+	border-color:#2662DF;
 }
 
 /* tabs from http://woork.blogspot.com/2008/03/clean-tab-bar-digg-like-using-css.html */ 

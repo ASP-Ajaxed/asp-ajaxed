@@ -75,4 +75,8 @@ sub test_3()
 	tf.assertNot lib.contains(d, 3.2), "lib.contains with dictionary"
 	tf.assert lib.contains(d, "not"), "lib.contains with dictionary"
 end sub
+
+sub test_4()
+	tf.assertEqual "scripting.dictionary", lib.detectComponent(array("bla", "scripting.dictionary")), "lib.detectComponent does not work"
+end sub
 %>

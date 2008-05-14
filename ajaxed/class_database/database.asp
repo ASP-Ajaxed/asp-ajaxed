@@ -1,4 +1,4 @@
-<%
+﻿<%
 '**************************************************************************************************************
 
 '' @CLASSTITLE:		Database
@@ -9,6 +9,7 @@
 ''					offers a property "DBConnection" which automatically opens and closes the connection
 ''					within a page.
 '' @STATICNAME:		db
+'' @COMPATIBLE:		MS SqlServer, MS Access, Sqlite
 '' @REQUIRES:		-
 '' @VERSION:		0.2
 
@@ -16,7 +17,7 @@
 class Database
 
 	'private members
-	private p_numberOfDBAccess
+	private p_numberOfDBAccess, dbType
 	
 	'public members
 	public connection		''[ADODB.Connection] holds the database connection
@@ -35,6 +36,7 @@ class Database
 	public sub class_initialize()
 		set connection = nothing
 		p_numberOfDBAccess = 0
+		dbType = empty
 	end sub
 	
 	'******************************************************************************************************************
@@ -46,13 +48,14 @@ class Database
 	public sub open(connectionString)
 		if not connection is nothing then close()
 		set connection = server.createObject("ADODB.connection")
+		debug("OPEN DB " & connectionString)
 		connection.open(connectionString)
 	end sub
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Opens the connection to the default database
 	'' @DESCRIPTION:	- uses open() for it
-	''					- throws an error if no default connectionstring is configured
+	''					- throws an error if default connectionstring is NOT configured
 	'******************************************************************************************************************
 	public sub openDefault()
 		if isEmpty(defaultConnectionString) then lib.throwError("No default connectionstring configured.")
@@ -66,6 +69,7 @@ class Database
 		if not connection is nothing then
 			if connection.state <> 0 then connection.close()
 			set connection = nothing
+			debug("CLOSE DB")
 		end if
 	end sub
 	
@@ -77,10 +81,11 @@ class Database
 	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. "id = 20 AND cool = 1"
 	''					- if condition is a string then you need to ensure sql-safety with str.sqlsafe yourself.
 	'******************************************************************************************************************
-	public sub delete(tablename, condition)
+	public sub delete(tablename, byVal condition)
+		checkBeforeExec "db.delete", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.delete", "tablename cannot be empty"))
 		if condition = "" then exit sub
-		getRecordset("DELETE FROM " & str.sqlSafe(tablename) & getWhereClause(condition))
+		getRS "DELETE FROM " & str.sqlSafe(tablename) & getWhereClause(condition), empty
 	end sub
 	
 	'******************************************************************************************************************
@@ -93,15 +98,21 @@ class Database
 	'' @RETURN:			[int] ID of the inserted record
 	'******************************************************************************************************************
 	public function insert(tablename, data)
+		checkBeforeExec "db.insert", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		aRS.open tablename, connection, 1, 2, 2
 		aRS.addNew()
 		fillRSWithData aRS, data, "db.insert"
 		aRS.update()
-		insert = aRS("id")
+		if dbType = "sqlite" then
+			insert = getRS("SELECT last_insert_rowid();", empty)
+		else
+			insert = aRS("id")
+		end if
 		aRS.close()
 		set aRS = nothing
+		debug("inserted record into '" & tablename & "' with ID " & insert)
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
 	end function
 	
@@ -115,7 +126,8 @@ class Database
 	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. "id = 20 AND cool = 1"
 	''					- if condition is a string then you need to ensure sql-safety with str.sqlsafe yourself.
 	'******************************************************************************************************************
-	public sub update(tablename, data, condition)
+	public sub update(tablename, data, byVal condition)
+		checkBeforeExec "db.update", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		aRS.open "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition), connection, 1, 2
@@ -123,6 +135,7 @@ class Database
 		aRS.update()
 		aRS.close()
 		set aRS = nothing
+		debug("updated record in '" & tablename & "' with condition '" & condition & "'")
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
 	end sub
 	
@@ -150,7 +163,8 @@ class Database
 	'' @PARAM:			condition [string]: condition for the count. e.g. "deleted = 0". leave empty to get all
 	'' @RETURN:			[int] number of records
 	'******************************************************************************************************************
-	public function count(tablename, condition)
+	public function count(tablename, byVal condition)
+		checkBeforeExec "db.count", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.count", "tablename cannot be empty"))
 		count = getScalar("SELECT COUNT(*) FROM " & str.SQLSafe(tablename) & lib.iif(condition <> "", " WHERE " & condition, ""), 0)
 	end function
@@ -162,17 +176,18 @@ class Database
 	'' @PARAM:			columnName [string]: name of the flag column. must be a numeric column accepting 1 and 0
 	'' @PARAM:			condition [string], [int]: if number then treated as ID of the record otherwise condition for WHERE clause.
 	'******************************************************************************************************************
-	public sub toggle(tablename, columnName, condition)
+	public sub toggle(tablename, columnName, byVal condition)
+		checkBeforeExec "db.toggle", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.toggle", "tablename cannot be empty"))
 		if trim(columnName) = "" then lib.throwError(array(100, "lib.toggle", "columnname cannot be empty"))
-		sql = "UPDATE " & str.SQLSafe(tablename) & " SET " & str.SQLSafe(columnName) & " = not " & str.SQLSafe(columnName) & getWhereClause(condition)
-		getRecordset(sql)
+		sql = "UPDATE " & str.SQLSafe(tablename) & " SET " & str.SQLSafe(columnName) & " = 1 - " & str.SQLSafe(columnName) & getWhereClause(condition)
+		getRS sql, empty
 	end sub
 	
 	'******************************************************************************************************************
 	'* getWhereClause - generates the where clause for SQL queries 
 	'******************************************************************************************************************
-	private function getWhereClause(condition)
+	private function getWhereClause(byVal condition)
 		getWhereClause = trim(condition)
 		if isNumeric(condition) then
 			rID = str.parse(condition, 0)
@@ -182,47 +197,67 @@ class Database
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION: 	Default method which should be always used to get a LOCKED recordset. Example for use:
-	''					set RS = db.getRecordset("SELECT * FROM user")
-	'' @PARAM:			sql [string]: Your SQL query
-	'' @RETURN:			[Recordset] recordset-Object
+	'' @DESCRIPTION: 	Gets a LOCKED recordset from the currently opened database. Example of usage:
+	''					set RS = lib.getRS("SELECT * FROM users WHERE name = '{0}'", "john")
+	'' @PARAM:			sql [string]: Your SQL query. placeholder for params are {0}, {1}, ... check str.format() for details
+	'' @PARAM:			params [array], [string]: parameters for the query which are used within the sql query. 
+	''					- Parameters are made sql injection safe.
+	''					- Leave empty if no params are needed
+	''					- provide an array if you have more parameters in your sql
+	''					- provide a string if you have only one parameter
+	'' @RETURN:			[recordset] recordset with data matching the sql query
 	'******************************************************************************************************************
-	public function getRecordset(sql)
-		if trim(sql) = "" then lib.throwError("SQL query cannot be empty")
-		if connection is nothing then lib.throwError("No connection is available.")
+	public function getRS(byVal sql, params)
+		sql = parametrizeSQL(sql, params, "db.getRS")
+		debug(sql)
 		on error resume next
- 		set getRecordset = connection.execute(sql)
+ 		set getRS = connection.execute(sql)
 		if err <> 0 then
 			errdesc = err.description
 			on error goto 0
-			lib.throwError(array(100, "Database.getRecordset", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
+			lib.throwError(array(101, "db.getRS", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
 		end if
 		on error goto 0
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
-	end Function
+	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION: 	Default method which should be always used to get an UNLOCKED recordset. Example for use:
-	''					set RS = db.getUnlockedRecordset("SELECT * FROM user")
-	'' @PARAM:			sql [string]: Your SQL query
-	'' @RETURN:			[Recordset] returns a recordset object (adOpenStatic & adUseClient)
+	'' @DESCRIPTION: 	Gets an UNLOCKED recordset from the currently opened database. check getRS() doc
+	'' @PARAM:			sql [string]: check getRS() doc
+	'' @PARAM:			params [array], [string]: check getRS() doc
+	'' @RETURN:			[recordset] recordset with data matching the sql query
 	'******************************************************************************************************************
-	public function getUnlockedRecordset(sql)
-		if trim(sql) = "" then lib.throwError("SQL query cannot be empty")
-		if connection is nothing then lib.throwError("No connection available")
+	public function getUnlockedRS(byVal sql, params)
+		sql = parametrizeSQL(sql, params, "db.getUnlockedRS")
+		debug(sql)
 		on error resume next
-		set getUnlockedRecordset = server.createObject("ADODB.Recordset")
-		getUnlockedRecordset.cursorLocation = 3
-		getUnlockedRecordset.cursorType = 3
-		getUnlockedRecordset.open sql, connection
+		set getUnlockedRS = server.createObject("ADODB.RecordSet")
+		getUnlockedRS.cursorLocation = 3
+		getUnlockedRS.cursorType = 3
+		getUnlockedRS.open sql, connection
 		if err <> 0 then
 			errdesc = err.description
 			on error goto 0
-			lib.throwError(array(100, "Database.getUnlockedRecordset", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
+			lib.throwError(array(101, "db.getUnlockedRS", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
 		end if
 		on error goto 0
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
-	end Function
+	end function
+	
+	'******************************************************************************************************************
+	'* parametrizeSQL 
+	'******************************************************************************************************************
+	private function parametrizeSQL(byVal sql, byVal params, callingFunction)
+		checkBeforeExec callingFunction, sql, true
+		parametrizeSQL = sql
+		if not isEmpty(params) then
+			if not isArray(params) then params = array(params)
+			for i = 0 to uBound(params)
+				params(i) = str.sqlSafe(params(i))
+			next
+			parametrizeSQL = str.format(parametrizeSQL, params)
+		end if
+	end function
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	executes a given sql-query and returns the first value of the first row.
@@ -235,13 +270,52 @@ class Database
 	'' @RETURN:			[variant] the first value of the result converted to the type of alternative
 	''					or the alternative itself if no records available
 	'******************************************************************************************************************
-	public function getScalar(sql, alternative)
-		if trim(sql) = "" then lib.throwError("SQL query cannot be empty")
+	public function getScalar(byVal sql, alternative)
+		checkBeforeExec "db.getScalar", sql, true
 		getScalar = alternative
-		set aRS = getRecordset(sql)
+		set aRS = getRS(sql, empty)
 		if not aRS.eof then getScalar = str.parse(aRS(0) & "", alternative)
 		set aRS = nothing
 	end function
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	OBSOLETE! use getRS() instead.
+	'' @DESCRIPTION:	Default method which should be always used to get a LOCKED recordset. Example for use:
+	''					set RS = db.getRecordset("SELECT * FROM user")
+	'' @PARAM:			sql [string]: Your SQL query
+	'' @RETURN:			[Recordset] recordset-Object
+	'******************************************************************************************************************
+	public function getRecordset(byVal sql)
+		lib.logger.warn("Database.getRecordset(" & sql & ") is obsolete and Database.getRS() should be used instead.")
+		set getRecordset = getRS(sql, empty)
+	end Function
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION:	OBSOLETE! use getUnlockedRS() instead
+	'' @DESCRIPTION: 	Default method which should be always used to get an UNLOCKED recordset. Example for use:
+	''					set RS = db.getUnlockedRecordset("SELECT * FROM user")
+	'' @PARAM:			sql [string]: Your SQL query
+	'' @RETURN:			[Recordset] returns a recordset object (adOpenStatic & adUseClient)
+	'******************************************************************************************************************
+	public function getUnlockedRecordset(byVal sql)
+		lib.logger.warn("Database.getUnlockedRecordset(" & sql & ") is obsolete and Database.getUnlockedRS() should be used instead.")
+		set getUnlockedRecordset = getUnlockedRS(sql, empty)
+	end Function
+	
+	'******************************************************************************************************************
+	'* checkBeforeExec - can be used to perform common checks before executing against the DB
+	'******************************************************************************************************************
+	private sub checkBeforeExec(callingFunc, sql, sqlRequired)
+		if sqlRequired and trim(sql) = "" then lib.throwError(array(100, callingFunction, "SQL-Query cannot be empty in " & callingFunc))
+		if connection is nothing then lib.throwError("connection is nothing. Configure/Open database connection before calling " & callingFunc)
+	end sub
+	
+	'******************************************************************************************************************
+	'* debug - debugs sql stuff
+	'******************************************************************************************************************
+	private sub debug(msg)
+		lib.logger.log 1, msg, "0;36"
+	end sub
 
 end class
 %>
