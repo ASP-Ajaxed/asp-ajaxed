@@ -21,7 +21,7 @@
 class Logger
 
 	'private members
-	private p_prefix, file, escapeChar, extension, p_path
+	private p_prefix, escapeChar, extension, p_path
 	
 	'public members
 	public msgPrefix	''[string] the prefix for all log messages. by default its the users ip and time stamp followed by a tabulator
@@ -38,7 +38,6 @@ class Logger
 	public sub class_initialize()
 		msgPrefix = lib.init(AJAXED_LOGMSG_PREFIX, request.servervariables("remote_addr") & " " & now() & vbTab)
 		defaultStyle = lib.init(AJAXED_LOGSTYLE, "0;37") 'the default style how text in the log appears.
-		set file = nothing
 		extension = ".log"
 		p_path = lib.init(AJAXED_LOGSPATH, "/ajaxedLogs/")
 		p_prefix = empty
@@ -53,16 +52,7 @@ class Logger
 		path = p_path
 	end property
 	
-	'**************************************************************************************************************
-	'* destructor 
-	'**************************************************************************************************************
-	public sub class_terminate()
-		if not file is nothing then file.close()
-		set file = nothing
-	end sub
-	
 	public property let prefix(val) ''[string] sets the prefix for the log file. Useful if you have more applications and want to have the logs separated. e.g. your app is named "app1" then it will result in a logfile app1_dev.log on the DEV env. default = empty
-		if not file is nothing then lib.throwError("prefix can only be set before any logs have been done")
 		prefix = val & "_"
 	end property
 	
@@ -81,9 +71,7 @@ class Logger
 	'**************************************************************************************************************
 	public sub [log](level, byVal msg, byVal style)
 		if not logsOnLevel(level) then exit sub
-		if file is nothing then
-			if not lib.fso.folderExists(server.mapPath(path)) then lib.fso.createFolder(server.mapPath(path))
-		end if
+		if not lib.fso.folderExists(server.mapPath(path)) then lib.fso.createFolder(server.mapPath(path))
 		set file = lib.fso.openTextFile(server.mapPath(logfile), 8, true)
 		if isEmpty(style) then style = defaultStyle
 		if not isArray(msg) then msg = array(msg)
@@ -94,6 +82,7 @@ class Logger
 			file.write(vbNewLine)
 		next
 		file.close()
+		set file = nothing
 	end sub
 	
 	'******************************************************************************************************************
