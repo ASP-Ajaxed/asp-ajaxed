@@ -1,4 +1,4 @@
-﻿<%
+<%
 '**************************************************************************************************************
 
 '' @CLASSTITLE:		Email
@@ -8,6 +8,7 @@
 ''					a third party component.
 ''					- create a new instance, set the properties and send or user newWith(template) and create a new instance with a template which will set the body and the subject of the email automatically from the TextTemplate
 ''					- you should send an email whereever you want to send an email in your application. Even if you dont know if an email component will be installed. 
+'' @REQUIRES:		TextTemplate
 '' @COMPATIBLE:		DIMAC JMail.Message, ASPEMAIL Persists.MailSender, MS cdo.message
 '' @VERSION:		0.9
 
@@ -103,7 +104,8 @@ class Email
 		p_sendersName = val
 		if component = "jmail.message" or component = "persits.mailsender" then
 			mailer.fromName = p_sendersName
-			'TODO: check for cdo
+		elseif component = "cdo.message" then
+			mailer.from = emailName(val, sendersEmail)
 		elseif component = "" then
 			exit property
 		else
@@ -149,7 +151,7 @@ class Email
 			mailer.username = val
 		elseif component = "cdo.message" then
 			with mailer.configuration.fields
-				.item("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = 1 '1 = basic, 2 = NTLM
+				.item("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = lib.iif(isEmpty(val), 0, 1)
 				.item("http://schemas.microsoft.com/cdo/configuration/sendusername") = val
 				.update()
 			end with
@@ -172,7 +174,7 @@ class Email
 			mailer.password = val
 		elseif component = "cdo.message" then
 			with mailer.configuration.fields
-				.item("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = 1 '1 = basic, 2 = NTLM
+				.item("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = lib.iif(isEmpty(val), 0, 1)
 				.item("http://schemas.microsoft.com/cdo/configuration/sendpassword") = val
 				.update()
 			end with
@@ -193,7 +195,7 @@ class Email
 		
 		dispatch = lib.init(AJAXED_EMAIL_DISPATCH, true)
 		p_allTo = lib.init(AJAXED_EMAIL_ALLTO, empty)
-		if allTo <> "" then addRecipientToComponent "bcc", allTo, empty
+		if not isEmpty(allTo) then addRecipientToComponent "bcc", allTo, empty
 		
 		sendersEmail = lib.init(AJAXED_EMAIL_SENDER, empty)
 		sendersName = lib.init(AJAXED_EMAIL_SENDER_NAME, empty)
@@ -216,7 +218,8 @@ class Email
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	STATIC! creates a new email instance with the content of a given TextTemplate
-	'' @DESCRIPTION:	first line of the template is treated as the emails subject and the rest as the body
+	'' @DESCRIPTION:	first line of the template is treated as the emails subject and the rest as the body.
+	''					Dont forget to load the TextTemplate class for this.
 	'' @PARAM:			template [TextTemplate]: template which is used within the email
 	'' @RETURN:			[Email] a ready-to-use email instance where subject and body is set
 	'******************************************************************************************************************
@@ -263,6 +266,8 @@ class Email
 				if dispatch then send = sendWithAspEmail()
 			elseif component = "jmail.message" then
 				if dispatch then send = sendWithJmail()
+			elseif component = "cdo.message" then
+				if dispatch then send = sendWithCDO()
 			elseif component = "" then
 				send = false
 				p_errorMsg = "No supported email component found."
@@ -330,8 +335,14 @@ class Email
 				.update()
 			end with
 		end if
-		'TODO catch the error of sending. on error?
-		mailer.send()
+		on error resume next
+			sendWithCDO = mailer.send() = 0
+			if err <> 0 then
+				sendWithCDO = false
+				errDesc = err.description
+			end if
+		on error goto 0
+		p_errorMsg = errDesc
 	end function
 	
 	'******************************************************************************************************************
@@ -373,7 +384,7 @@ class Email
 		
 		if name = "" then name = email
 		p_recipients.add lib.getUniqueID(), array(recipientsType, email, name)
-		if allTo = "" then addRecipientToComponent recipientsType, email, name
+		if isEmpty(allTo) then addRecipientToComponent recipientsType, email, name
 	end function
 	
 	'**********************************************************************************************************
@@ -409,13 +420,12 @@ class Email
 				mailer.addRecipientBCC email, name
 			end if
 		elseif component = "cdo.message" then
-			'TODO: check how multiple recipients and how to add the name
 			if recipientsType = "to" then
-				mailer.to email
+				mailer.to = mailer.to & emailName(name, email) & "; "
 			elseif recipientsType = "cc" then
-				mailer.cc email
+				mailer.cc = mailer.cc & emailName(name, email) & "; "
 			elseif recipientsType = "bcc" then
-				mailer.bcc email
+				mailer.bcc = mailer.bcc & emailName(name, email) & "; "
 			end if
 		elseif component = "" then
 			exit function
@@ -448,7 +458,7 @@ class Email
 				addAttachment = mailer.addAttachment(fileName, inline, contentType)
 			end if
 		elseif component = "cdo.message" then
-			'TODO: check for inline attachment.. return the ID
+			if inline then notSupported("addAttachment(inline)")
 			mailer.addAttachment(filename)
 		elseif component = "" then
 			exit function

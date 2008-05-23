@@ -1,4 +1,5 @@
-<!--#include file="../ajaxed.asp"-->
+﻿<!--#include file="../ajaxed.asp"-->
+<!--#include file="../class_email/email.asp"-->
 <%
 '******************************************************************************************
 '* Creator: 	michal
@@ -27,8 +28,13 @@ end sub
 '******************************************************************************************
 function getComponents()
 	'TODO: add more components here, which should be checked
-	comps = array("JMail.Message", "Persits.MailSender", _
-		"w3.Upload", "Persits.Jpeg", "Persits.Upload", "Persits.Pdf", "StringBuilderVB.StringBuilder")
+	comps = array("w3.Upload", "Persits.Jpeg", "Persits.Upload", "Persits.Pdf", "StringBuilderVB.StringBuilder")
+	'add the ones from the mailer
+	mailers = (new Email).supportedComponents
+	for each m in mailers
+		redim preserve comps(uBound(comps) + 1)
+		comps(uBound(comps)) = m
+	next
 	found = array()
 	for each c in comps
 		on error resume next
@@ -72,8 +78,8 @@ sub content() %>
 			if failed then
 				row "DB Connected", "could not connect. (" & description & ")", false
 			else
-				row "DB Connected", "successfully.	", false
-				row "DBMS", db.connection.properties("DBMS Name") & " " & db.connection.properties("DBMS Version"), false
+				row "DB Connected", "successfully.", false
+				row "DB Type", db.dbType, false
 				row "Provider", db.connection.properties("Provider Name") & " " & db.connection.properties("Provider Version"), false
 				row "OLE DB version", db.connection.properties("OLE DB Version"), false
 			end if

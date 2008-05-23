@@ -1,4 +1,5 @@
-﻿<!--#include file="../class_testFixture/testFixture.asp"-->
+﻿<% AJAXED_EMAIL_COMPONENTS = empty %>
+<!--#include file="../class_testFixture/testFixture.asp"-->
 <!--#include file="email.asp"-->
 <%
 set tf = new TestFixture
@@ -20,15 +21,19 @@ sub test_1()
 			e.subject = "Test"
 			e.body = "test"
 			e.sendersEmail = "tester@ajaxed.com"
-			e.addRecipient "to", "someEmail@mail.com", "michal"
-			e.body = "test email"
-			tf.assert e.send(), "email could not be sent with detected component '" & e.component & "'"
+			e.addRecipient "to", "some@someemail.com", "michal"
+			e.addRecipient "cc", "someCC@someemail.com", "CCer"
+			e.addRecipient "bcc", "someBCC@someemail.com", "BCCer"
+			e.body = "test email with " & e.component
+			e.addAttachment server.mappath("test_attachment.txt"), false, empty
+			tf.assert e.send(), "email could not be sent with detected component '" & e.component & "' " & "(" & e.errorMsg & ")"
 		end if
 	next
 end sub
 
+'tries to send an emil with a component 
 sub test_2()
-	AJAXED_EMAIL_COMPONENTS = array("non existing component")
+	AJAXED_EMAIL_COMPONENTS = array("no component")
 	set e = new Email
 	e.subject = "Test"
 	e.sendersEmail = "test@tester.com"

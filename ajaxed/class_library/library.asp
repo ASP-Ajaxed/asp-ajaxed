@@ -1,4 +1,4 @@
-﻿<%
+<%
 '**************************************************************************************************************
 
 '' @CLASSTITLE:		Library
@@ -8,6 +8,7 @@
 '' @CDESCRIPTION:	This class holds all general methods used within the library. They are accessible
 ''					through an already existing instance called "lib". It represents the Library itself somehow.
 ''					Thats why e.g. its possible to get the current version of the library using lib.version
+''					- environment specific configs are loaded when an instance of Library is created (thus its possible to override configs dependent on the environment). just place a sub called envDEV to override configs for the dev environment. envLIVE for the live.
 '' @VERSION:		1.0
 
 '**************************************************************************************************************
@@ -15,7 +16,7 @@
 class Library
 
 	'private members
-	private uniqueID, p_browser, errorCaption
+	private uniqueID, p_browser
 	
 	'public members
 	public page			''[AjaxedPage] holds the current executing page. Nothing if there is not page
@@ -39,7 +40,7 @@ class Library
 	end property
 	
 	public property get env ''[string] gets the current environment. LIVE or DEV
-		env = lib.init(AJAXED_ENVIRONMENT, "DEV")
+		env = uCase(init(AJAXED_ENVIRONMENT, "DEV"))
 		'always return development unless its really live
 		if env <> "LIVE" then env = "DEV"
 	end property
@@ -56,10 +57,11 @@ class Library
 	'* constructor 
 	'***********************************************************************************************************
 	public sub class_Initialize()
+		'loads environment specific configs (only if the sub exists)
+		exec "env" & env, empty
 		uniqueID = 0
 		p_browser = ""
 		set me.page = nothing
-		errorCaption = init(AJAXED_ERRORCAPTION, "Erroro: ")
 		set fso = server.createObject("scripting.filesystemobject")
 		set me.logger = nothing
 	end sub
@@ -222,7 +224,7 @@ class Library
 	'******************************************************************************************************************
 	public sub [error](msg)
 		if response.buffer then response.clear()
-		str.writeln(errorCaption)
+		str.writeln(init(AJAXED_ERRORCAPTION, "Erroro: "))
 		str.writeln(str.HTMLEncode(msg))
 		me.logger.error(msg)
 		str.end()
