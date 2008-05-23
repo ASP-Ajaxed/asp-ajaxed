@@ -2,6 +2,7 @@
 <% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("test.mdb") & ";" %>
 <%
 set tf = new TestFixture
+tf.debug = true
 tf.run()
 
 'tests with default DB (ACCESS)
@@ -13,7 +14,7 @@ sub test_1()
 end sub
 
 'SQLITE test
-sub test_not_finished_yet()
+sub test_2()
 	db.open("DRIVER=SQLite3 ODBC Driver;Database=" & server.mappath("test.sqlite") & ";LongNames=0;Timeout=1000;NoTXN=0;SyncPragma=NORMAL;StepAPI=0;")
 	performDBOperations()
 	db.close()
@@ -47,9 +48,7 @@ sub performDBOperations()
 	db.toggle "person", "cool", empty
 	tf.assertEqual 0, db.count("person", "cool = 1"), "in the end no cool people"
 	
-	tf.assertEqual 14, db.numberOfDBAccess, "db.numberOfDBAccess"
-	
-	set RS = db.getRS("SELECT TOP 1 id FROM person", empty)
+	set RS = db.getRS("SELECT id FROM person", empty)
 	tf.assert not RS.eof, "should have at least one person"
 	tf.assert not db.getRS("SELECT * FROM person WHERE id = {0}", RS("id")).eof, "db.getRS should take only one param as argument"
 	tf.assert not db.getRS("SELECT * FROM person WHERE id = {0}", array(RS("id"))).eof, "db.getRS should also take an array as arg"

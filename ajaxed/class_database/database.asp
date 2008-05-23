@@ -8,16 +8,18 @@
 ''					directly through "db" without creating an own instance. The AjaxedPage
 ''					offers a property "DBConnection" which automatically opens and closes the connection
 ''					within a page.
+''					- the database type is detected automatically but it can also be set manually in the config (AJAXED_DBTYPE).
+''					- if the database type could not be detected then the type is "unknown" and all operations are exectuted as it would be Microsoft SQL Server
 '' @STATICNAME:		db
-'' @COMPATIBLE:		MS SqlServer, MS Access, Sqlite
+'' @COMPATIBLE:		Microsoft Sql Server, Microsoft Access, Sqlite
 '' @REQUIRES:		-
-'' @VERSION:		0.2
+'' @VERSION:		1.0
 
 '**************************************************************************************************************
 class Database
 
 	'private members
-	private p_numberOfDBAccess, dbType
+	private p_numberOfDBAccess
 	
 	'public members
 	public connection		''[ADODB.Connection] holds the database connection
@@ -30,13 +32,27 @@ class Database
 		defaultConnectionString = lib.init(AJAXED_CONNSTRING, empty)
 	end property
 	
+	public property get dbType ''[string] gets the type of the currently opened db. access, sqlite, mysql, mssql. unknown if the database type could not be detected. If your database could not be detected then its possible to set the type manually in the config using AJAXED_DBTYPE
+		if connection is nothing then lib.throwError("Database.dbType needs an opened connection.")
+		if isEmpty(p_dbType) then
+			p_dbType = "unknown"
+			typ = connection.properties("Extended Properties")
+			if str.matching(typ, "ms access|microsoft access", true) then
+				p_dbType = "access"
+			elseif str.matching(typ, "sqlite", true) then
+				p_dbType = "sqlite"
+			end if
+		end if
+		dbType = p_dbType
+	end property
+	
 	'******************************************************************************************************************
 	'* constructor
 	'******************************************************************************************************************
 	public sub class_initialize()
 		set connection = nothing
 		p_numberOfDBAccess = 0
-		dbType = empty
+		p_dbType = lCase(lib.init(AJAXED_DBTYPE, empty))
 	end sub
 	
 	'******************************************************************************************************************
@@ -48,8 +64,8 @@ class Database
 	public sub open(connectionString)
 		if not connection is nothing then close()
 		set connection = server.createObject("ADODB.connection")
-		debug("OPEN DB " & connectionString)
 		connection.open(connectionString)
+		debug("OPENING DB (" & dbType & ")")
 	end sub
 	
 	'******************************************************************************************************************
@@ -68,8 +84,9 @@ class Database
 	public sub close()
 		if not connection is nothing then
 			if connection.state <> 0 then connection.close()
+			debug("CLOSING DB (" & dbType & ")")
 			set connection = nothing
-			debug("CLOSE DB")
+			p_dbType = empty
 		end if
 	end sub
 	
@@ -106,7 +123,7 @@ class Database
 		fillRSWithData aRS, data, "db.insert"
 		aRS.update()
 		if dbType = "sqlite" then
-			insert = getRS("SELECT last_insert_rowid();", empty)
+			insert = getScalar("SELECT last_insert_rowid();", 0)
 		else
 			insert = aRS("id")
 		end if

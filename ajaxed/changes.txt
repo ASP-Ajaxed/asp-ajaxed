@@ -26,7 +26,7 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 	- ajaxed logs some useful information by default as debug. e.g. all page requests and database accesses are logged. Nice thing: every class logs in its own color - to outline the different components
 	- also warnings about e.g. obsolete methods are performed
 - code-consoles in the console scroll from top to down now. this is more logic ;)
-- updated str.isValidEmail pattern
+- updated str.isValidEmail() pattern to match all emails
 - TestFixture
 	- assertInFile() and assertNotInFile added
 	- assertResponse() added. with this its possible now to write tests which check if pages actually respond and work
@@ -38,6 +38,12 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 	- is loaded by default and can be used e.g. ...
 	set output = new StringBuilder
 	output("test")
+- its possible to override config vars for each environment.
+	- place a evnDEV() and/or envLIVE() sub into config.asp and override the wanted config vars
+	- each var which should be overriden must be configured globally first otherwise it wont be recognized
+- database
+	- supports microsoft access, sqlite
+	- dbType added which tells us which database we are using
 	
 v 1.0
 

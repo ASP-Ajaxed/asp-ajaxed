@@ -9,6 +9,7 @@
 '(most of those settings are properties of classes and are initialized when the class is instantiated,
 'therefore this means that you can change it after initialization also.)
 'only the most common config variables are listed here. Check the documentation for even more configuration possibilities
+'if you need a config var to be different in each environment then just place it into the envLIVE() and/or envDEV() sub
 
 '**************************************************************************************************************
 
@@ -70,4 +71,16 @@
 	'const AJAXED_CONNSTRING = "Driver={Microsoft ODBC for Oracle};Server=localhost;Uid=YOUR_USER;Pwd=YOUR_PASSWORD;"
 'Sqlite with ODBC - (odbc driver http://www.ch-werner.de/sqliteodbc/)
 	'const AJAXED_CONNSTRING = "DRIVER=SQLite3 ODBC Driver;Database=mydb.sqlite;LongNames=0;Timeout=1000;NoTXN=0;SyncPragma=NORMAL;StepAPI=0;"
+
+'CONFIG OVERRIDES ON THE ENVIRONMENTS (uncomment the sub)
+'just place the config var into the sub if you want to have it different on that environment
+'sub envDEV()
+	'it makes sense to send all emails to you on the development 
+	'AJAXED_EMAIL_ALLTO = "youremail@domain.com"
+	'or dont dispatch emails at all
+	'AJAXED_EMAIL_DISPATCH = false
+'end sub
+
+'sub envLIVE()
+'end sub
 %>
