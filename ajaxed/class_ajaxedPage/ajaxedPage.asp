@@ -1,4 +1,4 @@
-﻿<%
+<%
 '**************************************************************************************************************
 '* Michal Gabrukiewicz Copyright (C) 2007 									
 '* For license refer to the license.txt    									
@@ -28,7 +28,7 @@
 class AjaxedPage
 
 	'private members
-	private status, jason, callbackFlagName, loadedSources, componentLocation, loadingText
+	private status, jason, callbackFlagName, loadedSources, loadingText
 	private ajaxHeaderDrawn, sessionCodePage
 	
 	'public members
@@ -65,7 +65,6 @@ class AjaxedPage
 		buffering = lib.init(AJAXED_BUFFERING, true)
 		callbackFlagName = "PageAjaxed"
 		set loadedSources = server.createObject("scripting.dictionary")
-		componentLocation = lib.init(AJAXED_LOCATION, "/ajaxed/")
 		loadingText = lib.init(AJAXED_LOADINGTEXT, "loading...")
 		DBConnection = lib.init(AJAXED_DBCONNECTION, false)
 		sessionCodePage = lib.init(AJAXED_SESSION_CODEPAGE, false)
@@ -83,10 +82,11 @@ class AjaxedPage
 	''					- 2. init() (will be only called if exists in your page)
 	''					- 3. main() or callback(action) - action is trimmed to 255 chars (for security reasons),
 	''					ajaxed.callback(theAction, func, params, onComplete, url) is the Javascript function
-	''					which can be used within your HTML to call serverside functions. The params are described
-	''					as followed:
-	''					- theAction: is the action which will be passed as parameter to the server-side callback function e.g. 'do'.
-	''					- func: the client-side javascript function which will be called after server-side finished processing SUCCESSFULLY. e.g. done
+	''					which can be used within your HTML to call serverside functions. The serverside execution can either
+	''					return value(s) which are accessible as JSON after execution or it returns a page part (some HTML) to update the current page.
+	''					The params are described as followed:
+	''					- theAction: is the action which will be passed as parameter to the server-side callback function e.g. 'do'. if there is a sub starting with 'pagePart_' and the action name (e.g. for action 'do' it would be 'pagePart_do') then its treated as a page part and returns the subs content.
+	''					- func: the client-side javascript function which will be called after server-side processing finished SUCCESSFULLY. e.g. done. It accepts one parameter which holds either the returned JSON (on cmmon callback) or the html of the page part. In case of a page part callback its possible to use the ID of the container which should be updated. e.g. ajaxed.callback('one', 'content') => this would update the element with ID 'content' with the response of server side 'pagePart_one()' sub
 	''					- params (optional): javascript hash with POST parameters you want to pass to the callback function. They are accessible with e.g. lib.RF on within the callback function. e.g. {a:1,b:2}. if there is a form called "frm" with your page then all its values are passed as POST values to the callback (if you havent specified any params manually). 
 	''					- onComplete (optional): client-side function which should be invoked when the server-side processing has been completed. This is called even if there was an error (same as with native XMLHttpRequest).
 	''					- url (optional): you can specify the url of the page where the callback sub is located. Normally the page itself is called but you could also call callbacks of other pages. Note: use this also if you use callbacks on pages which are recognized as default in a folder. So when a user can call them without specifying the file itself. e.g. /demo/ (bug in iis5: http://support.microsoft.com/kb/216493)
@@ -98,14 +98,26 @@ class AjaxedPage
 		if DBConnection then db.openDefault()
 		lib.exec "init", empty
 		if isCallback() then
-			writeln("{ ""root"": {")
-			status = 0
-			callback(callbackAction)
-			if status = 0 then write(" null ")
-			if status = 1 then
-				writeln(vbcrlf & "} }")
+			set partCallback = lib.getFunction("pagePart_" & callbackAction)
+			if not partCallback is nothing then
+				doLog("Serving page part 'pagePart_" & callbackAction & "()'")
+				writeln("pagePart:")
+				partCallback
 			else
-				writeln(vbcrlf & "}")
+				writeln("{ ""root"": {")
+				status = 0
+				set cb = lib.getFunction("callback")
+				if cb is nothing then
+					response.clear()
+					lib.throwError("No callback defined. Define 'sub callback(action)' in you page in order to use ajaxed.callback")
+				end if
+				callback(callbackAction)
+				if status = 0 then write(" null ")
+				if status = 1 then
+					writeln(vbcrlf & "} }")
+				else
+					writeln(vbcrlf & "}")
+				end if
 			end if
 		else
 			drawHeader()
@@ -181,8 +193,8 @@ class AjaxedPage
 	'' @PARAM:			params [array]: not used yet (provide empty array)
 	'******************************************************************************************************************
 	public sub ajaxedHeader(params)
-		if loadPrototypeJS then loadJSFile(loc("prototypejs/prototype.js"))
-		loadJSFile(loc("class_ajaxedPage/ajaxed.js"))
+		if loadPrototypeJS then loadJSFile(lib.path("prototypejs/prototype.js"))
+		loadJSFile(lib.path("class_ajaxedPage/ajaxed.js"))
 		execJS(array(_
 			"ajaxed.prototype.debug = " & lib.iif(debug, "true", "false") & ";",_
 			"ajaxed.prototype.indicator.innerHTML = '" & loadingText & "';"_
@@ -402,13 +414,6 @@ class AjaxedPage
 			end if
 		end with
 	end sub
-	
-	'**********************************************************************************************************
-	'* loc 
-	'**********************************************************************************************************
-	private function loc(path)
-		loc = componentLocation & path
-	end function
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	OBSOLETE! use lib.throwError instead

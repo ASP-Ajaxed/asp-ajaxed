@@ -15,7 +15,6 @@
 ''					- if you need to debug your failures then turn on the 'debug' property
 ''					- create a setup sub if you need a procedure which will be called before every test
 ''					- run the fixture with the run-method
-''					TODO: built some asserts for response and request (ala ruby on rails)
 '' @REQUIRES:		-
 '' @VERSION:		0.1
 
@@ -304,12 +303,22 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
+	'' @SDESCRIPTION:	allows to manually fail an assert
+	'' @PARAM:			msg [string]: msg which describes the failure
+	'**********************************************************************************************************
+	public sub fail(msg)
+		assertsFailed = assertsFailed + 1
+		println(str.format("Assert [{0}] in [{1}] {2}", _
+			array(assertsInCurrentTest, currentTest, str.HTMLEncode(msg))))
+	end sub
+	
+	'**********************************************************************************************************
 	'* assertFailed 
 	'**********************************************************************************************************
 	private sub assertFailed(expected, actual, msg)
 		assertsFailed = assertsFailed + 1
 		println(str.format("Assert [{0}] in [{1}] expected '{2}' but was '{3}' ({4})", _
-			array(assertsInCurrentTest, currentTest, str.HTMLEncode(toString(expected)), str.HTMLEncode(toString(actual)), msg)))
+			array(assertsInCurrentTest, currentTest, str.HTMLEncode(toString(expected)), str.HTMLEncode(toString(actual)), str.HTMLEncode(msg))))
 	end sub
 	
 	'**********************************************************************************************************

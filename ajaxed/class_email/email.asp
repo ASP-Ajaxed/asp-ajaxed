@@ -234,8 +234,7 @@ class Email
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	STATIC! sends an email with a given TextTemplate to a given recipient.
-	'' @DESCRIPTION:	- a shortcut to quickly send an email
-	''					- sender is the default one
+	'' @DESCRIPTION:	a helper to quickly send an email. sender is the default one
 	'' @PARAM:			template [TextTemplate]: template which is used within the email
 	'' @PARAM:			recipient [string], [array]: if string then treated as email otherwise first
 	''					value email and second the name

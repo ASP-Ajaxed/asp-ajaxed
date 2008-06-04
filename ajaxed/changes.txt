@@ -1,4 +1,4 @@
-﻿v 1.1
+v 1.1
 BUGFIX: lib.range previously failed float tests are now running
 BUGFIX: database tests used to run with the default DB if available.
 BUGIFX: lib.throwError had a bug calling just QS but should call page.QS
@@ -15,6 +15,7 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 	- BUGFIX: methods, properties, etc where case sensitive and it didnt recognize e.g. "Public Function" or "pUblic Property"
 	- BUGFIX: byVal parameters have been not correctly detected.
 	- removes square brackets on a methodname (reserved words)
+	- code blocks surrounded with <code></code> are outlined now in a nice way. Code examples are now better to read within the documentation
 - added db.getRS() and db.getUnlockedRS(). those should be used instead of db.getRecordset and db.getUnlockedRecordset
 	because they can be used with parameters which will be sql-safe. e.g. db.getRS("SELECT * FROM user WHERE id = {0}", 1)
 - added some more error checks to the db class
@@ -30,6 +31,7 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 - TestFixture
 	- assertInFile() and assertNotInFile added
 	- assertResponse() added. with this its possible now to write tests which check if pages actually respond and work
+	- asserts can be failed manually now by using fail() method
 - str.rReplace added => performs a quick regex replace on a given string
 - str.format is simpler to use when having one placeholder
 	- instead of str.format("one {0}", array(1)) we can use str.format("one {0}", 1)
@@ -41,9 +43,21 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 - its possible to override config vars for each environment.
 	- place a evnDEV() and/or envLIVE() sub into config.asp and override the wanted config vars
 	- each var which should be overriden must be configured globally first otherwise it wont be recognized
-- database
-	- supports microsoft access, sqlite
+- database class
+	- tested databases microsoft access, sqlite and ms sql server
 	- dbType added which tells us which database we are using
+- added a lib.require method which allows us to do a check if a given class has been included. if not a friendly error is shown
+- friendly error raised when ajaxed.callback is used but no callback() is defined on server side
+- ajaxed.callback supports page-parts now:
+	- it possible get page content back on callback and update a container with it.
+	example: lets say we have a DIV container with ID 'c' and want to load some html from the server into it
+	this is also possible now with ajaxed.callback:
+	e.g. ajaxed.callback('partname', 'c') will load a sub called "pagePart_partname()" and put its content
+	into the element with the ID 'c'. if no sub found with that name then it acts like a normal callback.
+- added a Dropdown control. 
+	- uses stringbuilder. can output directly or to a string
+	- different multiple types (checkboxes, radiobuttons)
+	- different datasources 
 	
 v 1.0
 

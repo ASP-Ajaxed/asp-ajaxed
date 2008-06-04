@@ -61,6 +61,7 @@ sub content() %>
 			<li>comments recognized by documentor must start with <code>''</code></li>
 			<li>documentor keywords always start with <code>@</code> and end with <code>:</code></li>
 			<li>types are surrounded by <code>[]</code> e.g. <code>[bool]</code></li>
+			<li>Documentor can be found in the ajaxed console. <code>http://yourhost.com/ajaxed/console/</code> (<a href="http://www.webdevbros.net/ajaxed/">ajaxed</a> must be installed)</li>
 		</ul>
 	</p>
 	
@@ -218,7 +219,7 @@ end function
 		public name <span class="comment">''[string] gets/sets the name of the user</span>
 	</div>
 	
-	<h2>Other documentor keywords</h2>
+	<h2>Other documentor keywords (Markers)</h2>
 
 	<table class="keywords">
 	<tr valign="top">
@@ -285,9 +286,19 @@ end function
 				end sub
 			</div>
 		</li>
-		<li>all HTML markup is recognized within the documentation</li>
+		<li>
+			all HTML markup is recognized within the documentation. Exceptions:
+			<ul>
+				<li>All HTML inside <code>&lt;code&gt;&lt;/code&gt;</code> is escaped and all line breaks are converted to <code>&lt;br/&gt;</code>. This makes the writing of code examples easier and more readable within the code as well (because no HTML markup is needed within code blocks).</li>
+			</ul>
+		</li>
 	</ul>
 	
+<br>
+
+	<div class="ct">
+		<small>Michal Gabrukiewicz, David Rankin. updated June, 2008</small>
+	</div>
 </body>
 </html>
 	

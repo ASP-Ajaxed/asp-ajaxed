@@ -114,6 +114,40 @@ function getNewNode(name, value)
 end function
 
 '******************************************************************************************
+'* formatCodeBlock - get all code blocks <code>...</code> and escape the html inside it.
+'* also add <br>'s instead of line breaks
+'******************************************************************************************
+function formatCodeBlock(byVal val)
+	set r = new Regexp
+	r.global = true
+	r.ignoreCase = true
+	r.pattern = "<code>[^>]*</code>"
+	
+	'lets find all code blocks in the given string
+	set matches = r.execute(val)
+	
+	'now we need to add the linebreaks and build the string as it was
+	offset = 0
+	for each m in matches
+		lastPart = ""
+		length = len(val)
+		
+		encoded = str.HTMLEncode(str.rReplace(m, "<code>|</code>", "", true))
+		'remove the linebreaks in the beginning and the ending if there is one
+		c = str.rReplace(encoded, "^\s\n|\n$", "", true)
+		c = str.rReplace(c, "\n", "<br/>", true)
+		firstPart = left(val, m.firstIndex + offset - 1)
+		rightCut = length - len(firstPart) - len(m) - 1
+		if rightCut > 0 then lastPart = right(val, rightCut)
+		
+		val = firstPart & "<code>" & c & "</code>" & lastPart
+		offset = offset + (len(val) - length)
+		lib.logger.debug offset
+	next
+	formatCodeBlock = val
+end function
+
+'******************************************************************************************
 '* parseFile	Parses the ASP class into an XML file
 '******************************************************************************************
 function parseFile(file)
@@ -146,6 +180,8 @@ function parseFile(file)
 			aLine = trim(lines(i)) & ""
 			if str.startsWith(aLine, "'' @CLASSTITLE:") then
 				title = replace(aLine, "'' @CLASSTITLE:", "")
+				'make first letter capital
+				title = uCase(left(title, 1)) & right(title, len(title) - 1)
 				if instr(title, "<<< CLASSTITLE >>>") then exit function
 				if not ClassNames.Exists(ucase(trim(title))) then 
 					ClassNames.add ucase(trim(title)) & "", lib.getUniqueID()
@@ -162,10 +198,11 @@ function parseFile(file)
 						tmp = replace(lines(j), "''", "")
 						tmp = addlistItem(tmp)
 						description = description & vbcrlf & trim(tmp)
-						else
+					else
 						j = ubound(lines)
 					end if
 				next
+				description = formatCodeBlock(description)
 			elseif str.startsWith(aLine, "'' @STATICNAME:") then
 				staticname = trim(replace(aLine, "'' @STATICNAME:", ""))
 			elseif str.startsWith(aLine, "'' @POSTFIX:") then
