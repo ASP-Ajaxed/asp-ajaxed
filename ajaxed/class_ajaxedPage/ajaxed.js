@@ -1,4 +1,4 @@
-﻿function ajaxed() {}
+function ajaxed() {}
 
 ajaxed.prototype.indicator = Element.extend(document.createElement('div')).addClassName('ajaxLoadingIndicator');
 
@@ -39,8 +39,13 @@ ajaxed.callback = function(theAction, func, params, onComplete, url) {
 		requestHeaders: {Accept: 'application/json'},
 		onSuccess: function(trans) {
 			if (ajaxed.prototype.debug) ajaxed.debug("Response on callback:\n\n" + trans.responseText);
-			if (!trans.responseText.startsWith('{ "root":')) {
+			if (!trans.responseText.startsWith('{ "root":') && 
+				!trans.responseText.startsWith('pagePart:')) {
 				ajaxed.callbackFailure(trans);
+			} else if (trans.responseText.startsWith('pagePart:')) {
+				var content = trans.responseText.replace(/^pagePart:/g, '');
+				if (typeof func == "string") return $(func).update(content);
+				if (func) func(content);
 			} else {
 				if (func) func(trans.responseText.evalJSON(true).root);
 			}

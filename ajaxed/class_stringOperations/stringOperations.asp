@@ -212,6 +212,7 @@ class StringOperations
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	makes a given string safe for the use within sql statements
 	'' @DESCRIPTION:	e.g. if its necessary to pass through an user input directly into a sql-query
+	''					example on a basic login scenario: <code>sql = "SELECT * FROM user WHERE login = " & str.SQLSafe(username)</code>
 	'' @PARAM:			value [string]: the value which should be made "safe"
 	'' @RETURN:			[string] safe value. e.g. ' are escaped with '', etc.
 	'******************************************************************************************************************

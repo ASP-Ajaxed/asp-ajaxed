@@ -351,6 +351,7 @@ class RSS
 	'**********************************************************************************************************
 	public sub setCache(interval, value)
 		if theCache is nothing then
+			lib.require "Cache", "RSS"
 			set theCache = new Cache
 			theCache.name = "RSS"
 		end if

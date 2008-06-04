@@ -17,7 +17,11 @@
 						font-family:tahoma;
 					}
 					code {
-						font-family:courier;
+						font-family:courier new;
+						color:#0B7391;
+						font-size:9pt !important;
+						display:block;
+						padding:3px;
 					}
 					#menu {
 						position:absolute;
@@ -79,7 +83,6 @@
 						font-family:courier;
 					}
 					.cDescription {
-						text-align:justify;
 					}
 					.mdetails {
 						padding:1em;

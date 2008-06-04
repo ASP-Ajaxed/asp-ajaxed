@@ -8,10 +8,10 @@
 ''					directly through "db" without creating an own instance. The AjaxedPage
 ''					offers a property "DBConnection" which automatically opens and closes the connection
 ''					within a page.
-''					- the database type is detected automatically but it can also be set manually in the config (AJAXED_DBTYPE).
+''					- the database type is automatically detected but it can also be set manually in the config (AJAXED_DBTYPE).
 ''					- if the database type could not be detected then the type is "unknown" and all operations are exectuted as it would be Microsoft SQL Server
 '' @STATICNAME:		db
-'' @COMPATIBLE:		Microsoft Sql Server, Microsoft Access, Sqlite
+'' @COMPATIBLE:		Microsoft Sql Server, Microsoft Access, Sqlite, MySQL (not fully tested yet)
 '' @REQUIRES:		-
 '' @VERSION:		1.0
 
@@ -52,7 +52,9 @@ class Database
 	public sub class_initialize()
 		set connection = nothing
 		p_numberOfDBAccess = 0
-		p_dbType = lCase(lib.init(AJAXED_DBTYPE, empty))
+		p_dbType = lib.init(AJAXED_DBTYPE, empty)
+		'in new line because it breaks the documentor!
+		p_dbType = lCase(p_dbType)
 	end sub
 	
 	'******************************************************************************************************************
@@ -64,6 +66,7 @@ class Database
 	public sub open(connectionString)
 		if not connection is nothing then close()
 		set connection = server.createObject("ADODB.connection")
+		if trim(connectionString) = "" then lib.throwError("Database.open() connectionstring cannot be an empty string.")
 		connection.open(connectionString)
 		debug("OPENING DB (" & dbType & ")")
 	end sub

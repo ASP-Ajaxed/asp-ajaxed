@@ -79,4 +79,24 @@ end sub
 sub test_4()
 	tf.assertEqual "scripting.dictionary", lib.detectComponent(array("bla", "scripting.dictionary")), "lib.detectComponent does not work"
 end sub
+
+sub test_5()
+	on error resume next
+		lib.require "SomeNonExistingClass", "Test_5"
+	if err <> 0 then
+		tf.assertEqual err.number, 1362, "lib.require raises a wrong error when requiring a not existing class"
+	else
+		tf.fail("lib.require did not raise an 1362 error when requiring a non existing class")
+	end if
+	on error goto 0
+	on error resume next
+		lib.require "TestFixture", "Test_5"
+	if err <> 0 then tf.fail("lib.require raised an error on an existing class")
+	on error goto 0
+end sub
+
+sub test_6()
+	tf.assertEqual "/ajaxed/", lib.path(empty), "lib.path seem not to work"
+	tf.assertEqual "/ajaxed/class_rss/rss.asp", lib.path("class_rss/rss.asp"), "lib.path seem not to work"
+end sub
 %>

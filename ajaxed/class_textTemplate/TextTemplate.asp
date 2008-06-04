@@ -10,10 +10,12 @@
 ''					be common name value pairs or even whole blocks which hold name value pairs and can be
 ''					duplicated several times. It's possible to create, modify and delete the templates.
 ''					Example for the usage as an email template (first line of the template is used as subject):
+''					<code>
 ''					set t = new TextTemplate
 ''					t.add "name", "John Doe"
 ''					email.subject = t.getFirstLine()
 ''					email.body = t.getAllButFirstLine()
+''					</code>
 '' @REQUIRES:		-
 '' @VERSION:		1.2
 

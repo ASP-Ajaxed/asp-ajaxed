@@ -16,7 +16,7 @@
 class Library
 
 	'private members
-	private uniqueID, p_browser
+	private uniqueID, p_browser, libraryLocation
 	
 	'public members
 	public page			''[AjaxedPage] holds the current executing page. Nothing if there is not page
@@ -61,6 +61,7 @@ class Library
 		exec "env" & env, empty
 		uniqueID = 0
 		p_browser = ""
+		libraryLocation = init(AJAXED_LOCATION, "/ajaxed/")
 		set me.page = nothing
 		set fso = server.createObject("scripting.filesystemobject")
 		set me.logger = nothing
@@ -71,6 +72,30 @@ class Library
 	'***********************************************************************************************************
 	public sub class_terminate()
 		set fso = nothing
+	end sub
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	gets the virtual path of the ajaxed library root folder.
+	'' @DESCRIPTION:	useful for static files like e.g. javascript, css which are used internally by the library
+	'' @PARAM:			filename [string]: some file which should be appended to the root path. e.g. class_rss/rss.asp would return /ajaxed/class_rss/rss.asp leave empty if not required
+	'' @RETURN:			[string] path of ajaxed root folder. e.g. /ajaxed/
+	'**********************************************************************************************************
+	public function path(filename)
+		path = libraryLocation & filename
+	end function
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	Requires a given class to be existing. error is raised if it does not exist
+	'' @PARAM:			classname [string]: name of the class you want to be required
+	'' @PARAM:			caller [string]: name of the object requiring the class
+	'**********************************************************************************************************
+	public sub require(classname, caller)
+		'we have to check the classname first for a legal classname otherwise it would be a risk bunging it into the execute
+		if not str.matching(classname, "^[a-z0-9_]*$", true) then lib.throwError("lib.require 'classname' is not a valid classname.")
+		on error resume next : execute("set tryToInstantiate = new " & classname)
+		if err <> 0 then failed = true
+		on error goto 0
+		if failed then throwError array(850, caller, "'" & caller & "' requires '" & classname & "' to be included.")
 	end sub
 	
 	'**********************************************************************************************************
@@ -289,16 +314,13 @@ class Library
 	'******************************************************************************************************************
 	public function URLDecode(endcodedText)
     	decoded = endcodedText
-	    
-		set oRegExpr = server.createObject("VBScript.RegExp")
-	    oRegExpr.pattern = "%[0-9,A-F]{2}"
-	    oRegExpr.global = true
-	    set matchCollection = oRegExpr.execute(endcodedText)
-		
+		set rex = new Regexp
+	    rex.pattern = "%[0-9,A-F]{2}"
+	    rex.global = true
+	    set matchCollection = rex.execute(endcodedText)
 	    for each match in matchCollection
 	    	decoded = replace(decoded, match.value, chr(cint("&H" & right(match.value, 2))))
 	    next
-		
 	    URLDecode = decoded
     end function
 	

@@ -1,6 +1,8 @@
 ﻿<!--#include file="../class_testFixture/testFixture.asp"-->
-<% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("test.mdb") & ";" %>
+<!--#include file="testDatabases.asp"-->
 <%
+AJAXED_CONNSTRING = TEST_DB_ACCESS
+
 set tf = new TestFixture
 tf.debug = true
 tf.run()
@@ -15,7 +17,7 @@ end sub
 
 'SQLITE test
 sub test_2()
-	db.open("DRIVER=SQLite3 ODBC Driver;Database=" & server.mappath("test.sqlite") & ";LongNames=0;Timeout=1000;NoTXN=0;SyncPragma=NORMAL;StepAPI=0;")
+	db.open(TEST_DB_SQLITE)
 	performDBOperations()
 	db.close()
 end sub
