@@ -11,7 +11,7 @@
 ''					- the database type is automatically detected but it can also be set manually in the config (AJAXED_DBTYPE).
 ''					- if the database type could not be detected then the type is "unknown" and all operations are exectuted as it would be Microsoft SQL Server
 '' @STATICNAME:		db
-'' @COMPATIBLE:		Microsoft Sql Server, Microsoft Access, Sqlite, MySQL (not fully tested yet)
+'' @COMPATIBLE:		Microsoft Sql Server, Microsoft Access, Sqlite, MySQL
 '' @REQUIRES:		-
 '' @VERSION:		1.0
 
@@ -19,7 +19,7 @@
 class Database
 
 	'private members
-	private p_numberOfDBAccess
+	private p_numberOfDBAccess, p_dbType
 	
 	'public members
 	public connection		''[ADODB.Connection] holds the database connection
@@ -41,6 +41,10 @@ class Database
 				p_dbType = "access"
 			elseif str.matching(typ, "sqlite", true) then
 				p_dbType = "sqlite"
+			elseif str.matching(typ, "mysql", true) then
+				p_dbType = "mysql"
+			elseif str.matching(connection.properties("Provider Friendly Name"), "SQL Server", true) then
+				p_dbType = "sqlserver"
 			end if
 		end if
 		dbType = p_dbType
@@ -54,7 +58,7 @@ class Database
 		p_numberOfDBAccess = 0
 		p_dbType = lib.init(AJAXED_DBTYPE, empty)
 		'in new line because it breaks the documentor!
-		p_dbType = lCase(p_dbType)
+		if not isEmpty(p_dbType) then p_dbType = lCase(p_dbType)
 	end sub
 	
 	'******************************************************************************************************************
@@ -127,6 +131,8 @@ class Database
 		aRS.update()
 		if dbType = "sqlite" then
 			insert = getScalar("SELECT last_insert_rowid();", 0)
+		elseif dbType = "mysql" then
+			insert = getScalar("SELECT last_insert_id();", 0)
 		else
 			insert = aRS("id")
 		end if

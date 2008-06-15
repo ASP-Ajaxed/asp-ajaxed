@@ -9,27 +9,68 @@
 '' @CLASSTITLE:		AjaxedPage
 '' @CREATOR:		Michal Gabrukiewicz - gabru at grafix.at
 '' @CREATEDON:		2007-06-28 20:32
-'' @CDESCRIPTION:	Represents a page which is located in physical file (e.g. index.asp). In 95% of cases
-''					each of your pages will hold one instance of it which defines the page.
-''					Furthermore it provides the functionality to call server-side ASP procedures
-''					directly from client-side. Whenever using the class be sure the draw() method is the first
-''					call before any other response is done. 
-''					- use plain-property if your page is being used with in an XHR (there you dont need the whole basic structure)
-''					- init(), main() and callback() need to be implemented within the page.
-''					- init() is always called first and allows preperation before any content is written to the response e.g. security checks and stuff which is necessary for main() and callback() should be placed into the init().
-''					- After the init always either main() or callback() is called. They are never called both within one page execution (request).
+'' @CDESCRIPTION:	Represents a page which is located in a physical file (e.g. index.asp). In 95% of cases
+''					each of your pages will hold one instance of this class which defines the page.
+''					For more details check the <a href="/ajaxed/demo/">/ajaxed/demo/</a> for a sample usage.<br><br>
+''					Example of a simple page (e.g. default.asp):
+''					<code>
+''					<!--#include virtual="/ajaxed/ajaxed.asp"-->
+''					<%
+''					set page = new AjaxedPage
+''					page.title = "my first ajaxed page"
+''					page.draw()
+''					sub main()
+''					.	'the execution starts here
+''					end sub
+''					% >
+''					</code>
+''					Furthermore each page provides the functionality to call server side ASP procedures
+''					directly from client-side (using the javascript function ajaxed.callback()). A server side procedure can either
+''					return value(s) (all kind of datatypes e.g. bool, recordset, string, etc.) or act as a page part which sends back whole HTML fragments.
+''					In order to return values check return() and returnValue() for further details. Page parts can be used to update an existing page with some
+''					HTML without using a conventional postback. Simply prefix a server side sub with "pagePart_", and call it with ajaxed.callback(pagePartname, targetContainerID):
+''					<code>
+''					<% sub pagePart_one() % >
+''					.	<strong>some bold text</strong>
+''					<% end sub
+''					sub main() % >
+''					.	<div id="container"></div>
+''					.	<button onclick="ajaxed.callback('one', 'container')">load page part one</button>
+''					<% end sub % >
+''					</code>
+''					- <strong>Refer to the draw() method for more details about the ajaxed.callback() javascript function.</strong>
+''					- Whenever using the class be sure the draw() method is the first call before any other response is done.
+''					- main() must be implemented within the page. when using callbacks then a callback(action) sub must be implemented as well.
+''					- init() is always called first (before main() and callback()) and allows preperations to be done before any content is written to the response e.g. security checks and stuff which is necessary for main() and callback() should be placed into the init().
+''					- After the init() always either main() or callback() is called. They are never called both within one page execution (request).
 ''					- main() = common state for the page which normally includes the page presentation (e.g. html elements)
-''					- callback() = handles all client requests done with ajaxed.callback(). callback() needs to be defined with one parameter which holds the actual action to perform. so the signature should be sub callback(action)
-''					- refer to /ajaxed/demo/ for a sample usage
-''					- Requires Prototype JavaScript library (available at prototypejs.org) but can be turned on from the config
+''					- callback() = handles all client requests done with ajaxed.callback(). callback() needs to be defined with one parameter which holds the actual action to perform. so the signature should be sub callback(action). Example of a valid callback sub
+''					<code>
+''					sub callback(action)
+''					.	if action = "add" then page.return(2 + 3)
+''					end sub
+''					</code>
+''					- Requires Prototype JavaScript library (available at prototypejs.org) but can be loaded automatically by ajaxed (turn on in the config)
+''					- access querystring and form fields using page methods:
+''					<code>
+''					sub main()
+''					.	id = page.QS("id") ' = request.queryString("id")
+''					.	name = page.RF("name") ' = request.form("name")
+''					.	save = page.RFHas("save") 'checks if "save" is not empty
+''					.	'automatically try to parse a querystring value into an integer.
+''					.	id = str.parse(page.QS("id"), 0)
+''					end sub
+''					</code>
+''					- The page also supports a mechanism called "page parts". 
+''					- use plain-property if your page is being used with in an XHR (there you dont need the whole basic structure)
 '' @VERSION:		0.1
 
 '**************************************************************************************************************
 class AjaxedPage
 
 	'private members
-	private status, jason, callbackFlagName, loadedSources, loadingText
-	private ajaxHeaderDrawn, sessionCodePage
+	private status, jason, loadedSources, loadingText
+	private ajaxHeaderDrawn, sessionCodePage, p_callbackType
 	
 	'public members
 	public loadPrototypeJS		''[bool] should protypeJS library be loaded. turn this off if you've done it manually. default = true
@@ -53,6 +94,24 @@ class AjaxedPage
 		callbackAction = left(RF(callbackFlagName), 255)
 	end property
 	
+	public property get callbackFlagName ''[string] gets the name of the callback flag. For advanced use only!
+		callbackFlagName = "PageAjaxed"
+	end property
+	
+	public property get callbackType ''[int] gets the type of the callback (1 = common, 2 = page part). advanced use only!
+		callbackType = p_callbackType
+	end property
+	
+	public property let callbackType(val) ''[int] sets the type of the callback. Advanced use only!
+		p_callbackType = val
+		if val = 2 then
+			'if its a page part then we clear the response and
+			'indicate that it is a page part with a "pagePart:" in the beginning of the response
+			response.clear()
+			writeln("pagePart:")
+		end if
+	end property
+	
 	'**********************************************************************************************************
 	'* constructor 
 	'**********************************************************************************************************
@@ -63,7 +122,6 @@ class AjaxedPage
 		loadPrototypeJS = lib.init(AJAXED_LOADPROTOTYPEJS, true)
 		status = -1
 		buffering = lib.init(AJAXED_BUFFERING, true)
-		callbackFlagName = "PageAjaxed"
 		set loadedSources = server.createObject("scripting.dictionary")
 		loadingText = lib.init(AJAXED_LOADINGTEXT, "loading...")
 		DBConnection = lib.init(AJAXED_DBCONNECTION, false)
@@ -73,6 +131,7 @@ class AjaxedPage
 		ajaxHeaderDrawn = false
 		onlyDev = false
 		defaultStructure = false
+		callbackType = 1
 	end sub
 	
 	'**********************************************************************************************************
@@ -82,14 +141,22 @@ class AjaxedPage
 	''					- 2. init() (will be only called if exists in your page)
 	''					- 3. main() or callback(action) - action is trimmed to 255 chars (for security reasons),
 	''					ajaxed.callback(theAction, func, params, onComplete, url) is the Javascript function
-	''					which can be used within your HTML to call serverside functions. The serverside execution can either
+	''					which can be used within your HTML to call serverside functions and page parts. The server side execution can either
 	''					return value(s) which are accessible as JSON after execution or it returns a page part (some HTML) to update the current page.
 	''					The params are described as followed:
-	''					- theAction: is the action which will be passed as parameter to the server-side callback function e.g. 'do'. if there is a sub starting with 'pagePart_' and the action name (e.g. for action 'do' it would be 'pagePart_do') then its treated as a page part and returns the subs content.
-	''					- func: the client-side javascript function which will be called after server-side processing finished SUCCESSFULLY. e.g. done. It accepts one parameter which holds either the returned JSON (on cmmon callback) or the html of the page part. In case of a page part callback its possible to use the ID of the container which should be updated. e.g. ajaxed.callback('one', 'content') => this would update the element with ID 'content' with the response of server side 'pagePart_one()' sub
-	''					- params (optional): javascript hash with POST parameters you want to pass to the callback function. They are accessible with e.g. lib.RF on within the callback function. e.g. {a:1,b:2}. if there is a form called "frm" with your page then all its values are passed as POST values to the callback (if you havent specified any params manually). 
-	''					- onComplete (optional): client-side function which should be invoked when the server-side processing has been completed. This is called even if there was an error (same as with native XMLHttpRequest).
-	''					- url (optional): you can specify the url of the page where the callback sub is located. Normally the page itself is called but you could also call callbacks of other pages. Note: use this also if you use callbacks on pages which are recognized as default in a folder. So when a user can call them without specifying the file itself. e.g. /demo/ (bug in iis5: http://support.microsoft.com/kb/216493)
+	''					- <strong>theAction</strong>: is the action which will be passed as parameter to the server-side callback function e.g. 'do'. if there is a sub starting with 'pagePart_' and the action name (e.g. for action 'do' it would be 'pagePart_do') then its treated as a page part and returns the subs content.
+	''					- <strong>func</strong>: the client-side javascript function which will be called after server-side processing finished SUCCESSFULLY. e.g. done. It accepts one parameter which holds either the returned JSON (on cmmon callback) or the html of the page part. In case of a page part callback its possible to use the ID of the container which should be updated. e.g. ajaxed.callback('one', 'content') => this would update the element with ID 'content' with the response of server side 'pagePart_one()' sub
+	''					- <strong>params</strong> (optional): javascript hash with POST parameters you want to pass to the callback function. They are accessible with e.g. lib.RF on within the callback function. e.g. {a:1,b:2}. if there is a form called "frm" with your page then all its values are passed as POST values to the callback (if you havent specified any params manually). 
+	''					- <strong>onComplete</strong> (optional): client-side function which should be invoked when the server-side processing has been completed. This is called even if there was an error (same as with native XMLHttpRequest).
+	''					- <strong>url</strong> (optional): you can specify the url of the page where the callback sub is located. Normally the page itself is called but you could also call callbacks of other pages. Note: use this also if you use callbacks on pages which are recognized as default in a folder. So when a user can call them without specifying the file itself. e.g. /demo/ (bug in iis5: http://support.microsoft.com/kb/216493)
+	''					Calling a page part named "profile" and inserting its content into a HTML element with the ID "userProfile":
+	''					<code>ajaxed.callback('profile', 'userProfile')</code>
+	''					Calling a page part named "info" and executing a javascript function "updateInfo" afterwards (which gets the content from the page part as an argument)
+	''					We also send a parameter called "id" with the value 1 to the page part:
+	''					<code>ajaxed.callback('info', updateInfo, {id: 1})</code>
+	''					Calling a server side procedure called "getSales" which gets the current year and current month as parameters.
+	''					The javascript function "gotSales" is executed after the server side processing of "getSales" has been completed:
+	''					<code>ajaxed.callback('getSales', gotSales, {year: <%= year(date()) % >, month: <%= year(date()) % >})</code>
 	'**********************************************************************************************************
 	public sub draw()
 		logRequestDetails()
@@ -100,8 +167,8 @@ class AjaxedPage
 		if isCallback() then
 			set partCallback = lib.getFunction("pagePart_" & callbackAction)
 			if not partCallback is nothing then
+				callbackType = 2
 				doLog("Serving page part 'pagePart_" & callbackAction & "()'")
-				writeln("pagePart:")
 				partCallback
 			else
 				writeln("{ ""root"": {")
@@ -112,11 +179,13 @@ class AjaxedPage
 					lib.throwError("No callback defined. Define 'sub callback(action)' in you page in order to use ajaxed.callback")
 				end if
 				callback(callbackAction)
-				if status = 0 then write(" null ")
-				if status = 1 then
-					writeln(vbcrlf & "} }")
-				else
-					writeln(vbcrlf & "}")
+				if callbackType = 1 then
+					if status = 0 then write(" null ")
+					if status = 1 then
+						writeln(vbcrlf & "} }")
+					else
+						writeln(vbcrlf & "}")
+					end if
 				end if
 			end if
 		else
@@ -208,7 +277,8 @@ class AjaxedPage
 	'' @PARAM:			val [variant]: check JSON.toJSON() for more details
 	'******************************************************************************************************************
 	public sub return(val)
-		if status < 0 then throwError("return() can only be called on a callback.")
+		if callbackType > 1 then exit sub
+		if status < 0 then throwError("AjaxedPage.return() can only be called on a callback.")
 		if status < 2 then
 			status = 1
 			response.clear()
@@ -226,9 +296,10 @@ class AjaxedPage
 	'' @PARAM:			val [variant]: refer to JSON.toJSON() method for details
 	'******************************************************************************************************************
 	public sub returnValue(name, val)
-		if status < 0 then throwError("returnValue() can only be called on a callback.")
-		if status > 2 then throwError("returnValue() cannot be called after return() has been called.")
-		if name = "" then throwError("returnValue() requires a name.")
+		if callbackType > 1 then exit sub
+		if status < 0 then throwError("AjaxedPage.returnValue() can only be called on a callback.")
+		if status > 2 then throwError("AjaxedPage.returnValue() cannot be called after return() has been called.")
+		if name = "" then throwError("AjaxedPage.returnValue() requires a name.")
 		if status > 0 then writeln(",")
 		jason.toJSON name, val, true
 		status = 1
@@ -388,9 +459,10 @@ class AjaxedPage
 	end function
 	
 	'******************************************************************************************************************
-	'* isCallback 
+	'' @SDESCRIPTION:	indicates if the state of the page is a callback. advanced usage only!
+	'' @RETURN:			[bool] true if its a callback otherwise false
 	'******************************************************************************************************************
-	private function isCallback()
+	public function isCallback()
 		isCallback = RFHas(callbackFlagName)
 	end function
 	

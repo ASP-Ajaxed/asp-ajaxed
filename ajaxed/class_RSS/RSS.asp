@@ -12,6 +12,16 @@
 ''					If caching should be enabled use the setCache() method. By default caching is off.
 ''					- on draw() caching stores the complete transformed output in the cache
 ''					- on load() caching stores the xml in the cache and parses it out from the cache.
+''					Simple example of how to read an RSS feed:
+''					<code>
+''					set r = new RSS
+''					r.url = "http://somehost.com/somefeed.xml"
+''					r.load()
+''					if r.failed then lib.error("could not read feed. could be down or wrong format")
+''					for each it in r.items
+''					.	str.write(r.title & "<br>")
+''					next
+''					</code>
 '' @REQUIRES:		Cache
 '' @POSTFIX:		rss
 '' @VERSION:		1.0

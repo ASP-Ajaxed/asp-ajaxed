@@ -12,6 +12,7 @@
 ''					Example for the usage as an email template (first line of the template is used as subject):
 ''					<code>
 ''					set t = new TextTemplate
+''					t.filename = "/sometemplatefile.txt"
 ''					t.add "name", "John Doe"
 ''					email.subject = t.getFirstLine()
 ''					email.body = t.getAllButFirstLine()
@@ -25,11 +26,11 @@ class TextTemplate
 
 	private vars, blocks, p_content, regex, blockBegin, blockEnd, validVarnamesPattern
 	
-	public fileName						''[string] The virtual path including the filename of your template. e.g. /userfiles/t.html
-	public placeHolderBegin				''[string] If you want to use your own placeholder characters. this is the beginning. e.g. <<<
-	public placeHolderEnd				''[string] If you want to use your own placeholder characters. this is the ending. e.g. >>>
-	public cleanParse					''[bool] should all unused blocks, vars, etc. been removed after parsing? default = true
-	public UTF8							''[bool] is the template saved as UTF8 and should it be stored as UTF8? default = true
+	public fileName				''[string] The virtual path including the filename of your template. e.g. /userfiles/t.html
+	public placeHolderBegin		''[string] If you want to use your own placeholder characters. this is the beginning. e.g. <<<
+	public placeHolderEnd		''[string] If you want to use your own placeholder characters. this is the ending. e.g. >>>
+	public cleanParse			''[bool] should all unused blocks, vars, etc. been removed after parsing? default = true
+	public UTF8					''[bool] is the template saved as UTF8 and should it be stored as UTF8? default = true
 	
 	public property get content	''[string] If no content is provided, we load the conents of the given file
 		if p_content = "" then p_content = getContents()

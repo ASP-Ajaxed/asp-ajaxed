@@ -16,12 +16,18 @@
 						font-size:14px;
 						font-family:tahoma;
 					}
-					code {
+					code, code * {
 						font-family:courier new;
 						color:#0B7391;
 						font-size:9pt !important;
+					}
+					code {
 						display:block;
-						padding:3px;
+						margin-top:3px;
+						padding:5px 3px 3px 20px;
+					}
+					code .ssi-code {
+						background:#F3F3F3;
 					}
 					#menu {
 						position:absolute;
@@ -41,7 +47,7 @@
 					}
 					.cDescription, .cDescription * {
 						font-size:16px;
-						margin:10px 0px;
+						margin-bottom:10px;
 					}
 					h1 {
 						background-color:#8DB2FF;
@@ -111,7 +117,8 @@
 					.methods a {
 					}
 					.param {
-						margin-top:0.7em;
+						margin-bottom:1em;
+						padding-bottom:0.2em;
 					}
 					.return {
 						margin-top:0.7em;
@@ -302,7 +309,9 @@
 						<td>
 							<xsl:for-each select="compatible/browser">
 								<xsl:value-of select="."/>
-								    <xsl:text> </xsl:text>
+								<xsl:if test="position() &lt; last()">
+								    <xsl:text>, </xsl:text>
+								</xsl:if>
 							</xsl:for-each>
 						</td>
 					</tr>
@@ -430,12 +439,12 @@
 											</xsl:attribute>
 										</xsl:if>
 										<xsl:value-of select="name"/>
-										(
-										<xsl:text> </xsl:text>
-										<xsl:for-each select="parameters/parameter">
-											<xsl:value-of select="name" /><xsl:text> </xsl:text>
-										</xsl:for-each>
-										)
+										(<xsl:for-each select="parameters/parameter">
+											<xsl:value-of select="name" />
+											<xsl:if test="position() &lt; last()">
+											    <xsl:text>, </xsl:text>
+											</xsl:if>
+										</xsl:for-each>)
 									</a>
 								</div>
 								<div class="mDesc">
@@ -447,7 +456,7 @@
 								<div style="display:none" class="mdetails alwaysPrint" id="mdetails_{$currentClass}{generate-id(name)}">
 									<xsl:if test="string-length(longdescription/text()) &gt; 0">
 										<xsl:value-of select="longdescription" disable-output-escaping="yes" />
-										<br />
+										<br /><br/>
 									</xsl:if>
 									
 									<xsl:if test="string-length(parameters/parameter/name/text()) &gt; 0">
@@ -455,16 +464,15 @@
 											<div class="param">
 												<strong><xsl:value-of select="name/@passed" /><xsl:text> </xsl:text><xsl:value-of select="name" /></strong>
 												<xsl:if test="string-length(types/type/text()) &gt; 0">
-													<span class="type">(
-														<xsl:for-each select="types/type">
+													<span>
+														[<xsl:for-each select="types/type">
 															<xsl:call-template name="TheTypes">
 																 <xsl:with-param name="aType" select="."/>
 																 <xsl:with-param name="aID" select="@id"/>
 															</xsl:call-template>
-														</xsl:for-each>
-													)</span>
+														</xsl:for-each>]</span>
 												</xsl:if>
-												:<xsl:text> </xsl:text> 
+												<br/>
 												<xsl:value-of select="description" disable-output-escaping="yes" />
 											</div>
 										</xsl:for-each>
@@ -472,14 +480,13 @@
 									
 									<xsl:if test="string-length(return/type/text()) &gt; 0">
 										<div class="return"> <strong>Returns </strong>
-											(
-											<xsl:for-each select="return/type">
+											[<xsl:for-each select="return/type">
 												<xsl:call-template name="TheTypes">
 												 <xsl:with-param name="aType" select="."/>
 												 <xsl:with-param name="aID" select="@id"/>
 												</xsl:call-template>
-											</xsl:for-each>
-											) :
+											</xsl:for-each>]
+											<br/>
 											<xsl:value-of select="return/description" disable-output-escaping="yes"  />
 										</div>
 									</xsl:if> 
@@ -588,6 +595,8 @@
 						<span class="type"><xsl:value-of select="$aType"/></span>
          			</xsl:otherwise>
        		</xsl:choose>
-			<xsl:text> </xsl:text>
+			<xsl:if test="position() &lt; last()">
+			    <xsl:text>, </xsl:text>
+			</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>

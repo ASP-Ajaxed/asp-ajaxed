@@ -72,6 +72,9 @@ sub content() %>
 					t.responseText = t.responseText.gsub(/(\([^0][\d| ]* (errors|failed)\))/, function(match) {
 						return '<span class="error">' + match[1] + '</span>'
 					}) + '<br>';
+					t.responseText = t.responseText.gsub(/(INFO \[.*\])/, function(match) {
+						return '<span class="info">' + match[1] + '</span>'
+					}); 
 				},
 				onComplete: function(t) {
 					scrollToFloor('console');

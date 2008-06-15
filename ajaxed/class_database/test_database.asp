@@ -4,7 +4,6 @@
 AJAXED_CONNSTRING = TEST_DB_ACCESS
 
 set tf = new TestFixture
-tf.debug = true
 tf.run()
 
 'tests with default DB (ACCESS)
@@ -17,10 +16,38 @@ end sub
 
 'SQLITE test
 sub test_2()
-	db.open(TEST_DB_SQLITE)
+	if not openDB(TEST_DB_SQLITE, "SQLite") then exit sub
 	performDBOperations()
 	db.close()
 end sub
+
+'MYSQL test
+sub test_3()
+	if not openDB(TEST_DB_MYSQL, "MySQL") then exit sub
+	performDBOperations()
+	db.close()
+end sub
+
+'MSSQL test
+sub test_4()
+	if not openDB(TEST_DB_MSSQL, "MS Sql Server") then exit sub
+	performDBOperations()
+	db.close()
+end sub
+
+function openDB(connStr, dbName)
+	openDB = true
+	on error resume next
+		db.open(connStr)
+		if err <> 0 then
+			lib.logger.info err.description
+			on error goto 0
+			openDB = false
+			tf.info(str.format("Could not open {0} Test Database. Therefore {0} was not tested. This test is only necessary if you develop the ajaxed core otherwise relax.", dbName))
+			err.clear()
+		end if
+	on error goto 0
+end function
 
 sub performDBOperations()
 	db.connection.beginTrans()
@@ -40,6 +67,7 @@ sub performDBOperations()
 	
 	tf.assertEqual 69, db.getScalar("SELECT age FROM person WHERE id = " & ID, 0), "db.getScalar"
 	
+	tf.assertEqual 3, db.count("person", empty), "we should have three persons"
 	db.delete "person", id
 	
 	tf.assertEqual 2, db.count("person", empty), "in the end there should only be two persons"
@@ -51,9 +79,11 @@ sub performDBOperations()
 	tf.assertEqual 0, db.count("person", "cool = 1"), "in the end no cool people"
 	
 	set RS = db.getRS("SELECT id FROM person", empty)
+	id = RS("id")
 	tf.assert not RS.eof, "should have at least one person"
-	tf.assert not db.getRS("SELECT * FROM person WHERE id = {0}", RS("id")).eof, "db.getRS should take only one param as argument"
-	tf.assert not db.getRS("SELECT * FROM person WHERE id = {0}", array(RS("id"))).eof, "db.getRS should also take an array as arg"
+	set RS = nothing
+	tf.assert not db.getRS("SELECT * FROM person WHERE id = {0}", id).eof, "db.getRS should take only one param as argument"
+	tf.assert not db.getRS("SELECT * FROM person WHERE id = {0}", array(id)).eof, "db.getRS should also take an array as arg"
 	
 	db.connection.rollbackTrans()
 end sub

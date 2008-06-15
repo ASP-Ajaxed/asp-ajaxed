@@ -96,7 +96,7 @@ sub content() %>
 
 	<tr valign="top">
 		<td nowrap><strong><%= name %>:</strong></td>
-		<td><%= lib.iif(htmlEncode, str.HTMLEncode(value), value) %></td>
+		<td><%= lib.iif(htmlEncode, str(value), value) %></td>
 	</tr>
 	
 <% end sub %>
