@@ -8,8 +8,7 @@
 ''					a third party component.
 ''					- create a new instance, set the properties and send or user newWith(template) and create a new instance with a template which will set the body and the subject of the email automatically from the TextTemplate
 ''					- you should send an email whereever you want to send an email in your application. Even if you dont know if an email component will be installed. 
-'' @REQUIRES:		TextTemplate
-'' @COMPATIBLE:		DIMAC JMail.Message, ASPEMAIL Persists.MailSender, MS cdo.message
+'' @COMPATIBLE:		Dimac JMail.Message, ASPEmail Persists.MailSender, Microsoft cdo.message
 '' @VERSION:		0.9
 
 '**************************************************************************************************************
@@ -439,7 +438,7 @@ class Email
 	'' @PARAM:			inline [bool]: if true the attachment will be added as an inline attachment
 	'' @PARAM:			contentType [string]: attachments content type. leave empty if you don't want to specify it explicitly
 	'' @RETURN:			[int] A unique ID that can be used to identify this attachment. This is useful if you are 
-	''					embedding images in the email, body. Then you need to refer to it with <img src="cid:xxxx">
+	''					embedding images in the email, body. Then you need to refer to it with &lt;img src="cid:xxxx">
 	'******************************************************************************************************************
 	public function addAttachment(fileName, inline, contentType)
 		addAttachment = lib.getUniqueID()

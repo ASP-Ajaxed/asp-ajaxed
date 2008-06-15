@@ -2,18 +2,25 @@
 <!--#include file="../class_testFixture/testFixture.asp"-->
 <!--#include file="email.asp"-->
 <%
+allToExists = empty
 set tf = new TestFixture
 tf.debug = true
 tf.run()
 
 sub setup()
-	if (new Email).allTo = "" then lib.throwError("Email.allTo property needs to be configured. piping all test emails to one person!")
+	if not isEmpty(allToExists) then exit sub
+	allToExists = true
+	if (new Email).allTo = "" then
+		tf.info("Email.allTo must be set for the email tests. Thus email sending was not fully tested. set AJAXED_EMAIL_ALLTO in your config to fully test email sending.")
+		allToExists = false
+	end if
 end sub
 
 'tries to send an email with each installed component
 'if no components are installed then nothing will be tested ;)
 sub test_1()
 	components = (new Email).supportedComponents
+	sentEmails = 0
 	for each c in components
 		AJAXED_EMAIL_COMPONENTS = array(c)
 		set e = new Email
@@ -26,12 +33,22 @@ sub test_1()
 			e.addRecipient "bcc", "someBCC@someemail.com", "BCCer"
 			e.body = "test email with " & e.component
 			e.addAttachment server.mappath("test_attachment.txt"), false, empty
-			tf.assert e.send(), "email could not be sent with detected component '" & e.component & "' " & "(" & e.errorMsg & ")"
+			if not allToExists then e.dispatch = false
+			sent = e.send()
+			tf.assert sent, "email could not be sent with detected component '" & e.component & "' " & "(" & e.errorMsg & ")"
+			if sent then sentEmails = sentEmails + 1
 		end if
 	next
+	if sentEmails > 0 then
+		if (new Email).dispatch then
+			tf.info(sentEmails & " test emails should be in the inbox of '" & (new Email).allTo & "'")
+		else
+			tf.info(sentEmails & " test emails have been sent but not dispatched because dispatching is turned off. Turn dispatching on if full test of sending emails is required.'")
+		end if
+	end if
 end sub
 
-'tries to send an emil with a component 
+'tries to send an emil with a component which does not exist
 sub test_2()
 	AJAXED_EMAIL_COMPONENTS = array("no component")
 	set e = new Email

@@ -1,6 +1,7 @@
 <!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 set tf = new TestFixture
+tf.debug = true
 tf.run()
 
 sub test_1()
@@ -45,6 +46,19 @@ sub test_4()
 	tf.assertEqual "ein 1 zwei {1}", str.format("ein {0} zwei {1}", 1), "str.format does not work"
 	tf.assertEqual "ein 1 zwei 2", str.format("ein {0} zwei {1}", array(1, 2)), "str.format does not work"
 	tf.assertEqual "ein {0} zwei {1}", str.format("ein {0} zwei {1}", array()), "str.format does not work"
+end sub
+
+sub test_5()
+	tf.assertEqual "Created on", str.humanize("created_ON"), "str.humanize does not work"
+	tf.assertEqual "User", str.humanize("user_id"), "str.humanize does not work"
+	tf.assertEqual "User", str.humanize("id_user"), "str.humanize does not work"
+	tf.assertEqual "Main category", str.humanize("fk_main_category"), "str.humanize does not work"
+	tf.assertEqual "Main category", str.humanize("main_category_fk"), "str.humanize does not work"
+	tf.assertEqual "First name", str.humanize("  FIRST_NAME  "), "str.humanize does not work"
+	tf.assertEqual "News", str.humanize("id___news_fk"), "str.humanize does not work"
+	tf.assertEqual "", str.humanize(empty), "str.humanize does not work"
+	tf.assertEqual "", str.humanize(""), "str.humanize does not work"
+	tf.assertEqual "A", str.humanize("a"), "str.humanize does not work"
 end sub
 'TODO: add more tests here for all the string functions
 %>

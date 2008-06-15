@@ -11,6 +11,15 @@
 ''					- you should use it whereever there is a loads of output to be rendered on your page. Its faster than normal concatening.
 ''					- basically just intantiate it and use append() method for appending. In the end use toString() to output your string
 ''					- if there is no component found then it would be faster to directly write the output to the response. This can be achieved using the write() method
+''					Best way to use the StringBuilder (always uses the fastest possible method):
+''					<code>
+''					<%
+''					set output = new StringBuilder
+''					output("some text")
+''					output("some other text")
+''					% >
+''					<%= output.toString() % >
+''					</code>
 '' @REQUIRES:		-
 '' @VERSION:		0.1
 
@@ -50,6 +59,7 @@ class StringBuilder
 	''					output to the response if there is no component found
 	'' @DESCRIPTION:	- its recommended to use this instead of append() when rendering html markup. it wil allways use this fastest method. if stringbuilder available then using stringbuilder otherwise direct output to response.
 	''					- note: be sure that on the place you use write() it can output directly to the response if needed
+	'' @PARAM:			val [string]: the string you want to write
 	'**********************************************************************************************************
 	public default sub write(val)
 		if isEmpty(component) then
@@ -61,6 +71,7 @@ class StringBuilder
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	appends a string to the builder
+	'' @PARAM:			val [string]: the string you want to append
 	'**********************************************************************************************************
 	public sub append(val)
 		if isEmpty(component) then
@@ -76,7 +87,7 @@ class StringBuilder
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	returns the concatenated string
-	'' @RETURN:			[string] 
+	'' @RETURN:			[string] concatenated string
 	'**********************************************************************************************************
 	public function toString()
 		if isEmpty(component) then

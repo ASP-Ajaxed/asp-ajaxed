@@ -18,6 +18,19 @@
 class StringOperations
 
 	'******************************************************************************************
+	'' @SDESCRIPTION:	Takes a string and tries to make it look more humanreadable. Its for creating pretty output
+	'' @DESCRIPTION:	- "_" are replaced by " " (also more underscores e.g. "___" are replaced by only one space)
+	''					- "_id" and "_fk" in the back are stripped as well as "id_" and "fk_" in the beginning
+	''					- everything is lower cased unless the first letter
+	'' @PARAM:			val [string]: the value which should be humanized
+	'' @RETURN:			[string] a pretty string. e.g. "created_on" => "Created on" or "fk_category" => "Category"
+	'******************************************************************************************
+	public function humanize(byVal val)
+		humanize = lCase(trim(rReplace(rReplace(val & "", "^fk_|^id_|_fk$|_id$", "", true), "_+", " ", true)))
+		humanize = uCase(left(humanize, 1)) & right(humanize, abs(len(humanize) - 1))
+	end function
+	
+	'******************************************************************************************
 	'' @SDESCRIPTION:	performs a replace with a regular expression pattern
 	'' @DESCRIPTION:	e.g. surrounding all numbers of a string with brackets: <code>str.rReplace("i am 20 and he is 10", "(\d)", "($1)", true)</code>
 	'' @PARAM:			val [string]: the value you want to replace the matches
@@ -263,9 +276,11 @@ class StringOperations
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	encodes a value so that any special chars will be transformed into html entities.
 	''					e.g. " will be &quot;
+	'' @DESCRIPTION:	should be used in all views to prevent XSS. for that reason its also the default function so its
+	''					easier to use. example of usage in your views: <code>str("some value <>")</code>
 	'' @PARAM:			value [string]: the value you want to encode
 	'******************************************************************************************************************
-	public function HTMLEncode(value)
+	public default function HTMLEncode(value)
 		HTMLEncode = server.HTMLEncode(value & "")
 	end function
 	

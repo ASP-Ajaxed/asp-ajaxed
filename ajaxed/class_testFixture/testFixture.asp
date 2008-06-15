@@ -304,12 +304,23 @@ class TestFixture
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	allows to manually fail an assert
-	'' @PARAM:			msg [string]: msg which describes the failure
+	'' @PARAM:			msg [string]: message which describes the failure
 	'**********************************************************************************************************
 	public sub fail(msg)
 		assertsFailed = assertsFailed + 1
 		println(str.format("Assert [{0}] in [{1}] {2}", _
-			array(assertsInCurrentTest, currentTest, str.HTMLEncode(msg))))
+			array(assertsInCurrentTest, currentTest, str(msg))))
+	end sub
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	prints an information message to the output.
+	'' @DESCRIPTION:	useful e.g. on testing email. after the test you could inform the user that a specific amount
+	''					of emails should be now in his inbox.
+	'' @PARAM:			msg [string]: message which contains the information
+	'**********************************************************************************************************
+	public sub info(msg)
+		if str.matching(msg, "\[|\]", true) then lib.throwError("TestFixture.info() does not accept '[' or ']' within the msg argument.")
+		println("INFO [" & str(msg) & "]")
 	end sub
 	
 	'**********************************************************************************************************
@@ -318,7 +329,7 @@ class TestFixture
 	private sub assertFailed(expected, actual, msg)
 		assertsFailed = assertsFailed + 1
 		println(str.format("Assert [{0}] in [{1}] expected '{2}' but was '{3}' ({4})", _
-			array(assertsInCurrentTest, currentTest, str.HTMLEncode(toString(expected)), str.HTMLEncode(toString(actual)), str.HTMLEncode(msg))))
+			array(assertsInCurrentTest, currentTest, str(toString(expected)), str(toString(actual)), str(msg))))
 	end sub
 	
 	'**********************************************************************************************************

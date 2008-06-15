@@ -74,6 +74,9 @@ input.code, textarea.code {
 .console .error {
 	background:#f00;
 }
+.console .info {
+	color:#ff0;
+}
 
 .blue .top, 
 .blue .top b, 

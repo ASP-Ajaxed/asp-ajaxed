@@ -5,17 +5,18 @@ BUGIFX: lib.throwError had a bug calling just QS but should call page.QS
 BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 - added error handling in db.insert and db.update to get more information about an error if one happens
 - updated documentor:
-	- support for lists added, because docs looked a little messed up sometimes. 
-		elements supporing lists include:
+	- support for lists added and code blocks (<code></code>) added, because docs looked a little messed up sometimes. 
+		elements supporing lists and code blocks include:
 		@CDESCRIPTION, @SDESCRIPTION, @DESCRIPTION, @PARAM, @RETURN and public properties.
 		A list item must be on one line, and start with "- "
+		- Code examples are now better to read within the documentation
 	- due to this change some docs have been updated for better readability
 	- removed the class path in the documentation. it made no real sense to display this. 
 	- default methods has not been supported yet. are marked in "italic" now
 	- BUGFIX: methods, properties, etc where case sensitive and it didnt recognize e.g. "Public Function" or "pUblic Property"
 	- BUGFIX: byVal parameters have been not correctly detected.
 	- removes square brackets on a methodname (reserved words)
-	- code blocks surrounded with <code></code> are outlined now in a nice way. Code examples are now better to read within the documentation
+	- parameter lists have a "," now between every parameter
 - added db.getRS() and db.getUnlockedRS(). those should be used instead of db.getRecordset and db.getUnlockedRecordset
 	because they can be used with parameters which will be sql-safe. e.g. db.getRS("SELECT * FROM user WHERE id = {0}", 1)
 - added some more error checks to the db class
@@ -32,6 +33,7 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 	- assertInFile() and assertNotInFile added
 	- assertResponse() added. with this its possible now to write tests which check if pages actually respond and work
 	- asserts can be failed manually now by using fail() method
+	- info() method added. 
 - str.rReplace added => performs a quick regex replace on a given string
 - str.format is simpler to use when having one placeholder
 	- instead of str.format("one {0}", array(1)) we can use str.format("one {0}", 1)
@@ -58,7 +60,10 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 	- uses stringbuilder. can output directly or to a string
 	- different multiple types (checkboxes, radiobuttons)
 	- different datasources 
-	
+- str.HTMLEncode() is now a default function so its quicker to use in your views. use it to prevent XSS attacks!
+- str.humanize() added. it makes "computer" strings more "human" readable
+- Validator class added. It helps validating business objects!
+
 v 1.0
 
 - ajaxedPage has a plain- and title-property

@@ -30,7 +30,7 @@ sub main()
 	end if
 	set stream = lib.fso.openTextFile(path, 1, false)
 	lineFeed = lib.iif(page.RF("moreSpace") = "1", "<br/><br/>", "<br/>")
-	logsContent = replace(str.HTMLEncode(stream.readAll()), vbNewLine, lineFeed)
+	logsContent = replace(str(stream.readAll()), vbNewLine, lineFeed)
 	if page.RF("removeAscii") = "1" then
 		str.write(removeAsciiCodes(logsContent))
 	else

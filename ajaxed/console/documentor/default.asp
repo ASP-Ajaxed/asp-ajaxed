@@ -6,9 +6,7 @@
 '* Description: ajaxed documentor. creates a documentation for a given folder on the server
 '*				and saves it into that folder with the filename doc.html
 '*				TODO: - write version of ajaxed into the documentation
-'*				- make "," within the argumentslist of method signatures
-'*				- leave the ":" if no param description is given
-'*				- BUG: first method of a class cannot be opened
+'*				TODO: recognize indentation on <code> blocks
 '* Input:		POST params: folder (folder to parse - if no given then "ajaxed" is used)
 '******************************************************************************************
 
@@ -114,14 +112,16 @@ function getNewNode(name, value)
 end function
 
 '******************************************************************************************
-'* formatCodeBlock - get all code blocks <code>...</code> and escape the html inside it.
-'* also add <br>'s instead of line breaks
+'* formatCodeBlock 
+'* - get all code blocks <code>...</code>
+'* - escape the html inside it.
+'* - also add <br>'s instead of line breaks
 '******************************************************************************************
 function formatCodeBlock(byVal val)
 	set r = new Regexp
 	r.global = true
 	r.ignoreCase = true
-	r.pattern = "<code>[^>]*</code>"
+	r.pattern = "<code>[\s\S]*?</code>"
 	
 	'lets find all code blocks in the given string
 	set matches = r.execute(val)
@@ -131,10 +131,14 @@ function formatCodeBlock(byVal val)
 	for each m in matches
 		lastPart = ""
 		length = len(val)
-		
-		encoded = str.HTMLEncode(str.rReplace(m, "<code>|</code>", "", true))
+		'remove code blocks, make closing proppelers display nicely (remove space) and encode all html
+		encoded = str.HTMLEncode(str.rReplace(replace(m, "% >", "%" & ">"), "^<code>|</code>$", "", true))
 		'remove the linebreaks in the beginning and the ending if there is one
 		c = str.rReplace(encoded, "^\s\n|\n$", "", true)
+		c = str.rReplace(c, "(&lt;%[\s\S]*?%&gt;)", "<span class=""ssi-code"">$1</span>", true)
+		'TODO: only one level of identation is done with this. more levels are a little
+		'tricky because all tabs have been already removed in this place
+		c = str.rReplace(c, "\n\.", "<br/>&nbsp;&nbsp;&nbsp;&nbsp;", true)
 		c = str.rReplace(c, "\n", "<br/>", true)
 		firstPart = left(val, m.firstIndex + offset - 1)
 		rightCut = length - len(firstPart) - len(m) - 1
@@ -142,7 +146,6 @@ function formatCodeBlock(byVal val)
 		
 		val = firstPart & "<code>" & c & "</code>" & lastPart
 		offset = offset + (len(val) - length)
-		lib.logger.debug offset
 	next
 	formatCodeBlock = val
 end function
@@ -390,7 +393,7 @@ function parseFile(file)
 									for each key in params.keys
 										akey = trim(str.rReplace(key, "byRef|byVal", "", true))
 										if ubound(parameterFor) >=0 then
-											if uCase(akey) = uCase(parameterFor(0)) then params(key) = parameter
+											if uCase(akey) = uCase(parameterFor(0)) then params(key) = formatCodeBlock(parameter)
 										end if
 									next
 									
@@ -411,6 +414,7 @@ function parseFile(file)
 											exit for
 										end if
 									next
+									returns = formatCodeBlock(returns)
 								end if
 								if str.startsWith(aLine, "'' @DESCRIPTION:") then
 									aLine = replace(aline,"'' @DESCRIPTION:", "")
@@ -430,6 +434,7 @@ function parseFile(file)
 											exit for
 										end if
 									next
+									lDescription = formatCodeBlock(lDescription)
 								end if
 								if str.startsWith(aLine, "'' @SDESCRIPTION:") then
 									aLine = replace(aline,"'' @SDESCRIPTION:", "")
@@ -448,6 +453,7 @@ function parseFile(file)
 											exit for
 										end if
 									next
+									sDescription = formatCodeBlock(sDescription)
 								end if
 							else
 								exit for
@@ -581,6 +587,7 @@ function parseFile(file)
 									exit for
 								end if
 							next
+							description = formatCodeBlock(description)
 						end if
 					end if
 					
