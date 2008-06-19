@@ -369,6 +369,16 @@ class AjaxedPage
 	end function
 	
 	'******************************************************************************************************************
+	'' @SDESCRIPTION:	gets the value of a given form field and treats it as an array. (value splitted by ', ')
+	'' @DESCRIPTION:	this is needed when you give more form fields the same name then its being posted comma seperated.
+	'' @PARAM:			name [string]: name of the formfield you want to get
+	'' @RETURN:			[array] array of string values
+	'******************************************************************************************************************
+	public function RFA(name)
+		RFA = split(RFT(name), ", ")
+	end function
+	
+	'******************************************************************************************************************
 	'' @SDESCRIPTION:	gets the value of a given form field and trims it automatically.
 	'' @PARAM:			name [string]: name of the formfield you want to get
 	'' @RETURN:			[string] value from the request-form-collection

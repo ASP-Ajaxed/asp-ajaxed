@@ -235,7 +235,7 @@ class Dropdown
 	'' @PARAM:			attributeValue [string] value of the attribute
 	'' @RETURN:			[string]: returns a nicely formatted attribute
 	'**************************************************************************************************************
-	public function getAttribute(attributeName, attributeValue)
+	function getAttribute(attributeName, attributeValue)
 		if attributeValue <> "" then getAttribute = " " & attributeName & "=""" & attributeValue & """"
 	end function
 	
@@ -244,7 +244,7 @@ class Dropdown
 	'' @DESCRIPTION:	just for internal use. public because the dropdownItem-class needs it too.
 	'' @RETURN:			[bool]: returns true if it is a common dropdown
 	'**************************************************************************************************************
-	public function isCommonDropdown()
+	function isCommonDropdown()
 		isCommonDropdown = (not multiple or (multiple and multipleSelectionType = DD_SELECTIONTYPE_COMMON))
 	end function
 	
@@ -397,7 +397,7 @@ class Dropdown
 	'' @DESCRIPTION:	just for internal use. public because the dropdownItem-class needs it too.
 	'' @PARAM:			value [string] the value to print
 	'**************************************************************************************************************
-	public sub print(value)
+	sub print(value)
 		if outputMethod = DD_OUTPUT_DIRECT then
 			str.write(value)
 		else
