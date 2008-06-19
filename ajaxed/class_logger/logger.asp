@@ -6,6 +6,13 @@
 '' @CREATEDON:		28.04.2008
 '' @CDESCRIPTION:	Provides the opportunity to log messages into text files. Logging can be done on different levels.
 ''					debug, warn, info or error. Which messages will actually be logged can be set with the logLevel property. 
+''					Simple logging within ajaxed:
+''					<code>
+''					lib.logger.debug("some debug message")
+''					lib.logger.warn("a warning like e.g. use method A instead of B")
+''					lib.logger.info("user logged in")
+''					lib.logger.error("some error happend")
+''					</code>
 ''					- on dev env the logLevel is debug by default (so all levels are being logged)
 ''					- Logger supports ascii coloring => log files are easier to read. 
 ''					- Its recommended to download e.g. "cygwin" and hook up the log file with "tail -f file.log". This allows you to immediately follow the log and it supports coloring as well.
