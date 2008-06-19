@@ -1,0 +1,27 @@
+﻿.axd_dt th.sortedASC {
+	border-top:5px #000 solid;
+}
+.axd_dt th.sortedDESC {
+	border-bottom:5px #000 solid;
+}
+
+tr.axdDTRowSelected td {
+	background:#FFFFCC;
+}
+
+tr.axdDTControlsRow {
+	background: #eee;
+}
+
+.axdDTCustomControls {
+	float:left;
+}
+.axdDTControls {
+	float:right;
+}
+.axdDTHighlight {
+	background: #FCF232;
+}
+.axdDTNull {
+	color:#bbb;
+}

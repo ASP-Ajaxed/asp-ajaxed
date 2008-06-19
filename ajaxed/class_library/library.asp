@@ -124,7 +124,7 @@ class Library
 	''					if its a dictionary then the key is used for comparison.
 	'' @RETURN:			[bool] true if it contains the value
 	'**********************************************************************************************************
-	public function contains(data, val)
+	public function contains(byRef data, val)
 		contains = true
 		if isArray(data) then
 			for each d in data

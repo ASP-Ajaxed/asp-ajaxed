@@ -23,6 +23,8 @@
 					}
 					code {
 						display:block;
+						overflow:auto;
+						white-space:nowrap;
 						margin-top:3px;
 						padding:5px 3px 3px 20px;
 					}
@@ -164,6 +166,9 @@
 					}
 					#menu {
 						display:none;
+					}
+					code {
+						white-space:auto;
 					}
 				</style>
 				

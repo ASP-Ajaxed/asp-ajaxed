@@ -156,12 +156,13 @@ class Database
 		checkBeforeExec "db.update", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
-		aRS.open "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition), connection, 1, 2
+		sql = "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition)
+		aRS.open sql, connection, 1, 2
 		fillRSWithData aRS, data, "db.update"
 		aRS.update()
 		aRS.close()
 		set aRS = nothing
-		debug("updated record in '" & tablename & "' with condition '" & condition & "'")
+		debug(array("updated record in '" & tablename & "' with condition '" & condition & "':", sql))
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
 	end sub
 	

@@ -63,6 +63,7 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 - str.HTMLEncode() is now a default function so its quicker to use in your views. use it to prevent XSS attacks!
 - str.humanize() added. it makes "computer" strings more "human" readable
 - Validator class added. It helps validating business objects!
+- AjaxedPage.RFA() method added. It gets arrays from the request.form collection
 
 v 1.0
 

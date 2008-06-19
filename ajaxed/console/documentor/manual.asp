@@ -270,7 +270,7 @@ end function
 		end class
 	</div>
 	
-	<h2><a name="parsing"></a>Parsing</h2>
+	<h2><a name="parsing"></a>Parsing & other important things</h2>
 	
 	You should know the following things about the parsing of documentation:
 	<ul>
@@ -286,6 +286,7 @@ end function
 				end sub
 			</div>
 		</li>
+		<li>Do not use the <code>public</code> keyword if you don't want to show a method/property in the documentation (no access modifier will result in public member anyway). Can be useful for e.g. protected members, etc</li>
 		<li>
 			all HTML markup is recognized within the documentation. Exceptions:
 			<ul>
@@ -297,7 +298,7 @@ end function
 <br>
 
 	<div class="ct">
-		<small>Michal Gabrukiewicz, David Rankin. updated June, 2008</small>
+		<small>Michal Gabrukiewicz, David Rankin. updated July, 2008</small>
 	</div>
 </body>
 </html>
