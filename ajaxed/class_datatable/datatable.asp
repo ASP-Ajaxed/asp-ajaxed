@@ -160,6 +160,10 @@ class Datatable
 		set p_row = new DatatableRow
 		set p_row.dt = me
 		fullsearch = true
+		set lang = lib.newDict(empty)
+		server.execute(path("de.asp"))
+		ll(lang)
+		lib.logger.debug lang.count
 	end sub
 	
 	'**********************************************************************************************************
@@ -257,7 +261,7 @@ class Datatable
 		
 		for each c in columns
 			typ = data.fields(c.name).type
-			if lib.contains(array(200, 201, 202, 203), typ) then
+			if lib.contains(db.stringFieldTypes, typ) then
 				if not isEmpty(fTemplate) then fTemplate = fTemplate & " OR "
 				fTemplate = fTemplate & c.name & " LIKE '*{0}*' "
 			end if
@@ -265,6 +269,7 @@ class Datatable
 		for i = 0 to ubound(keywords)
 			'TODO: bug with more keywords. seems not to know AND
 			'TODO: use wildcards *
+			'TODO: negation of the keyword with !
 			if i > 0 then fltr = fltr & " AND "
 			fltr = fltr & "(" & str.format(fTemplate, str.sqlSafe(keywords(i))) & ")"
 		next

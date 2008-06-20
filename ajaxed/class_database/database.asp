@@ -50,6 +50,10 @@ class Database
 		dbType = p_dbType
 	end property
 	
+	public property get stringFieldTypes ''[array] gets the field type numbers of a recordset-field which represent a string value
+		stringFieldTypes = array(8, 129, 200, 201, 202, 203, 130)
+	end property
+	
 	'******************************************************************************************************************
 	'* constructor
 	'******************************************************************************************************************
@@ -116,6 +120,7 @@ class Database
 	'' @SDESCRIPTION: 	inserts a record into a given database table and returns the record ID
 	'' @DESCRIPTION:	- primary key column must be named ID
 	''					- the values are not type converted in any way. you need to do it yourself
+	''					- columns with string values are trimmed if they exceed the maximum allowed length. e.g. if column A only accepts 50 chars it will be trimmed to 50 if it exceeds the length of 50
 	'' @PARAM:			tablename [string]: name of the table
 	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. array("name", "jack johnson")
 	''					- length must be even otherwise error is thrown
@@ -146,6 +151,7 @@ class Database
 	'' @SDESCRIPTION: 	updates a record in a given database table
 	'' @DESCRIPTION:	- primary key column must be named ID if condition is int
 	''					- the values are not type converted in any way. you need to do it yourself
+	''					- columns with string values are trimmed if they exceed the maximum allowed length. e.g. if column A only accepts 50 chars it will be trimmed to 50 if it exceeds the length of 50
 	'' @PARAM:			tablename [string]: name of the table
 	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. array("name", "jack johnson")
 	''					- length must be even otherwise error is thrown
@@ -175,7 +181,12 @@ class Database
 			desc = ""
 			col = dataArray(i)
 			val = dataArray(i + 1)
+			size = RS(col).definedSize
 			on error resume next
+				'we trim the value to the length which is allowed by the database
+				if not isNull(val) then
+					if lib.contains(stringFieldTypes, RS(col).type) then val = left(val, size)
+				end if
 				RS(col) = val
 				failed = err <> 0
 				if failed then desc = err.description
