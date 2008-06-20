@@ -58,7 +58,11 @@ sub performDBOperations()
 	tf.assert db.getRS("SELECT * FROM person WHERE id = 0", empty).eof, "db.getRecordset"
 	
 	ID = 1
-	ID = db.insert("person", array("firstname", "jack", "lastname", "kett", "age", 20))
+	ID = db.insert("person", array("firstname", null, "lastname", "kett" & str.clone("s", 300), "age", 20))
+	
+	tf.assertEqual 255, len(db.getRS("SELECT * FROM person WHERE id = {0}", ID)("lastname")), "lastname must have been trimmed to the maximum accepted length of the column"
+	tf.assert isNull(db.getRS("SELECT * FROM person WHERE id = {0}", ID)("firstname")), "firstname must be null when set to null"
+	tf.assert not isEmpty(db.getRS("SELECT * FROM person WHERE id = {0}", ID)("firstname")), "firstname cannot be empty when defined as null"
 	
 	tf.assert ID > 0, "db.insert does not return a correct ID"
 	tf.assertEqual 3, db.getUnlockedRS("SELECT * FROM person", empty).recordcount, "db.getUnlockedRecordset"
