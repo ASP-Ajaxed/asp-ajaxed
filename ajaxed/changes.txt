@@ -1,4 +1,4 @@
-v 1.1
+﻿v 1.1
 BUGFIX: lib.range previously failed float tests are now running
 BUGFIX: database tests used to run with the default DB if available.
 BUGIFX: lib.throwError had a bug calling just QS but should call page.QS
@@ -28,6 +28,7 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 	- ajaxed logs some useful information by default as debug. e.g. all page requests and database accesses are logged. Nice thing: every class logs in its own color - to outline the different components
 	- also warnings about e.g. obsolete methods are performed
 - code-consoles in the console scroll from top to down now. this is more logic ;)
+	- console has a favicon
 - updated str.isValidEmail() pattern to match all emails
 - TestFixture
 	- assertInFile() and assertNotInFile added
@@ -65,7 +66,16 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 - str.humanize() added. it makes "computer" strings more "human" readable
 - Validator class added. It helps validating business objects!
 - AjaxedPage.RFA() method added. It gets arrays from the request.form collection
-
+- logger deactivated by default
+- JSON:
+	- BUGFIX: if a dictionary contains no items then "null" is returned. used to return nothing (this is wrong according to JSONs RFC).
+	- BUGFIX: supports all unicode chars now (using ascw() function instead of asc()). Chinese, etc. works fine now!!
+	- recordsetPaging property added
+	- updated documentation
+	- toJSON() has been defined as default method. thus generation is possible with (new JSON)("some value")
+	- standalone test(s) added
+	- supports request object now (includes IStringList and IRequestDictionary support). exposes session, form, querystring, etc.
+	
 v 1.0
 
 - ajaxedPage has a plain- and title-property

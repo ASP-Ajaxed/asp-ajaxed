@@ -350,7 +350,8 @@ class AjaxedPage
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	gets the value from a given form field after postback
-	'' @DESCRIPTION:	just an equivalent for request.form.
+	'' @DESCRIPTION:	just an equivalent for request.form. Note: if you expecting the value to be an array
+	''					(e.g. more fields with the same name) then use RFA() method.
 	'' @PARAM:			name [string]: name of the value you want to get
 	'' @RETURN:			[string] value from the request-form-collection.
 	'******************************************************************************************************************
@@ -369,13 +370,30 @@ class AjaxedPage
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	gets the value of a given form field and treats it as an array. (value splitted by ', ')
-	'' @DESCRIPTION:	this is needed when you give more form fields the same name then its being posted comma seperated.
+	'' @SDESCRIPTION:	gets the value of a given form field and treats it as an array (useful if you have more form fields with the same name).
+	'' @DESCRIPTION:	this is needed when you give more form fields the same name then its being posted as an array.
+	''					Example of two fields with the same name being posted:
+	''					<code>
+	''					<%
+	''					if page.isPostback() then
+	''					.	str.write(page.RFA("test")(0)) 'writes 1
+	''					.	str.write(page.RFA("test")(1)) 'writes 2,3
+	''					end if
+	''					% >
+	''					<input type="text" name="test" value="1">
+	''					<input type="text" name="test" value="2,3">
+	''					</code>
 	'' @PARAM:			name [string]: name of the formfield you want to get
 	'' @RETURN:			[array] array of string values
 	'******************************************************************************************************************
 	public function RFA(name)
-		RFA = split(RFT(name), ", ")
+		set val = request.form(name)
+		arr = array()
+		redim preserve arr(val.count - 1)
+		for i = 0 to uBound(arr)
+			arr(i) = val(i + 1)
+		next
+		RFA = arr
 	end function
 	
 	'******************************************************************************************************************
@@ -389,6 +407,11 @@ class AjaxedPage
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	returns true if a given value exists in the request.form
+	'' @DESCRIPTION:	good usage on submit buttons or checkboxes. Example of how to check a checkbox if it has been
+	''					checked after posting the form:
+	''					<code>
+	''					<input type="checkbox" name="cb" value="1" <%= lib.iif(page.RFHas("cb", "checked", "")) % >>
+	''					</code>
 	'' @PARAM:			name [string]: name of the value you want to get
 	'' @RETURN:			[bool] false if there is not value returned. true if yes
 	'******************************************************************************************************************
@@ -399,7 +422,7 @@ class AjaxedPage
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	just an equivalent for request.querystring. if empty then returns whole querystring.
 	'' @PARAM:			name [string]: name of the value you want to get. leave it empty to get the whole querystring
-	'' @RETURN:			[string] value from the request-querystring-collection
+	'' @RETURN:			[string] value from the request querystring collection
 	'******************************************************************************************************************
 	public function QS(name)
 		if name = "" then

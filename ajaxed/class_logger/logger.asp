@@ -50,9 +50,8 @@ class Logger
 		p_prefix = empty
 		escapeChar = chr(27)
 		logLevel = lib.init(AJAXED_LOGLEVEL, -1)
-		'if not set by the config then set the defaults for each env
-		if logLevel = -1 and lib.dev then logLevel = 1
-		if logLevel = -1 and lib.live then logLevel = 8
+		'if not set by the config then deactivate the logger by default
+		if logLevel = -1 then logLevel = 0
 	end sub
 	
 	public property get path ''[string] gets the virtual path where the logfiles are located. e.g. /ajaxedLogs/

@@ -1,4 +1,4 @@
-ï»¿<!--#include file="../class_testFixture/testFixture.asp"-->
+<!--#include file="../class_testFixture/testFixture.asp"-->
 <% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("../class_database/test.mdb") & ";" %>
 <%
 class Person
@@ -35,8 +35,6 @@ set aDict = server.createObject("scripting.dictionary")
 aDict.add "a", 2.2342348
 aDict.add "b", array(7, 8, array(9, 5))
 aDict.add "c", p
-aDict.add "d", "Ã¥"
-aDict.add "e", "Ã¤Ã¶Ã¼"
 aDict.add "f", db.getRecordset("SELECT * FROM person ORDER BY created_on")
 aDict.add "g", db.getRecordset("SELECT * FROM person WHERE firstname = 'sbas' ORDER BY created_on")
 
@@ -52,6 +50,19 @@ set empty_rs = db.getRecordset("SELECT * FROM person WHERE firstname = 'sbas' OR
 		}
 		assertions++;
 	}
+	
+	<%
+	set s = lib.newDict(empty)
+	s.add "germanumlaute", "äöüÄÖÜß"
+	s.add "newline", vbNewLine
+	s.add "specials", """\/"
+	s.add "asian", ""
+	%>
+	var jsn = <%= (new JSON).toJSON(empty, s, false) %>;
+	assert(jsn.germanumlaute == 'äöüÄÖÜß', 'german umlaute should work');
+	assert(jsn.newline == '\r\n', 'new lines should work');
+	assert(jsn.specials == '"\\/', 'special chars should work');
+	
 	var jsn = <%= (new JSON).toJSON("p", p, false) %>;
 	assert(jsn.p.favNumbers[0] == 2);
 	assert(jsn.p.favNumbers[2] == 234);
@@ -63,8 +74,6 @@ set empty_rs = db.getRecordset("SELECT * FROM person WHERE firstname = 'sbas' OR
 	assert(jsn.a.b[2][0] == 9);
 	assert(jsn.a.c.lastname == 'Doe');
 	assert(jsn.a.c.favNumbers[2] == 234);
-	assert(jsn.a.d == '\u00E5', 'special chars should work');
-	assert(jsn.a.e == "\u00E4\u00F6\u00FC", 'umlaute should work');
 	assert(jsn.a.f[1].lastname == 'and the gang');
 	assert(jsn.a.g.length == 0, 'empty RS within nested within a dictionary');
 	
@@ -81,4 +90,5 @@ set empty_rs = db.getRecordset("SELECT * FROM person WHERE firstname = 'sbas' OR
 	
 	var jsn = <%= (new JSON).toJSON("rs", empty_rs, false) %>;
 	assert(jsn.rs.length == 0);
+	
 </script>

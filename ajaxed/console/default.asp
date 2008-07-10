@@ -5,7 +5,7 @@ set page = new AjaxedPage
 with page
 	.onlyDev = true
 	.defaultStructure = true
-	.title = "ajaxedConsole"
+	.title = "console"
 	.draw()
 end with
 
@@ -13,6 +13,7 @@ end with
 '* header  
 '******************************************************************************************
 sub header()
+	str.write("<link rel=""shortcut icon"" href=""img/fav.png"" type=""image/ico"" />")
 	page.loadCSSFile "std.css", empty
 	page.loadCSSFile "screen_borderstyles.css", empty
 	page.loadJSFile "console.js"
@@ -49,7 +50,7 @@ sub main() %>
 		</div>
 	<% end if %>
 	
-	<h1 id="headline">ajaxed Console</h1>
+	<h1 id="headline"><img src="img/ajaxed.png" alt="ajaxed logo" width="163" height="37"></h1>
 	
 	<ul class="tab">
 		<li onclick="loadContent('configuration.asp', this)" id="tConfig">
