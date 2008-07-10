@@ -160,10 +160,10 @@ class Datatable
 		set p_row = new DatatableRow
 		set p_row.dt = me
 		fullsearch = true
-		set lang = lib.newDict(empty)
-		server.execute(path("de.asp"))
-		ll(lang)
-		lib.logger.debug lang.count
+		''set lang = lib.newDict(empty)
+		''server.execute(path("de.asp"))
+		'll(lang)
+		'lib.logger.debug lang.count
 	end sub
 	
 	'**********************************************************************************************************

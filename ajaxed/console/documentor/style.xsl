@@ -20,6 +20,7 @@
 						font-family:courier new;
 						color:#0B7391;
 						font-size:9pt !important;
+						line-height:1em;
 					}
 					code {
 						display:block;
@@ -121,6 +122,15 @@
 					.param {
 						margin-bottom:1em;
 						padding-bottom:0.2em;
+					}
+					.paramName {
+						color:#AE008F;
+						font-weight:bold;
+					}
+					.returnName {
+						color:#000;
+						text-decoration:underline;
+						font-weight:bold;
 					}
 					.return {
 						margin-top:0.7em;
@@ -467,7 +477,7 @@
 									<xsl:if test="string-length(parameters/parameter/name/text()) &gt; 0">
 										<xsl:for-each select="parameters/parameter">
 											<div class="param">
-												<strong><xsl:value-of select="name/@passed" /><xsl:text> </xsl:text><xsl:value-of select="name" /></strong>
+												<span class="paramName"><xsl:value-of select="name/@passed" /><xsl:text> </xsl:text><xsl:value-of select="name" /></span>
 												<xsl:if test="string-length(types/type/text()) &gt; 0">
 													<span>
 														[<xsl:for-each select="types/type">
@@ -484,7 +494,7 @@
 									</xsl:if>
 									
 									<xsl:if test="string-length(return/type/text()) &gt; 0">
-										<div class="return"> <strong>Returns </strong>
+										<div class="return"> <span class="returnName">Returns </span>
 											[<xsl:for-each select="return/type">
 												<xsl:call-template name="TheTypes">
 												 <xsl:with-param name="aType" select="."/>

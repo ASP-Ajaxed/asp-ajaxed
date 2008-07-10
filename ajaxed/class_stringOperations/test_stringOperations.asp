@@ -46,6 +46,8 @@ sub test_4()
 	tf.assertEqual "ein 1 zwei {1}", str.format("ein {0} zwei {1}", 1), "str.format does not work"
 	tf.assertEqual "ein 1 zwei 2", str.format("ein {0} zwei {1}", array(1, 2)), "str.format does not work"
 	tf.assertEqual "ein {0} zwei {1}", str.format("ein {0} zwei {1}", array()), "str.format does not work"
+	'TODO: make this assert work ;)
+	'tf.assertEqual "{1},{0}", str.format("{0},{1}", array("{1}", "{0}")), "str.format should also allow placeholder as replacement values"
 end sub
 
 sub test_5()

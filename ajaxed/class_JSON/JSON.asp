@@ -5,12 +5,27 @@
 '' @CREATOR:		Michal Gabrukiewicz (gabru at grafix.at), Michael Rebec
 '' @CONTRIBUTORS:	- Cliff Pruitt (opensource at crayoncowboy.com)
 ''					- Sylvain Lafontaine
+''					- Jef Housein
+''					- Jeremy Brown
 '' @CREATEDON:		2007-04-26 12:46
 '' @CDESCRIPTION:	Comes up with functionality for JSON (http://json.org) to use within ASP.
 '' 					Correct escaping of characters, generating JSON Grammer out of ASP datatypes and structures
+''					Some examples (all use the toJSON() method but as it is the class' default method it can be left out):
+''					<code>
+''					<%
+''					'simple number
+''					output = (new JSON)("myNum", 2, false)
+''					'generates {"myNum": 2}
+''					
+''					'array with different datatypes
+''					output = (new JSON)("anArray", array(2, "x", null), true)
+''					'generates "anArray": [2, "x", null]
+''					'(note: the last parameter was true, thus no surrounding brackets in the result)
+''					% >
+''					</code>
 '' @REQUIRES:		-
 '' @OPTIONEXPLICIT:	yes
-'' @VERSION:		1.4.1
+'' @VERSION:		1.5
 
 '**************************************************************************************************************
 class JSON
@@ -19,7 +34,9 @@ class JSON
 	private output, innerCall
 	
 	'public members
-	public toResponse		''[bool] should generated results be directly written to the response? default = false
+	public toResponse		''[bool] should the generated representation be written directly to the response (using response.write)? default = false
+	public recordsetPaging	''[bool] indicates if only the current page should be processed on paged recordsets.
+							''e.g. would return only 10 records if RS.pagesize is set to 10. default = false (means that always all records are processed)
 	
 	'**********************************************************************************************************
 	'* constructor 
@@ -27,6 +44,7 @@ class JSON
 	public sub class_initialize()
 		newGeneration()
 		toResponse = false
+		recordsetPaging = false
 	end sub
 	
 	'******************************************************************************************
@@ -45,14 +63,14 @@ class JSON
 		dim i, currentDigit
 		for i = 1 to (len(val))
 			currentDigit = mid(val, i, 1)
-			if asc(currentDigit) > &h00 and asc(currentDigit) < &h1F then
+			if ascw(currentDigit) > &h00 and ascw(currentDigit) < &h1F then
 				currentDigit = escapequence(currentDigit)
-			elseif asc(currentDigit) >= &hC280 and asc(currentDigit) <= &hC2BF then
-				currentDigit = "\u00" + right(padLeft(hex(asc(currentDigit) - &hC200), 2, 0), 2)
-			elseif asc(currentDigit) >= &hC380 and asc(currentDigit) <= &hC3BF then
-				currentDigit = "\u00" + right(padLeft(hex(asc(currentDigit) - &hC2C0), 2, 0), 2)
+			elseif ascw(currentDigit) >= &hC280 and ascw(currentDigit) <= &hC2BF then
+				currentDigit = "\u00" + right(padLeft(hex(ascw(currentDigit) - &hC200), 2, 0), 2)
+			elseif ascw(currentDigit) >= &hC380 and ascw(currentDigit) <= &hC3BF then
+				currentDigit = "\u00" + right(padLeft(hex(ascw(currentDigit) - &hC2C0), 2, 0), 2)
 			else
-				select case asc(currentDigit)
+				select case ascw(currentDigit)
 					case cDoubleQuote: currentDigit = escapequence(currentDigit)
 					case cRevSolidus: currentDigit = escapequence(currentDigit)
 					case cSolidus: currentDigit = escapequence(currentDigit)
@@ -64,25 +82,45 @@ class JSON
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	generates a representation of a name value pair in JSON grammer
-	'' @DESCRIPTION:	the generation is done fully recursive so the value can be a complex datatype as well. e.g.
-	''					toJSON("n", array(array(), 2, true), false) or toJSON("n", array(RS, dict, false), false), etc.
+	'' @DESCRIPTION:	It generates a name value pair which is represented as {"name": value} in JSON.
+	''					the generation is fully recursive. Thus the value can also be a complex datatype (array in dictionary, etc.) e.g.
+	''					<code>
+	''					set j = new JSON
+	''					j.toJSON "n", array(RS, dict, false), false
+	''					j.toJSON "n", array(array(), 2, true), false
+	''					</code>
 	'' @PARAM:			name [string]: name of the value (accessible with javascript afterwards). leave empty to get just the value
 	'' @PARAM:			val [variant], [int], [float], [array], [object], [dictionary], [recordset]: value which needs
-	''					to be generated. Conversation of the data types (ASP datatype -> Javascript datatype):
-	''					- NOTHING, NULL -> null
-	''					- ARRAY -> array
-	''					- BOOL -> bool
-	''					- OBJECT -> name of the type (if unknown type)
-	''					- OBJECT with reflect() method -> returned as object which can be used within JavaScript
-	''					- MULTIDIMENSIONAL ARRAY -> generates a 1 dimensional array (flat) with all values of the multidim array
-	''					- DICTIONARY -> valuepairs. each key is accessible as property afterwards
-	''					- RECORDSET -> array where each row of the recordset represents a field in the array. fields have properties named after the column names of the recordset (LOWERCASED!) e.g. generate(RS) can be used afterwards r[0].ID
-	''					- INT, FLOAT -> number
-	'' @PARAM:			nested [bool]: is the value pair already nested within another? if yes then the {} are left out.
+	''					to be generated. Conversation of the data types is as follows:<br>
+	''					- <strong>ASP datatype -> JavaScript datatype</strong>
+	''					- nothing, null -> null
+	''					- int, double -> number
+	''					- string -> string
+	''					- boolean -> bool
+	''					- array -> array
+	''					- dictionary -> Represents it as name value pairs. Each key is accessible as property afterwards. json will look like <code>"name": {"key1": "some value", "key2": "other value"}</code>
+	''					- multidimensional array -> Generates a 1-dimensional array (flat) with all values of the multidimensional array
+	''					- recordset -> array where each row of the recordset represents a field of the array. Each array field has properties according to the column names of the recordset (<strong>lowercase!</strong>) e.g toJSON("r", RS, false) can be accessed afterwards with r[0].id
+	''					- request object -> every property and collection (cookies, form, querystring, etc) of the asp request object is exposed as an item of a dictionary. Property names are <strong>lowercase</strong>. e.g. servervariables.
+	''					- object -> name of the type (if unknown type) or all its properties (if class implements reflect() method)
+	''					Implement a <strong>reflect()</strong> function if you want your custom classes to be recognized. The function must return
+	''					a dictionary where the key holds the property name and the value its value. Example of a reflect function within a User class which has firstname and lastname properties
+	''					<code>
+	''					function reflect()
+	''					.	set reflect = server.createObject("scripting.dictionary")
+	''					.	reflect.add "firstname", firstname
+	''					.	reflect.add "lastname", lastname
+	''					end function
+	''					</code>
+	''					Example of how to generate a JSON representation of the asp request object and access the HTTP_HOST server variable in Javascript:
+	''					<code>
+	''					<script>alert(<%= (new JSON)(empty, request, false) % >.servervariables.HTTP_HOST);</script>
+	''					</code>
+	'' @PARAM:			nested [bool]: indicates if the name value pair is already nested within another? if yes then the {} are left out.
 	'' @RETURN:			[string] returns a JSON representation of the given name value pair
 	''					(if toResponse is on then the return is written directly to the response and nothing is returned)
 	'******************************************************************************************************************
-	public function toJSON(name, val, nested)
+	public default function toJSON(name, val, nested)
 		if not nested and not isEmpty(name) then write("{")
 		if not isEmpty(name) then write("""" & escape(name) & """: ")
 		generateValue(val)
@@ -101,12 +139,28 @@ class JSON
 		elseif isArray(val) then
 			generateArray(val)
 		elseif isObject(val) then
+			dim tName : tName = typename(val)
 			if val is nothing then
 				write("null")
-			elseif typename(val) = "Dictionary" then
+			elseif tName = "Dictionary" or tName = "IRequestDictionary" then
 				generateDictionary(val)
-			elseif typename(val) = "Recordset" then
+			elseif tName = "Recordset" then
 				generateRecordset(val)
+			elseif tName = "IRequest" then
+				set req = server.createObject("scripting.dictionary")
+				req.add "clientcertificate", val.ClientCertificate
+				req.add "cookies", val.cookies
+				req.add "form", val.form
+				req.add "querystring", val.queryString
+				req.add "servervariables", val.serverVariables
+				req.add "totalbytes", val.totalBytes
+				generateDictionary(req)
+			elseif tName = "IStringList" then
+				if val.count = 1 then
+					toJSON empty, val(1), true
+				else
+					generateArray(val)
+				end if
 			else
 				generateObject(val)
 			end if
@@ -149,13 +203,18 @@ class JSON
 	'* generateDictionary 
 	'******************************************************************************************************************
 	private sub generateDictionary(val)
-		dim keys, i
+		if val.count = 0 then
+			toJSON empty, null, true
+			exit sub
+		end if
+		dim key, i
 		innerCall = innerCall + 1
 		write("{")
-		keys = val.keys
-		for i = 0 to uBound(keys)
+		i = 0
+		for each key in val
 			if i > 0 then write(",")
-			toJSON keys(i), val(keys(i)), true
+			toJSON key, val(key), true
+			i = i + 1
 		next
 		write("}")
 		innerCall = innerCall - 1
@@ -165,9 +224,11 @@ class JSON
 	'* generateRecordset 
 	'******************************************************************************************************************
 	private sub generateRecordset(val)
-		dim i
+		dim i, curRow
 		write("[")
-		while not val.eof
+		curRow = 0
+		'recordset.pagesize = -1 means it is not paged.
+		while not val.eof and ((recordsetPaging and curRow < val.pageSize) or val.recordCount = -1 or not recordsetPaging)
 			innerCall = innerCall + 1
 			write("{")
 			for i = 0 to val.fields.count - 1
@@ -176,7 +237,8 @@ class JSON
 			next
 			write("}")
 			val.movenext()
-			if not val.eof then write(",")
+			curRow = curRow + 1
+			if not val.eof and ((recordsetPaging and curRow < val.pageSize) or val.recordCount = -1 or not recordsetPaging) then write(",")
 			innerCall = innerCall - 1
 		wend
 		write("]")
@@ -212,7 +274,7 @@ class JSON
 	'* JsonEscapeSquence 
 	'******************************************************************************************
 	private function escapequence(digit)
-		escapequence = "\u00" + right(padLeft(hex(asc(digit)), 2, 0), 2)
+		escapequence = "\u00" + right(padLeft(hex(ascw(digit)), 2, 0), 2)
 	end function
 	
 	'******************************************************************************************
@@ -225,7 +287,7 @@ class JSON
 	'******************************************************************************************
 	'* clone 
 	'******************************************************************************************
-	public function clone(byVal str, n)
+	private function clone(byVal str, n)
 		dim i
 		for i = 1 to n : clone = clone & str : next
 	end function
