@@ -601,16 +601,22 @@ class StringOperations
 	'' @SDESCRIPTION:	Replaces all {n} values in a given string through the n-index field of an array.
 	'' @DESCRIPTION:	Its just like the string.format method in .NET. so if you provide "my Name is {0}" as
 	''					your input then the {0} will be replaced by the first field of your array. and so on.
+	''					- in case you get an error about unsupported character sequence, then your string contains a special character sequence which is used internally for escaping (the sequence consists of non printable characters). Thus it cannot be used as input.
 	'' @PARAM:			str [string]: the source string
 	'' @PARAM:			values [array], [string]: your values which replace the placeholders. if string then only one value otherwise use array
 	'' @RETURN:			[string] changed string
 	'**************************************************************************************************************
 	public function format(byVal str, byVal values)
+		escapeChar = asc(24) & asc(27)
+		if instr(str, escapeChar) > 0 then lib.throwError("input string of StringOperations.format() contains unsupported character sequence.")
 		if not isArray(values) then values = array(values)
 		for i = 0 to ubound(values)
-			str = replace(str, "{" & i & "}", cstr(values(i)))
+			val = cStr(values(i))
+			if instr(val, escapeChar) > 0 then lib.throwError("at least one value given for StringOperations.format() contains unsupported character sequence.")
+			val = replace(val, "{", escapeChar)
+			str = replace(str, "{" & i & "}", val)
 		next
-		format = str
+		format = replace(str, escapeChar, "{")
 	end function
 	
 	'**************************************************************************************************************
