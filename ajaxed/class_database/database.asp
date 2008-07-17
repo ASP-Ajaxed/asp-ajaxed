@@ -128,7 +128,7 @@ class Database
 	'******************************************************************************************************************
 	public function insert(tablename, data)
 		checkBeforeExec "db.insert", empty, false
-		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
+		if trim(tablename) = "" then lib.throwError(array(100, "Database.insert()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		aRS.open tablename, connection, 1, 2, 2
 		aRS.addNew()
@@ -160,7 +160,7 @@ class Database
 	'******************************************************************************************************************
 	public sub update(tablename, data, byVal condition)
 		checkBeforeExec "db.update", empty, false
-		if trim(tablename) = "" then lib.throwError(array(100, "lib.insert", "tablename cannot be empty"))
+		if trim(tablename) = "" then lib.throwError(array(100, "Database.update()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		sql = "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition)
 		aRS.open sql, connection, 1, 2
@@ -171,6 +171,27 @@ class Database
 		debug(array("updated record in '" & tablename & "' with condition '" & condition & "':", sql))
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
 	end sub
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	Inserts (<em>insert()</em>) a record if it does not exist otherwise it updates the record (<em>update()</em>).
+	'' @DESCRIPTION:	For more details about the functionality refer to the <em>insert()</em> and <em>update()</em> method. Those are used internally.
+	'' @PARAM:			tablename [string]: name of the table
+	'' @PARAM:			data [array]: array which holds the columnames and its values.
+	'' @PARAM:			condition [int], [string]: ID of the record or a condition
+	'' @RETURN:			[int] ID of the record if the condition is an ID or if an insert has been performed. Otherwise <em>0</em>
+	'******************************************************************************************************************
+	public function insertOrUpdate(tablename, data, byVal condition)
+		checkBeforeExec "db.insertOrUpdate", empty, false
+		if trim(tablename) = "" then lib.throwError(array(100, "Database.insertOrUpdate()", "tablename cannot be empty"))
+		insertOrUpdate = 0
+		if count(tablename, condition) > 0 then
+			update tablename, data, condition
+			ID = str.parse(condition, 0)
+			if ID > 0 then insertOrUpdate = ID
+		else
+			insertOrUpdate = insert(tablename, data)
+		end if
+	end function
 	
 	'******************************************************************************************************************
 	'* fillRSWithData 
@@ -204,7 +225,7 @@ class Database
 	'******************************************************************************************************************
 	public function count(tablename, byVal condition)
 		checkBeforeExec "db.count", empty, false
-		if trim(tablename) = "" then lib.throwError(array(100, "lib.count", "tablename cannot be empty"))
+		if trim(tablename) = "" then lib.throwError(array(100, "Database.count()", "tablename cannot be empty"))
 		count = getScalar("SELECT COUNT(*) FROM " & str.SQLSafe(tablename) & lib.iif(condition <> "", " WHERE " & condition, ""), 0)
 	end function
 	
@@ -217,8 +238,8 @@ class Database
 	'******************************************************************************************************************
 	public sub toggle(tablename, columnName, byVal condition)
 		checkBeforeExec "db.toggle", empty, false
-		if trim(tablename) = "" then lib.throwError(array(100, "lib.toggle", "tablename cannot be empty"))
-		if trim(columnName) = "" then lib.throwError(array(100, "lib.toggle", "columnname cannot be empty"))
+		if trim(tablename) = "" then lib.throwError(array(100, "Database.toggle()", "tablename cannot be empty"))
+		if trim(columnName) = "" then lib.throwError(array(100, "Database.toggle()", "columnname cannot be empty"))
 		sql = "UPDATE " & str.SQLSafe(tablename) & " SET " & str.SQLSafe(columnName) & " = 1 - " & str.SQLSafe(columnName) & getWhereClause(condition)
 		getRS sql, empty
 	end sub

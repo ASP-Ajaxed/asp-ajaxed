@@ -53,6 +53,7 @@ BUGFIX: str.format used to have a bug when arguments contained a placeholder str
 	- tested databases microsoft access, sqlite and ms sql server
 	- dbType added which tells us which database we are using
 	- trims all text field columns on insert() and update() to the length which is maximum allowed for the column => no error happens anymore because a field is too long
+	- added insertOrUpdate()
 - added a lib.require method which allows us to do a check if a given class has been included. if not a friendly error is shown
 - friendly error raised when ajaxed.callback is used but no callback() is defined on server side
 - ajaxed.callback supports page-parts now:

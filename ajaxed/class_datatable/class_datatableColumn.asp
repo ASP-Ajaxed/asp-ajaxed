@@ -101,7 +101,7 @@ class DatatableColumn
 	'**********************************************************************************************************
 	sub drawData(val, output)
 		p_nullValue = isNull(val)
-		p_value = val & ""
+		if p_nullValue then p_value = "" else p_value = cstr(val) end if
 		if encodeHTML and not nullValue then p_value = str(p_value)
 		if not isEmpty(onCellCreated) then
 			if isEmpty(cellCreatedFunc) then
