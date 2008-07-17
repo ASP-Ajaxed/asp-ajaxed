@@ -1,4 +1,4 @@
-﻿<!--#include file="../../ajaxed.asp"-->
+<!--#include file="../../ajaxed.asp"-->
 <%
 '******************************************************************************************
 '* Creator: 	David Rankin, adapted by Michal
@@ -112,6 +112,19 @@ function getNewNode(name, value)
 end function
 
 '******************************************************************************************
+'* formatComment 
+'******************************************************************************************
+function formatComment(byVal val)
+	'first emphasize all keywords
+	keywords = array("EMPTY", "NOTHING", "BOOL", "NULL", "OBJECT", "TRUE", "FALSE", "INT", "STRING", "RECORDSET", "DICTIONARY", "BOOLEAN", "FLOAT", "DOUBLE", "ARRAY")
+	for each k in keywords
+		val = str.rReplace(val, "\b" & k & "\b", "<em>" & lCase(k) & "</em>", false)
+	next
+	'now check highlight all codeblocks
+	formatComment = formatCodeBlock(val)
+end function
+
+'******************************************************************************************
 '* formatCodeBlock 
 '* - get all code blocks <code>...</code>
 '* - escape the html inside it.
@@ -135,12 +148,20 @@ function formatCodeBlock(byVal val)
 		encoded = str.HTMLEncode(str.rReplace(replace(m, "% >", "%" & ">"), "^<code>|</code>$", "", true))
 		'remove the linebreaks in the beginning and the ending if there is one
 		c = str.rReplace(encoded, "^\s\n|\n$", "", true)
+		'surround server side code with a span
 		c = str.rReplace(c, "(&lt;%[\s\S]*?%&gt;)", "<span class=""ssi-code"">$1</span>", true)
+		'TODO surround comments with a span
+		set r2 = new Regexp
+		r2.global = true
+		r2.pattern = "&lt;%[\s\S]*?%&gt;"
+		for each ssi in r2.execute(c)
+			
+		next
 		'TODO: only one level of identation is done with this. more levels are a little
 		'tricky because all tabs have been already removed in this place
 		c = str.rReplace(c, "\n\.", "<br/>&nbsp;&nbsp;&nbsp;&nbsp;", true)
 		c = str.rReplace(c, "\n", "<br/>", true)
-		firstPart = left(val, m.firstIndex + offset - 1)
+		if m.firstIndex > 0 then firstPart = left(val, m.firstIndex + offset - 1)
 		rightCut = length - len(firstPart) - len(m) - 1
 		if rightCut > 0 then lastPart = right(val, rightCut)
 		
@@ -205,7 +226,7 @@ function parseFile(file)
 						j = ubound(lines)
 					end if
 				next
-				description = formatCodeBlock(description)
+				description = formatComment(description)
 			elseif str.startsWith(aLine, "'' @STATICNAME:") then
 				staticname = trim(replace(aLine, "'' @STATICNAME:", ""))
 			elseif str.startsWith(aLine, "'' @POSTFIX:") then
@@ -393,7 +414,7 @@ function parseFile(file)
 									for each key in params.keys
 										akey = trim(str.rReplace(key, "byRef|byVal", "", true))
 										if ubound(parameterFor) >=0 then
-											if uCase(akey) = uCase(parameterFor(0)) then params(key) = formatCodeBlock(parameter)
+											if uCase(akey) = uCase(parameterFor(0)) then params(key) = formatComment(parameter)
 										end if
 									next
 									
@@ -414,7 +435,7 @@ function parseFile(file)
 											exit for
 										end if
 									next
-									returns = formatCodeBlock(returns)
+									returns = formatComment(returns)
 								end if
 								if str.startsWith(aLine, "'' @DESCRIPTION:") then
 									aLine = replace(aline,"'' @DESCRIPTION:", "")
@@ -434,7 +455,7 @@ function parseFile(file)
 											exit for
 										end if
 									next
-									lDescription = formatCodeBlock(lDescription)
+									lDescription = formatComment(lDescription)
 								end if
 								if str.startsWith(aLine, "'' @SDESCRIPTION:") then
 									aLine = replace(aline,"'' @SDESCRIPTION:", "")
@@ -453,7 +474,7 @@ function parseFile(file)
 											exit for
 										end if
 									next
-									sDescription = formatCodeBlock(sDescription)
+									sDescription = formatComment(sDescription)
 								end if
 							else
 								exit for
@@ -587,7 +608,7 @@ function parseFile(file)
 									exit for
 								end if
 							next
-							description = formatCodeBlock(description)
+							description = formatComment(description)
 						end if
 					end if
 					

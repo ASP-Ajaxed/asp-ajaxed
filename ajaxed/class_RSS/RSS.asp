@@ -7,13 +7,14 @@
 '' @CREATEDON:		2006-09-08 15:07
 '' @CDESCRIPTION:	Reads RSS feeds and gives you the possibility of formating it with xsl or using
 ''					the items programmatically as objects. Additionally it lets you generate your own feeds.
-''					- READING: achieved with load() or draw(). Refer to the methods for the supported versions
-''					- WRITING: achiedved with generate(). Refer to the method for the supported versions
-''					If caching should be enabled use the setCache() method. By default caching is off.
-''					- on draw() caching stores the complete transformed output in the cache
-''					- on load() caching stores the xml in the cache and parses it out from the cache.
+''					- READING: achieved with <em>load()</em> or <em>draw()</em>. Refer to the methods for the supported versions
+''					- WRITING: achiedved with <em>generate()</em>. Refer to the method for the supported versions
+''					If caching should be enabled use the <em>setCache()</em> method. By default caching is off.
+''					- on <em>draw()</em> caching stores the complete transformed output in the cache
+''					- on <em>load()</em> caching stores the xml in the cache and parses it out from the cache.
 ''					Simple example of how to read an RSS feed:
 ''					<code>
+''					<%
 ''					set r = new RSS
 ''					r.url = "http://somehost.com/somefeed.xml"
 ''					r.load()
@@ -21,6 +22,7 @@
 ''					for each it in r.items
 ''					.	str.write(r.title & "<br>")
 ''					next
+''					% >
 ''					</code>
 '' @REQUIRES:		Cache
 '' @POSTFIX:		rss
@@ -32,18 +34,18 @@ class RSS
 	private xml, generator, xmlDomVersion
 	
 	'public members
-	public url				''[string] url of the RSS feed (necessary for load() and draw())
-	public failed			''[bool] indicates if any of the methods load() or draw()
+	public url				''[string] url of the RSS feed (necessary for <em>load()</em> and <em>draw()</em>)
+	public failed			''[bool] indicates if any of the methods <em>load()</em> or <em>draw()</em>
 							''e.g. server not responding, timeouts, etc.
 	public title			''[string] title of the feed
 	public link				''[string] link which is associated with the feed
 	public description		''[string] description of the feed
-	public language			''[string] the language of the feed. e.g. en
+	public language			''[string] the language of the feed. e.g. <em>en</em>
 	public publishedDate	''[date] date when the feed has been published. you local timezone!
-	public items			''[dictionary] collection of the items (RSSItem). after load() this gets filled
+	public items			''[dictionary] collection of the items (<em>RSSItem</em>). after <em>load()</em> this gets filled
 							''- for writing a feed this collection needs to be filled with items which sould be published. use addItem()
 	public theCache			''[Cache] holds the cache which is used for caching the feed. by default it is nothing and
-							''should only be set by setCache(). afterwards this property can be used.
+							''should only be set by <em>setCache()</em>. afterwards this property can be used.
 	public debug			''[bool] turns debuging on/off. if on then useful information will be shown which can be used
 							''if the feed never loads. e.g. the response of the server, etc. default = false
 	public timeout			''[int] timeout in seconds for the requests. default = 2
@@ -75,7 +77,7 @@ class RSS
 	''					is performed just once.
 	''					- supported formats: all because the XSL needs to be provided by the client manually
 	''					- check failed property after execution
-	'' @PARAM:			xslPath [string]: virtual path to the xsl. e.g. /xsl/foo.xsl
+	'' @PARAM:			xslPath [string]: virtual path to the xsl. e.g. <em>/xsl/foo.xsl</em>
 	'**********************************************************************************************************
 	public sub draw(xslPath)
 		initialize("reading")
@@ -109,7 +111,7 @@ class RSS
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	loads the feed. so the items, title, link, etc. will be set
 	'' @DESCRIPTION:	use this if you want to access e.g. the items of the feed and dont want to use
-	''					the draw() method using the XSL. Note: using this method wont use the caching!
+	''					the <em>draw()</em> method using the XSL. Note: using this method wont use the caching!
 	''					- supported formats: RSS1.0 (RDF), RSS2.0, RSS0.92, RSS0.94 and ATOM
 	''					- check failed property after execution
 	'**********************************************************************************************************
@@ -158,8 +160,8 @@ class RSS
 	''					itself and is generated on each request.)
 	''					- supported formats: RSS2.0
 	'' @PARAM:			format [string]: RSS2.0
-	'' @PARAM:			target [string]: path to the file you want to save the feed to. e.g. /feeds/feed.xml
-	''					leave it empty if you want to get the XML returned
+	'' @PARAM:			target [string]: path to the file you want to save the feed to. e.g. <em>/feeds/feed.xml</em>
+	''					leave EMPTY if you want to get the XML returned
 	'' @RETURN:			[microsoft.xmldom] the resulted xmldom
 	'**********************************************************************************************************
 	public function generate(format, target)
@@ -240,7 +242,7 @@ class RSS
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	reflection of the properties and its values
-	'' @RETURN:			[dictionary] key = property-name, value = property value
+	'' @RETURN:			[dictionary] <em>key</em> = property-name, <em>value</em> = property value
 	'**********************************************************************************************************
 	public function reflect()
 		set reflect = server.createObject("scripting.dictionary")
@@ -355,9 +357,9 @@ class RSS
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	sets the caching of the RSS. the Cache class needs to be loaded for this
 	'' @DESCRIPTION:	Specify how long the feed should be cashed till it will be requested again. For more
-	''					information about the caching look up the Cache class
-	'' @PARAM:			interval [string]: m = months, y = year, d = day, etc. everything accepted by dateadd
-	'' @PARAM:			value [int]: value for the interval. e.g. 1 for month
+	''					information about the caching look up the <em>Cache</em> class
+	'' @PARAM:			interval [string]: <em>m</em> = months, <em>y</em> = year, <em>d</em> = day, etc. everything accepted which is supported by <em>dateadd</em> function
+	'' @PARAM:			value [int]: value for the interval. e.g. 1 (month)
 	'**********************************************************************************************************
 	public sub setCache(interval, value)
 		if theCache is nothing then
@@ -370,7 +372,7 @@ class RSS
 	end sub
 	
 	'**********************************************************************************************************
-	'* loadXML - tries to load an xmldom with a given xml-string. failed is set to true if cannot parse
+	'* loadXML - tries to load an xmldom with a given xml-string. <em>failed</em> is set to TRUE if parse failed
 	'**********************************************************************************************************
 	private sub loadXML(xmlString)
 		if failed then exit sub

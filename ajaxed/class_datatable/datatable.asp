@@ -8,7 +8,7 @@
 '' @CREATEDON:		2008-06-06 09:26
 '' @CDESCRIPTION:	Represents a control which uses data based on a SQL query and renders it as a data table.
 ''					The whole datatable is represented as a html table and contains rows (records) and columns (columns defined in the SQL query).
-''					Columns (DatatableColumn instances) must be added to the table. Columns are auto generated if none are defined by the client.
+''					Columns (<em>DatatableColumn</em> instances) must be added to the table. Columns are auto generated if none are defined by the client.
 ''					Datatable contains the following main features which makes it a very powerful component:
 ''					- only a SQL query is needed as the datasource. All columns which are exposed in the query can be used within the table.
 ''					- sorting, pagination and quick deletion of records
@@ -44,9 +44,9 @@
 ''					</code>
 ''					As you can see in the example its necessary to draw the datatable in the main and the callback sub.
 ''					Thats needed because all the sorting, paging, etc. is done with AJAX using ajaxed callback feature (pageParts).
-''					Setting the properties of the datatable must be done within the init sub (which is executed before callback and main).
-''					In most cases its necessary to decide which columns should be used. Therefore columns must be added manually using newColmn() metnod:
-''					<code>dt.newColumn("firstname", "Firstname")</code>
+''					Setting the properties of the datatable must be done within the pages <em>init()</em> sub (which is executed before <em>callback</em> and <em>main</em>).
+''					In most cases its necessary to decide which columns should be used. Therefore columns must be added manually using <em>newColmn()</em> metnod:
+''					<code><% dt.newColumn("firstname", "Firstname")% ></code>
 '' @REQUIRES:		Dropdown, Pageable
 '' @VERSION:		0.1
 
@@ -58,29 +58,31 @@ class Datatable
 	
 	'public members
 	public sql				''[string] SQL query which gets all the data. Paging, etc. is done by the control itself so
-							''provide only the query which returns all records. Note: no ORDER BY clause (use sort property for this)
+							''provide only the query which returns all records. Note: no <em>ORDER BY</em> clause (use <em>sort</em> property for this)
 	public recsPerPage		''[int] how many records should be displayed per page. default = 100 (0 = no paging)
 	public onRowCreated		''[string] name of the <strong>sub</strong> you want to execute when a row is created. it is raised before it will be drawn.
-							''eventargument is the current Datatable instance. You can access the current row with the 'row' property. Example of how to disable and mark all rows which contain a deleted record with the class "deleted":
+							''eventargument is the current Datatable instance. You can access the current row with the <em>row</em> property. Example of how to disable and mark all rows which contain a deleted record with the class "deleted":
 							''<code>
+							''<%
 							''dt.onRowCreated = "onRow"
 							''sub onRow(callerDT)
 							''.	callerDT.row.disabled = callerDT.data("deleted") = 1
 							''.	if callerDT.data("deleted") = 1 then callerDT.row.class = "deleted"
 							''end sub
+							''% >
 							''</code>
 	public pkColumn			''[string], [int] name (or index) of the column which holds the primary key (uniquely identifies each record). Must be a numeric column! by default its the first column. Used for e.g. selection of records
 	public attributes		''[string] any attributes which will be placed within the table tag which is used for rendering a datatable.
 	public cssClass			''[string] name of the css class which should be applied to the table-tag
-	public sorting			''[bool] should it be possible to sort the data? default = true
+	public sorting			''[bool] should it be possible to sort the data? default = TRUE
 	public sort				''[string] indicates how the data should be sorted (ORDER BY part of the SQL). on sorting this property is changed (thus its possible to access it during runtime).
-							''e.g. "lastname" or "created_on DESC", etc.
-	public rememberState	''[bool] indicates if the state (page position, soring, filters, etc.) should be remembered for the next request. default = true
-	public css				''[string] virtual path of the CSS file which should be used for formatting. set 'empty' if no specific file should be used.
+							''e.g. <em>"lastname"</em> or <em>"created_on DESC"</em>, etc.
+	public rememberState	''[bool] indicates if the state (page position, soring, filters, etc.) should be remembered for the next request. default = TRUE
+	public css				''[string] virtual path of the CSS file which should be used for formatting. set EMPTY if no specific file should be used.
 							''by default the ajaxed default styles are used. By creating your own style files its possible to skin the datatable and share the styles with others.
-							''Refer to the datatable.css to see how the styling works (also check the source of a generated datatable to see the classes being used)
-	public cssPrint			''[string] virtual path of the CSS file which should be used for formatting when printing. set 'empty' if no specific file should be used.
-	public data				''[recordset] gets the recordset which has been generated by the SQL query. Can be useful to access it when working with events like e.g. onRowCreated
+							''Refer to the <em>datatable.css</em> to see how the styling works (also check the source of a generated datatable to see the classes being used)
+	public cssPrint			''[string] virtual path of the CSS file which should be used for formatting when printing. set EMPTY if no specific file should be used.
+	public data				''[recordset] gets the recordset which has been generated by the SQL query. Can be useful to access it when working with events like e.g. <em>onRowCreated</em>
 	public customControls	''[string] name of the sub which draws custom controls for the datatable. e.g. if you want to add additional button, etc. with custom functions. takes the current datatable as eventargument.
 							''Example of adding an own print button:
 							''<code>
@@ -94,9 +96,9 @@ class Datatable
 	public fullsearch		''[bool] enable/disable the fullsearch feature. Lets the user search all columns with keyword(s). 
 							''If more words are entered (seperated with space) then all must be found within the record. Matches are highlighted
 							''with the data. Fullsearch is enabled by default.
-	public nullSign			''[string] a sign which will be shown if a data value is NULL. default = empty. (The data cell gets a axdDTNull css class if it contains a null)
+	public nullSign			''[string] a sign which will be shown if a data value is NULL. default = EMPTY. (The data cell gets a <em>axdDTNull</em> css class if it contains a null)
 	
-	public property let selection(val) ''[string] sets if it should be possible to select records (checkbox/radio button is automatically placed in front of each record). use "single" to allow selection of one record (radiobutton) or "multiple" for the selection of more records (checkboxes). default = empty. Name of the checkbox/radio is the ID of the datatable (needed if you do POST it with a form) and value is the value of the pkColumn.
+	public property let selection(val) ''[string] sets if it should be possible to select records (checkbox/radio button is automatically placed in front of each record). use <em>"single"</em> to allow selection of one record (radiobutton) or <em>"multiple"</em> for the selection of more records (checkboxes). default = EMPTY. Name of the checkbox/radio is the ID of the datatable (needed if you do POST it with a form) and value is the value of the pkColumn.
 		if val <> "" and not str.matching(val, "^single|multiple$", true) then lib.throwError("Datatable.selection only allows 'single', 'multiple' or 'empty'")
 		p_selection = lCase(val)
 	end property
@@ -109,11 +111,11 @@ class Datatable
 		ID = p_ID
 	end property
 	
-	public property get col ''[DatatableColumn] gets the column which is being currently drawn. (needed when using <strong>onCellCreated</strong> property of the DatatableColumn)
+	public property get col ''[DatatableColumn] gets the column which is being currently drawn. (needed when using <strong>onCellCreated</strong> property of the <em>DatatableColumn</em>)
 		set col = p_col
 	end property
 	
-	public property get row ''[DatabaseRow] gets the row which is being currenly drawn. Useful when using onRowCreated
+	public property get row ''[DatabaseRow] gets the row which is being currenly drawn. Useful when using <em>onRowCreated</em>
 		set row = p_row
 	end property
 	
@@ -170,8 +172,8 @@ class Datatable
 	'' @SDESCRIPTION: 	draws the control. Must be called within <strong>main()</strong> and <strong>callback()</strong>
 	'' @DESCRIPTION:	draws the datatable with all its previosuly defined columns/filters.
 	''					If no columns are defined then the control automatically grabs all columns which are defined within the sql.
-	''					It must be called within the main() sub and the callback() sub of the AjaxedPage. All initializations
-	''					(setting properties) must be done in the init().
+	''					It must be called within the <em>main()</em> sub and the <em>callback()</em> sub of the AjaxedPage. All initializations
+	''					(setting properties) must be done in the <em>init()</em>.
 	'**********************************************************************************************************
 	public sub draw()
 		if lib.page.isCallback() then
@@ -214,7 +216,7 @@ class Datatable
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	indicates if the datatable is sorted by a given column name
 	'' @PARAM:			name [string]: name of column you want to check if its sorted
-	'' @RETURN:			[int] empty = not sorted by this column otherwise ASC or DESC
+	'' @RETURN:			[int] EMPTY means its not sorted by this column otherwise <em>ASC</em> or <em>DESC</em>
 	'**********************************************************************************************************
 	public function sortedBy(name)
 		if not dataLoaded then lib.throwError("Datatable.sortedBy is only accessible after data has been loaded.")
@@ -377,7 +379,7 @@ class Datatable
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	adds a new column with name and caption and returns it
-	'' @PARAM:			name [string], [int]: name/index of the column (should exist within the SQL)
+	'' @PARAM:			name [string], [int]: name/index of the column (should exist within the <em>sql</em>)
 	'' @PARAM:			caption [string]: caption for the column header
 	'' @RETURN:			[DatatableColumn] returns an already added column (properties can be changed afterwards).
 	'**********************************************************************************************************

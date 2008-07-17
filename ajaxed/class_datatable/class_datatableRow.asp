@@ -5,15 +5,17 @@
 '' @CREATOR:		michal
 '' @CREATEDON:		2008-06-17 15:56
 '' @CDESCRIPTION:	Represents a row in a datatable. Can only be accessed when using
-''					the onRowCreated event of the Datatable. When the event is raised its
-''					possible to access the current row with the row property of the Datatable.
-''					Example of how to mark first 10 records of a datatable as selected using the row's selected property:
+''					the <em>onRowCreated</em> event of the Datatable. When the event is raised its
+''					possible to access the current row with the <em>row</em> property of the Datatable.
+''					Example of how to mark first 10 records of a datatable as selected using the row's <em>selected</em> property:
 ''					<code>
+''					<%
 ''					dt.selection = "multiple"
 ''					dt.onRowCreated = "onRow"
 ''					sub onRow(callerDT)
 ''					.	callerDT.row.selected = callerDT.row.number <= 10
 ''					end sub
+''					% >
 ''					</code>
 '' @FRIENDOF:		Datatable
 '' @VERSION:		0.1
@@ -26,14 +28,12 @@ class DatatableRow
 	
 	'public members
 	public dt			''[Datatable] the datatable which contains the row
-	public cssClass		''[string] css class which will be placed within the &lt;tr> tag
+	public cssClass		''[string] css class which will be placed within the <em>&lt;tr></em> tag
 	public disabled		''[bool] indicates if the row is disabled or not. disabled does not allow to select the row and it wont be clickable
 	
 	public property get selected ''[bool] indicates if the row is selected or not. keeps state after postback as well. So when user changes the selection it will remember the selection after postback.
 		selected = p_selected
-		if lib.page.isPostback() then
-			selected = lib.contains(lib.page.RFA(dt.ID), PK)
-		end if
+		if lib.page.isPostback() then ((new DataContainer)(lib.page.RFA(dt.ID))).contains(PK)
 	end property
 	
 	public property let selected(val) ''[bool]
@@ -44,7 +44,7 @@ class DatatableRow
 		number = p_number
 	end property
 	
-	public property get ID ''[int] gets a unique ID of the row. the &lt;tr> tag contains this ID
+	public property get ID ''[int] gets a unique ID of the row. the <em>&lt;tr></em> tag contains this ID
 		ID = dt.ID & "_row_" & PK
 	end property
 	

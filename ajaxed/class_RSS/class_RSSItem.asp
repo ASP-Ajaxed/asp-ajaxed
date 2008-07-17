@@ -29,7 +29,7 @@ class RSSItem
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	reflection of the properties and its values
-	'' @RETURN:			[dictionary] key = property-name, value = property value
+	'' @RETURN:			[dictionary] <em>key</em> = property-name, <em>value</em> = property value
 	'**********************************************************************************************************
 	public function reflect()
 		set reflect = server.createObject("scripting.dictionary")

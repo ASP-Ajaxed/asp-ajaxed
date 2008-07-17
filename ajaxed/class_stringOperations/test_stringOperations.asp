@@ -1,4 +1,4 @@
-<!--#include file="../class_testFixture/testFixture.asp"-->
+﻿<!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 set tf = new TestFixture
 tf.debug = true
@@ -7,9 +7,9 @@ tf.run()
 sub test_1()
 	tf.assertEqual str.parse("202", 0), 202, "str.parse parses int"
 	tf.assertEqual str.parse("229029899809809", 0), 0, "str.parse should not be able to parse a too big int"
-	tf.assertEqual str.parse("2022,22", 0.0), 2022.22, "str.parse parsing floats"
 	tf.assertEqual year(str.parse("1/1/2007", now())), 2007, "str.parse parsing a date"
 	tf.assertEqual str.parse("True", false), true, "str.parse should parse booleans"
+	tf.assertEqual str.parse(str.format("2022{0}22", local.comma), 0.0), 2022.22, "str.parse parsing floats"
 end sub
 
 sub test_2()
@@ -61,6 +61,15 @@ sub test_5()
 	tf.assertEqual "", str.humanize(empty), "str.humanize does not work"
 	tf.assertEqual "", str.humanize(""), "str.humanize does not work"
 	tf.assertEqual "A", str.humanize("a"), "str.humanize does not work"
+end sub
+
+sub test_6()
+	tf.assert str.isAlphabetic("a"), "isAlphabetic() does not work"
+	tf.assert str.isAlphabetic("A"), "isAlphabetic() does not work"
+	tf.assert str.isAlphabetic("x"), "isAlphabetic() does not work"
+	tf.assertNot str.isAlphabetic("_"), "isAlphabetic() does not work"
+	tf.assertNot str.isAlphabetic(empty), "isAlphabetic() does not work"
+	tf.assertNot str.isAlphabetic(""), "isAlphabetic() does not work"
 end sub
 'TODO: add more tests here for all the string functions
 %>

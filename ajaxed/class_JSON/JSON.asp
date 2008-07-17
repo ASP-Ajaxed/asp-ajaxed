@@ -9,14 +9,14 @@
 ''					- Jeremy Brown
 '' @CREATEDON:		2007-04-26 12:46
 '' @CDESCRIPTION:	Comes up with functionality for JSON (http://json.org) to use within ASP.
-'' 					Correct escaping of characters, generating JSON Grammer out of ASP datatypes and structures
-''					Some examples (all use the toJSON() method but as it is the class' default method it can be left out):
+''					Correct escaping of characters, generating JSON Grammer out of ASP datatypes and structures
+''					Some examples (all use the <em>toJSON()</em> method but as it is the class' default method it can be left out):
 ''					<code>
 ''					<%
 ''					'simple number
 ''					output = (new JSON)("myNum", 2, false)
 ''					'generates {"myNum": 2}
-''					
+''										
 ''					'array with different datatypes
 ''					output = (new JSON)("anArray", array(2, "x", null), true)
 ''					'generates "anArray": [2, "x", null]
@@ -25,7 +25,7 @@
 ''					</code>
 '' @REQUIRES:		-
 '' @OPTIONEXPLICIT:	yes
-'' @VERSION:		1.5
+'' @VERSION:		1.5.1
 
 '**************************************************************************************************************
 class JSON
@@ -34,9 +34,9 @@ class JSON
 	private output, innerCall
 	
 	'public members
-	public toResponse		''[bool] should the generated representation be written directly to the response (using response.write)? default = false
+	public toResponse		''[bool] should the generated representation be written directly to the response (using <em>response.write</em>)? default = false
 	public recordsetPaging	''[bool] indicates if only the current page should be processed on paged recordsets.
-							''e.g. would return only 10 records if RS.pagesize is set to 10. default = false (means that always all records are processed)
+							''e.g. would return only 10 records if <em>RS.pagesize</em> is set to 10. default = false (means that always all records are processed)
 	
 	'**********************************************************************************************************
 	'* constructor 
@@ -82,41 +82,45 @@ class JSON
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	generates a representation of a name value pair in JSON grammer
-	'' @DESCRIPTION:	It generates a name value pair which is represented as {"name": value} in JSON.
+	'' @DESCRIPTION:	It generates a name value pair which is represented as <em>{"name": value}</em> in JSON.
 	''					the generation is fully recursive. Thus the value can also be a complex datatype (array in dictionary, etc.) e.g.
 	''					<code>
+	''					<%
 	''					set j = new JSON
 	''					j.toJSON "n", array(RS, dict, false), false
 	''					j.toJSON "n", array(array(), 2, true), false
+	''					% >
 	''					</code>
 	'' @PARAM:			name [string]: name of the value (accessible with javascript afterwards). leave empty to get just the value
 	'' @PARAM:			val [variant], [int], [float], [array], [object], [dictionary], [recordset]: value which needs
 	''					to be generated. Conversation of the data types is as follows:<br>
 	''					- <strong>ASP datatype -> JavaScript datatype</strong>
-	''					- nothing, null -> null
-	''					- int, double -> number
-	''					- string -> string
-	''					- boolean -> bool
-	''					- array -> array
-	''					- dictionary -> Represents it as name value pairs. Each key is accessible as property afterwards. json will look like <code>"name": {"key1": "some value", "key2": "other value"}</code>
-	''					- multidimensional array -> Generates a 1-dimensional array (flat) with all values of the multidimensional array
-	''					- recordset -> array where each row of the recordset represents a field of the array. Each array field has properties according to the column names of the recordset (<strong>lowercase!</strong>) e.g toJSON("r", RS, false) can be accessed afterwards with r[0].id
-	''					- request object -> every property and collection (cookies, form, querystring, etc) of the asp request object is exposed as an item of a dictionary. Property names are <strong>lowercase</strong>. e.g. servervariables.
-	''					- object -> name of the type (if unknown type) or all its properties (if class implements reflect() method)
+	''					- NOTHING, NULL -> null
+	''					- INT, DOUBLE -> number
+	''					- STRING -> string
+	''					- BOOLEAN -> bool
+	''					- ARRAY -> array
+	''					- DICTIONARY -> Represents it as name value pairs. Each key is accessible as property afterwards. json will look like <code>"name": {"key1": "some value", "key2": "other value"}</code>
+	''					- <em>multidimensional array</em> -> Generates a 1-dimensional array (flat) with all values of the multidimensional array
+	''					- RECORDSET -> array where each row of the recordset represents a field of the array. Each array field has properties according to the column names of the recordset (<strong>lowercase!</strong>) e.g <em>toJSON("r", RS, false)</em> can be accessed afterwards with <em>r[0].id</em>
+	''					- <em>request</em> object -> every property and collection (cookies, form, querystring, etc) of the asp request object is exposed as an item of a dictionary. Property names are <strong>lowercase</strong>. e.g. <em>servervariables</em>.
+	''					- OBJECT -> name of the type (if unknown type) or all its properties (if class implements <em>reflect()</em> method)
 	''					Implement a <strong>reflect()</strong> function if you want your custom classes to be recognized. The function must return
 	''					a dictionary where the key holds the property name and the value its value. Example of a reflect function within a User class which has firstname and lastname properties
 	''					<code>
+	''					<%
 	''					function reflect()
 	''					.	set reflect = server.createObject("scripting.dictionary")
 	''					.	reflect.add "firstname", firstname
 	''					.	reflect.add "lastname", lastname
 	''					end function
+	''					% >
 	''					</code>
-	''					Example of how to generate a JSON representation of the asp request object and access the HTTP_HOST server variable in Javascript:
+	''					Example of how to generate a JSON representation of the asp request object and access the <em>HTTP_HOST</em> server variable in JavaScript:
 	''					<code>
 	''					<script>alert(<%= (new JSON)(empty, request, false) % >.servervariables.HTTP_HOST);</script>
 	''					</code>
-	'' @PARAM:			nested [bool]: indicates if the name value pair is already nested within another? if yes then the {} are left out.
+	'' @PARAM:			nested [bool]: indicates if the name value pair is already nested within another? if yes then the <em>{}</em> are left out.
 	'' @RETURN:			[string] returns a JSON representation of the given name value pair
 	''					(if toResponse is on then the return is written directly to the response and nothing is returned)
 	'******************************************************************************************************************
@@ -203,12 +207,12 @@ class JSON
 	'* generateDictionary 
 	'******************************************************************************************************************
 	private sub generateDictionary(val)
+		innerCall = innerCall + 1
 		if val.count = 0 then
 			toJSON empty, null, true
 			exit sub
 		end if
 		dim key, i
-		innerCall = innerCall + 1
 		write("{")
 		i = 0
 		for each key in val

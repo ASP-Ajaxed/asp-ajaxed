@@ -7,11 +7,11 @@
 '' @CDESCRIPTION:	Represents a string builder which handles string concatenation. If a supported stringbuilder
 ''					COM component can be found it is used and hence the concatenation is much faster than common string
 ''					concatening.
-''					- check supported components with the supportedComponents property. 
+''					- check supported components with the <em>supportedComponents</em> property. 
 ''					- you should use it whereever there is a loads of output to be rendered on your page. Its faster than normal concatening.
-''					- basically just intantiate it and use append() method for appending. In the end use toString() to output your string
-''					- if there is no component found then it would be faster to directly write the output to the response. This can be achieved using the write() method
-''					Best way to use the StringBuilder (always uses the fastest possible method):
+''					- basically just intantiate it and use <em>append()</em> method for appending. In the end use <em>toString()</em> to output your string
+''					- if there is no component found then it would be faster to directly write the output to the response. This can be achieved using the <em>write()</em> method
+''					Best way to use the <em>StringBuilder</em> (always uses the fastest possible method):
 ''					<code>
 ''					<%
 ''					set output = new StringBuilder
@@ -30,7 +30,7 @@ class StringBuilder
 	private p_component
 	
 	'public members
-	public component	''[string] holds the component which should be used. empty = none (common concatination)
+	public component	''[string] holds the component which should be used. EMPTY = none (common concatination)
 	
 	public property get supportedComponents ''[array] gets the supported string builder COM components. the order represents the order which will be loaded first if available
 		supportedComponents = array("system.io.stringwriter", "stringbuildervb.stringbuilder")
@@ -57,8 +57,8 @@ class StringBuilder
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	writes a string with the string builder. the difference to append is that it will 
 	''					output to the response if there is no component found
-	'' @DESCRIPTION:	- its recommended to use this instead of append() when rendering html markup. it wil allways use this fastest method. if stringbuilder available then using stringbuilder otherwise direct output to response.
-	''					- note: be sure that on the place you use write() it can output directly to the response if needed
+	'' @DESCRIPTION:	- its recommended to use this instead of <em>append()</em> when rendering html markup. it wil allways use this fastest method. if stringbuilder available then using stringbuilder otherwise direct output to response.
+	''					- note: be sure that on the place you use <em>write()</em> it can output directly to the response if needed
 	'' @PARAM:			val [string]: the string you want to write
 	'**********************************************************************************************************
 	public default sub write(val)

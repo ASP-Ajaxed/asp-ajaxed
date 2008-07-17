@@ -4,7 +4,8 @@
 	<xsl:template match="/">
 		<html>
 			<head>
-				<title>ajaxed Documentation</title>
+				<title>ajaxed API</title>
+				<link rel="shortcut icon" href="/ajaxed/console/documentor/icon.png" type="image/ico" />
 				<meta name="Generator" content="ASP Documentor" />
 				<meta name="description" content="ASP Documentor - documentation for classic ASP (VBScript)" />
 				<script src="/ajaxed/prototypejs/prototype.js"></script>
@@ -16,11 +17,18 @@
 						font-size:14px;
 						font-family:tahoma;
 					}
+					em {
+						font-family:courier new;
+						font-style:normal;
+					}
+					.comment {
+						color:#008000 !important;
+					}
 					code, code * {
 						font-family:courier new;
 						color:#0B7391;
 						font-size:9pt !important;
-						line-height:1em;
+						margin-bottom:0px !important;
 					}
 					code {
 						display:block;
@@ -30,7 +38,7 @@
 						padding:5px 3px 3px 20px;
 					}
 					code .ssi-code {
-						background:#F3F3F3;
+						background:#EFEFEF;
 					}
 					#menu {
 						position:absolute;
@@ -96,8 +104,8 @@
 					.mdetails {
 						padding:1em;
 						margin-top:0.5em;
-						border:1px solid #bbb;
-						background-color:#F7F7F7;
+						border:1px solid #aaa;
+						background-color:#FBFBFB;
 					}
 					.button {
 						width:70px;
@@ -275,7 +283,7 @@
 					
 					<div class="cDescription"><xsl:value-of select="description" disable-output-escaping="yes"/></div>
 					
-					<table cellspacing="0" cellpadding="3" border="0">
+					<table cellspacing="0" id="info_{$currentClass}" cellpadding="3" border="0">
 					<tr>
 						<td class="label">Version:</td>
 						<td>
@@ -301,8 +309,8 @@
 					</xsl:if>
 					<xsl:if test="string-length(staticname/text()) &gt; 0">
 					<tr>
-						<td class="label">Static:</td>
-						<td><xsl:value-of select="staticname"/></td>
+						<td class="label">Staticname:</td>
+						<td><em><xsl:value-of select="staticname"/></em></td>
 					</tr>					
 					</xsl:if>
 					<xsl:if test="string-length(requires/types/type/text()) &gt; 0">

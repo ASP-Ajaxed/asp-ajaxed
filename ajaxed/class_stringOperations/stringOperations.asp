@@ -1,4 +1,4 @@
-<%
+﻿<%
 '**************************************************************************************************************
 '* License refer to license.txt		
 '**************************************************************************************************************
@@ -10,8 +10,8 @@
 '' @CREATEDON:		11.12.2003
 '' @STATICNAME:		str
 '' @CDESCRIPTION:	Collection of various useful string operations. An instance of this class
-''					called "str" is created when loading the page. Thus all methods can easily be
-''					accessed using str.methodName.
+''					called <em>str</em> is created when loading the page. Thus all methods can easily be
+''					accessed using <em>str.methodName</em>
 '' @VERSION:		1.1
 
 '**************************************************************************************************************
@@ -19,11 +19,11 @@ class StringOperations
 
 	'******************************************************************************************
 	'' @SDESCRIPTION:	Takes a string and tries to make it look more humanreadable. Its for creating pretty output
-	'' @DESCRIPTION:	- "_" are replaced by " " (also more underscores e.g. "___" are replaced by only one space)
-	''					- "_id" and "_fk" in the back are stripped as well as "id_" and "fk_" in the beginning
+	'' @DESCRIPTION:	- <em>_</em> (underscores) are replaced by a space character (also more underscores e.g. <em>___</em> are replaced by only one space)
+	''					- <em>_id</em> and <em>_fk</em> in the back are stripped as well as <em>id_</em> and <em>fk_</em> in the beginning
 	''					- everything is lower cased unless the first letter
 	'' @PARAM:			val [string]: the value which should be humanized
-	'' @RETURN:			[string] a pretty string. e.g. "created_on" => "Created on" or "fk_category" => "Category"
+	'' @RETURN:			[string] a pretty string. e.g. <em>created_on</em> => <em>Created on</em> or <em>fk_category</em> => <em>Category</em>
 	'******************************************************************************************
 	public function humanize(byVal val)
 		humanize = lCase(trim(rReplace(rReplace(val & "", "^fk_|^id_|_fk$|_id$", "", true), "_+", " ", true)))
@@ -32,11 +32,11 @@ class StringOperations
 	
 	'******************************************************************************************
 	'' @SDESCRIPTION:	performs a replace with a regular expression pattern
-	'' @DESCRIPTION:	e.g. surrounding all numbers of a string with brackets: <code>str.rReplace("i am 20 and he is 10", "(\d)", "($1)", true)</code>
+	'' @DESCRIPTION:	e.g. surrounding all numbers of a string with brackets: <code><% str.rReplace("i am 20 and he is 10", "(\d)", "($1)", true) % ></code>
 	'' @PARAM:			val [string]: the value you want to replace the matches
 	'' @PARAM:			pattern [string]: regular expression pattern
 	'' @PARAM:			replaceWith [string]: a string which is used for the replacement of the matches
-	''					- $1, $2, .. can be used as placeholders for grouped expressions of the regex pattern
+	''					- <em>$1, $2</em>, .. can be used as placeholders for grouped expressions of the regex pattern
 	'' @PARAM:			ignoreCase [bool]: ignore the case on comparison
 	'' @RETURN:			[string] returns the new string with replacements made. if no replacements made then the same string is returned as given on input
 	'******************************************************************************************
@@ -54,7 +54,7 @@ class StringOperations
 	'' @PARAM:			val [string]: the value which needs to be checked against the pattern
 	'' @PARAM:			pattern [string]: regular expression pattern
 	'' @PARAM:			ignoreCase [bool]: ignore the case on comparison
-	'' @RETURN:			[bool] true if val matches the pattern otherwise false
+	'' @RETURN:			[bool] TRUE if val matches the pattern otherwise false
 	'******************************************************************************************
 	public function matching(val, pattern, ignoreCase)
 		set re = new regexp
@@ -68,12 +68,12 @@ class StringOperations
 	'******************************************************************************************
 	'' @SDESCRIPTION:	returns a full URL with a given file and given parameters
 	'' @DESCRIPTION:	it encodes automatically the values of the parameters.
-	'' @PARAM:			path [string]: the path to the file. e.g. /file.asp, f.asp, http://domain.com/f.asp
-	'' @PARAM:			params [string], [array]: the parameters for the url (querystring). if its an array
-	''					then every even field is the name and every odd field is the value. if its a string
-	''					then its treated as jusst one parameter value for the URL. e.g. file.asp?oneValue
-	'' @PARAM:			anker [string]: a jump label. will be appended with # to the end of the URL. empty if no given
-	'' @RETURN:			[string] an URL build with the parameters and fully URL-encoded. example: /file.asp?x=10
+	'' @PARAM:			path [string]: the path to the file. e.g. <em>/file.asp</em>, <em>f.asp</em>, <em>http://domain.com/f.asp</em>
+	'' @PARAM:			params [string], [array]: the parameters for the url (querystring). if its an ARRAY
+	''					then every even field is the name and every odd field is the value. if its a STRING
+	''					then its treated as jusst one parameter value for the URL. e.g. <em>file.asp?oneValue</em>
+	'' @PARAM:			anker [string]: a jump label. will be appended with <em>#</em> to the end of the URL. EMPTY if no given
+	'' @RETURN:			[string] an URL build with the parameters and fully URL-encoded. example: <em>/file.asp?x=10</em>
 	'******************************************************************************************
 	public function URL(path, params, anchor)
 		URL = path
@@ -90,14 +90,11 @@ class StringOperations
 	end function
 	
 	'******************************************************************************************
-	'' @SDESCRIPTION:	an extension of the common replace() function. basically the same
+	'' @SDESCRIPTION:	an extension of the common <em>replace()</em> function. basically the same
 	''					but you can replace more parts in one go.
-	'' @DESCRIPTION:	find (array) -> replaceWith (string): every match of 'find' will be replaced with the string
-	''					find (array[n]) -> replaceWith (array[n]): must be same size! every field will be replaced by the field
-	''					of replaceWith with the same index.
-	''					find (array[n]) -> replaceWith (array[m]): n > m! for the missing fields the last one will be taken
-	''					for replacement. e.g. find  = array(1, 2), replaceWith = array(3) means that the 1 will be replaced with
-	''					3 and the 2 will also be replaced with 3 because there is no equivalent for the 2
+	'' @DESCRIPTION:	- <em>find (array)</em> -> <em>replaceWith (string)</em>: every match of 'find' will be replaced with the string
+	''					- <em>find (array[n])</em> -> <em>replaceWith (array[n])</em>: must be same size! every field will be replaced by the field of replaceWith with the same index.
+	''					- <em>find (array[n])</em> -> <em>replaceWith (array[m])</em>: n > m! for the missing fields the last one will be taken for replacement. e.g. <code><% str.change("somestring", array(1, 2), array(3)) % ></code> means that the 1 will be replaced with 3 and the 2 will also be replaced with 3 because there is no equivalent for the 2
 	'' @PARAM:			source [string]: the source string in which we search
 	'' @PARAM:			find [string], [array]: what you are looking for. 
 	'' @PARAM:			replaceWith [string], [array]: the value you want to replace the matches with.
@@ -126,12 +123,12 @@ class StringOperations
 	end function
 	
 	'******************************************************************************************
-	'' @SDESCRIPTION:	checks if a given string can be found in a given array
-	'' @DESCRIPTION:	all values in the array are treated as strings when comparing
+	'' @SDESCRIPTION:	checks if a given string can be found in a given ARRAY
+	'' @DESCRIPTION:	all values in the ARRAY are treated as strings when comparing
 	'' @PARAM:			aString [string]: the string which should be checked against
 	'' @PARAM:			anArray [array]: the array with values where the function will walk through
 	'' @PARAM:			caseSensitive [bool]: should the search be case sensitive?
-	'' @RETURN:			[int] index of the first found field within the array. -1 if not found
+	'' @RETURN:			[int] index of the first found field within the ARRAY. <em>-1</em> if not found
 	'******************************************************************************************
 	public function existsIn(byVal aString, byVal anArray, caseSensitive)
 		aString = lib.iif(caseSensitive, aString & "", lCase(aString & ""))
@@ -145,10 +142,30 @@ class StringOperations
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	tries to parse a given value into the datatype of the alternative. If it cannot be parsed
 	''					then the alternative is passed through
-	'' @DESCRIPTION:	it ALWAYS returns the type of the alternative
-	'' @PARAM:			value [string]: value which should be parsed
+	'' @DESCRIPTION:	It ALWAYS returns the type of the alternative. Recommended usage when getting values from querystring or form:
+	''					<code>
+	''					'gets the ID value from querystring and ensures its an integer.
+	''					'if it cannot be parsed then always 0 is returned
+	''					id = str.parse(page.QS("id"), 0)
+	''					'the same with a form value
+	''					id = str.parse(page.RF("id"), 0)
+	''					'parsing to a float number
+	''					nr = str.parse("212.22", 0.0)
+	''					</code>
+	'' @PARAM:			value [string]: value which should be parsed.
+	''					Float values are only recognized with the comma which is common for the current locale (check <em>local.comma</em>.
+	''					<code>
+	''					<%
+	''					'e.g. US
+	''					str.parse("12.3", 0.0) ' => 12.3
+	''					str.parse("12,3", 0.0) ' => 123
+	''					'e.g. Germany
+	''					str.parse("12.3", 0.0) ' => 123
+	''					str.parse("12,3", 0.0) ' => 12.3
+	''					% >
+	''					</code>
 	'' @PARAM:			alternative [variant]: alternative value if converting is not possible
-	''					- if a float value is needed then use a comma. e.g. 0.0
+	''					- if a FLOAT value is needed then use a comma. e.g. <em>0.0</em>
 	'' @RETURN:			[variant] the string parsed into the alternative type or the alternative itself
 	'******************************************************************************************************************
 	public function parse(value, alternative)
@@ -175,14 +192,14 @@ class StringOperations
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	OBSOLETE! use parse() instead
+	'' @SDESCRIPTION:	OBSOLETE! use <em>parse()</em> instead
 	'******************************************************************************************************************
 	public function toFloat(value, alternative)
 		toFload = parse(value, alternative)
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	OBSOLETE! use parse() instead
+	'' @SDESCRIPTION:	OBSOLETE! use <em>parse()</em> instead
 	'******************************************************************************************************************
 	public function toInt(value, alternative)
 		toInt = parse(value, alternative)
@@ -190,7 +207,7 @@ class StringOperations
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	right-aligns a given value by padding left a given character to a totalsize
-	'' @DESCRIPTION:	example: input: 22 -> output: 00022 (padded to total length of 5 with the paddingchar 0)
+	'' @DESCRIPTION:	example: input: <em>22</em> -> output: <em>00022</em> (padded to total length of 5 with the paddingchar 0)
 	'' @PARAM:			value [string]: the value which should be aligned right
 	'' @PARAM:			totalLength [string]: whats the total Length of the result string
 	'' @PARAM:			paddingChar [string]: the char which is taken for padding
@@ -202,7 +219,7 @@ class StringOperations
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	left-aligns a given value by padding right a given character to a totalsize
-	'' @DESCRIPTION:	example: input: 22 -> output: 22000 (padded to total length of 5 with the paddingchar 0)
+	'' @DESCRIPTION:	example: input: <em>22</em> -> output: <em>22000</em> (padded to total length of 5 with the paddingchar 0)
 	'' @PARAM:			value [string]: the value which should be aligned left
 	'' @PARAM:			totalLength [string]: whats the total Length of the result string
 	'' @PARAM:			paddingChar [string]: the char which is taken for padding
@@ -213,7 +230,7 @@ class StringOperations
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	defuses the HTML of  given string. so html code wont be recognized as HTML code by browser
+	'' @SDESCRIPTION:	defuses the HTML of given string. so html code wont be recognized as HTML code by browser
 	'' @PARAM:			value [string]: the value which should be defused
 	'' @RETURN:			[string] defused value
 	'******************************************************************************************************************
@@ -225,9 +242,9 @@ class StringOperations
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	makes a given string safe for the use within sql statements
 	'' @DESCRIPTION:	e.g. if its necessary to pass through an user input directly into a sql-query
-	''					example on a basic login scenario: <code>sql = "SELECT * FROM user WHERE login = " & str.SQLSafe(username)</code>
+	''					example on a basic login scenario: <code><% sql = "SELECT * FROM user WHERE login = " & str.SQLSafe(username) % ></code>
 	'' @PARAM:			value [string]: the value which should be made "safe"
-	'' @RETURN:			[string] safe value. e.g. ' are escaped with '', etc.
+	'' @RETURN:			[string] safe value. e.g. <em>'</em> are escaped with <em>''</em>, etc.
 	'******************************************************************************************************************
 	public function SQLSafe(value)
 		SQLSafe = replace(value & "", "--", "")
@@ -238,8 +255,9 @@ class StringOperations
 	'' @DESCRIPTION: 	Makes a string javascript persistent. Changes special characters, etc.
 	'' @DESCRIPTION:	using this function it has to be possible to pass any string which should be 
 	''					executed in a javascript later. example: you want to execute the following
-	''					onclick="obj.value='" & usrInput & "'. so in this case usrInput needs to be validated that no
-	''					javascript error happens when he/she enters e.g. a '.
+	''					<code>
+	''					<button onclick="this.value='" & str.JSEncode(usrInput) & "'"></button>
+	''					</code>
 	'' @PARAM:			val [string]: the value which needs to be encoded
 	'' @RETURN:			[string] encoded string which can be used within javascript strings.
 	'******************************************************************************************************************
@@ -275,9 +293,9 @@ class StringOperations
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	encodes a value so that any special chars will be transformed into html entities.
-	''					e.g. " will be &quot;
+	''					e.g. <em>"</em> will converted to <em>&quot;</em>
 	'' @DESCRIPTION:	should be used in all views to prevent XSS. for that reason its also the default function so its
-	''					easier to use. example of usage in your views: <code>str("some value <>")</code>
+	''					easier to use. example of usage in your views (as its the default function it can be used directly on the instance): <code>str("some value <>")</code>
 	'' @PARAM:			value [string]: the value you want to encode
 	'******************************************************************************************************************
 	public default function HTMLEncode(value)
@@ -296,7 +314,7 @@ class StringOperations
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	returns null if the input is empty. 
 	'' @PARAM:			value [variant]: the value you are dealing with
-	'' @RETURN:			[variant] null if the value is empty, otherwise the value itself
+	'' @RETURN:			[variant] NULL if the value is EMPTY, otherwise the value itself
 	'******************************************************************************************************************
 	public function nullIfEmpty(value)
 		nullIfEmpty = value
@@ -331,7 +349,7 @@ class StringOperations
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	removes all Tags from a given string
-	'' @DESCRIPTION:	Tags are defined as string-parts surrounded by a < and a >. example: <sample>
+	'' @DESCRIPTION:	Tags are defined as string-parts surrounded by a <em><</em> and a <em>></em>. example: <em>&lt;sample&gt;</em>
 	'' @PARAM:			inputStr [string]: string where the Tags should be removed
 	'' @RETURN:			[string] the input-String without any Tags
 	'******************************************************************************************************************
@@ -344,8 +362,8 @@ class StringOperations
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	divides a string into several string-paritions of a given length
-	'' @DESCRIPTION:	string "HAXN" will result (partitionlength=2) in the following array:
-	''					a(0) = "HA"; a(1) = "XN"
+	'' @DESCRIPTION:	string <em>HAXN</em> will result (<em>partitionlength = 2</em>) in the following array:
+	''					<em>array("HA", "XN")</em>
 	'' @PARAM:			inputStr [string]: string which should be divided
 	'' @PARAM:			partitionLength [string]: the length of each partion
 	'' @RETURN:			[array] array with all partitions
@@ -370,7 +388,9 @@ class StringOperations
 	end sub
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	shortens a string and adds a custom string at the end if string is longer than a given value.
+	'' @SDESCRIPTION:	Shortens a string and adds a custom string at the end if string is longer than a given value.
+	'' @DESCRIPTION:	Useful if you want to display excerpts:
+	''					<code><%= str.shorten("some value", 10, "...") % ></code>
 	'' @PARAM:			str [string]: string which should be checked against cutting
 	'' @PARAM:			maxChars [string]: whats the maximum allowed length of chars
 	'' @PARAM:			overflowString [int]: what string should be added at the end of the string if it has been cutted
@@ -387,8 +407,8 @@ class StringOperations
 	'' @DESCRIPTION:	it uses the split function but immediately returns you the field you want.
 	'' @PARAM:			stringToSplit [string]: the string you want to split
 	'' @PARAM:			delimiter [string]: whats the delimiter for splitting
-	'' @PARAM:			returnIndex [int]: what index should be returned after spliting?. -1 = get the last index
-	'' @RETURN:			[string] string content for the wanted field of the array
+	'' @PARAM:			returnIndex [int]: what index should be returned after spliting?. <em>-1</em> = get the last index
+	'' @RETURN:			[string] string content for the needed field of the ARRAY
 	'******************************************************************************************************************
 	public function splitValue(stringToSplit, delimiter, returnIndex)
 		tmpArray = split(stringToSplit, delimiter)
@@ -398,7 +418,7 @@ class StringOperations
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	adds a slash "/" at the end of the string if there isnt one.
+	'' @SDESCRIPTION:	adds a slash <em>/</em> at the end of the string if there isnt one.
 	'' @DESCRIPTION:	Good use for urls or paths if you want to be sure that there is a slash at the end
 	''					of an url or a path. 
 	'' @PARAM:			pathString [string]: The string (url, path) you want to check
@@ -426,7 +446,7 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Converts a string to a "char" array
+	'' @SDESCRIPTION:	Converts a STRING to a CHAR ARRAY
 	'' @PARAM:			str [string]: the string you want to convert
 	'' @RETURN:			[array] a "char" array
 	'**************************************************************************************************************
@@ -439,9 +459,10 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Converts an array to a string
+	'' @SDESCRIPTION:	Converts an ARRAY to a STRING
+	'' @DESCRIPTION:	<code><% str.arrayToString(array(1, 2, 3), ",") '=> 1,2,3 % ></code>
 	'' @PARAM:			arr [Array]: the array you want to concat
-	'' @PARAM:			seperator [string]: seperator between the array-fields
+	'' @PARAM:			seperator [string]: seperator between the array fields e.g. <em>,</em>
 	'' @RETURN:			[string] concated array
 	'**************************************************************************************************************
 	public function arrayToString(byVal arr, seperator)
@@ -455,12 +476,12 @@ class StringOperations
 	end function
 	
 	'******************************************************************************************
-	'' @SDESCRIPTION:	Converts a part of a multidimensional array to a string
+	'' @SDESCRIPTION:	Converts a part of a multidimensional ARRAY to a STRING
 	'' @PARAM:			arr [Array]: the array you want to concat
 	'' @PARAM:			seperator [string]: seperator between the array-fields
-	'' @PARAM:			dimension [int]: the dimension index in the array -> e.g. you have an
-	''					array of the size (5, 2) -> with dimension 2 you get the array fields
-	''					(0, 2), (1, 2), ..., (4, 2) as the string object, savvy ?
+	'' @PARAM:			dimension [int]: the dimension index in the array e.g. you have an
+	''					array of the size <em>(5, 2)</em> -> with <em>dimension</em> <em>2</em> you get the array fields
+	''					<em>(0, 2), (1, 2)</em>, ..., <em>(4, 2)</em> as a string.
 	'' @RETURN:			[string] concated array
 	'******************************************************************************************
 	public function multiArrayToString(byVal arr, seperator, dimension)
@@ -474,27 +495,27 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Checks if the string begins with ...
+	'' @SDESCRIPTION:	Checks if the string begins with a given string. Case sensitive.
 	'' @PARAM:			str [string]: the source string
 	'' @PARAM:			chars [string]: the compare char/string
-	'' @RETURN:			[bool] true if the two strings are equal
+	'' @RETURN:			[bool] true if source string starts with the <em>chars</em> string
 	'**************************************************************************************************************
 	public function startsWith(byVal str, chars)
 		startsWith = (left(str, len(chars)) = chars)
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Checks if the string ends with ...
+	'' @SDESCRIPTION:	Checks if the string ends with a given string. Case sensitive.
 	'' @PARAM:			str [string]: the source string
 	'' @PARAM:			chars [string]: the compare char/string
-	'' @RETURN:			[bool] true if the two strings are equal
+	'' @RETURN:			[bool] true if the source string ends with the <em>chars</em> string
 	'**************************************************************************************************************
 	public function endsWith(byVal str, chars)
 		endsWith = (right(str, len(chars)) = chars)
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Concats a string "n" times
+	'' @SDESCRIPTION:	Concats a string <em>n</em> times
 	'' @PARAM:			str [string]: the source string
 	'' @PARAM:			n [int]: the number of concats
 	'' @RETURN:			[string] the concated string
@@ -504,7 +525,7 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Removes characters from the begin of a string
+	'' @SDESCRIPTION:	Removes a given amount of characters from the begining of a string
 	'' @PARAM:			str [string]: the source string
 	'' @PARAM:			n [int]: the number of characters you want to remove
 	'' @RETURN:			[string] the trimmed string
@@ -515,7 +536,7 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Removes characters from the end of a string
+	'' @SDESCRIPTION:	Removes a given amount of characters from the end of a string
 	'' @PARAM:			str [string]: the source string
 	'' @PARAM:			n [int]: the number of characters you want to remove
 	'' @RETURN:			[string] the trimmed string
@@ -528,7 +549,7 @@ class StringOperations
 	'**************************************************************************************************************
 	'' @SDESCRIPTION:	Removes characters from a given string with all occurencies of a matching string
 	'' @PARAM:			str [string]: the source string
-	'' @PARAM:			stringToTrim [string]: the "find" string which will be trimmed out of the string
+	'' @PARAM:			stringToTrim [string]: the string which will be trimmed out of the string
 	'' @RETURN:			[string] the trimmed string
 	'**************************************************************************************************************
 	public function trimString(byVal str, stringToTrim)
@@ -536,17 +557,19 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Checks if a char is an alphabetic character or not. A-Z or a-z
+	'' @SDESCRIPTION:	Checks if given a char is an alphabetic character (<em>A-Z</em> or <em>a-z</em>) or not.
 	'' @PARAM:			character [char]: The char to check
-	'' @RETURN:			[bool] Wether the char is alphabetic or not.
+	'' @RETURN:			[bool] TRUE the char is alphabetic otherwise FALSE.
 	'**************************************************************************************************************
 	public function isAlphabetic(byVal character)
+		isAlphabetic = false
+		if character = "" then exit function
 		asciiValue = cint(asc(character))
 		isAlphabetic = ((65 <= asciiValue and asciiValue <= 90) or (97 <= asciiValue and asciiValue <= 122))
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Swaps the Case of a String. Lower to Upper and vice a versa
+	'' @SDESCRIPTION:	Swaps the Case of a String. lowercase chars to uppercase and vice a versa
 	'' @PARAM:			str [string]: the source string
 	'' @RETURN:			[string] the swapped string
 	'**************************************************************************************************************
@@ -566,8 +589,8 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Makes every first letter of every word to upper-case.
-	'' @DESCRIPTION:	Good for Names or cities. Example: "axel schweis" will result in "Axel Schweis"
+	'' @SDESCRIPTION:	Converts every first letter of every word into uppercase.
+	'' @DESCRIPTION:	Good for Names or cities. Example: <em>jack johnson</em> will result in <em>Jack Johnson</em>
 	'' @PARAM:			str [string]: the source string
 	'' @RETURN:			[string] changed string
 	'**************************************************************************************************************
@@ -582,8 +605,8 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Switches the case of the letters alternatly to U/Lcase - just for fun :)
-	'' @DESCRIPTION:	So "testing" will result in "TeStInG"
+	'' @SDESCRIPTION:	Switches the case of the letters alternatly to upper/lowercase - just for fun :)
+	'' @DESCRIPTION:	So e.g the word <em>testing</em> will result in <em>TeStInG</em>
 	'' @PARAM:			str [string]: the source string
 	'' @RETURN:			[string] changed string
 	'**************************************************************************************************************
@@ -598,12 +621,13 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Replaces all {n} values in a given string through the n-index field of an array.
-	'' @DESCRIPTION:	Its just like the string.format method in .NET. so if you provide "my Name is {0}" as
-	''					your input then the {0} will be replaced by the first field of your array. and so on.
-	''					- in case you get an error about unsupported character sequence, then your string contains a special character sequence which is used internally for escaping (the sequence consists of non printable characters). Thus it cannot be used as input.
+	'' @SDESCRIPTION:	Replaces all <em>{n}</em> placeholders in a given string through the n-index field of a given array.
+	'' @DESCRIPTION:	Its just like the <em>string.format</em> method in .NET. So if you have a string <em>my Name is {0}</em> as
+	''					your input then the <em>{0}</em> will be replaced by the first field of your array. And so on and so forth.
+	''					- Placeholders can be used multiple times within the source string
+	''					- In case you get an error about unsupported character sequence, then your string contains a special character sequence which is used internally for escaping (the sequence consists of non printable characters). Thus it cannot be used as input.
 	'' @PARAM:			str [string]: the source string
-	'' @PARAM:			values [array], [string]: your values which replace the placeholders. if string then only one value otherwise use array
+	'' @PARAM:			values [array], [string]: your values which should replace the placeholders. Use a STRING if you have only one placeholder to replace
 	'' @RETURN:			[string] changed string
 	'**************************************************************************************************************
 	public function format(byVal str, byVal values)

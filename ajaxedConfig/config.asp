@@ -60,6 +60,8 @@
 'MSSQL
 	'AJAXED_CONNSTRING = "Driver={SQL Server};Server=localhost;Database=YOUR_DB;Uid=YOUR_USER;Pwd=YOUR_PASSWORD;"
 'mySQL
+	'Note: mySQL ODBC driver 5.1 fully supports UTF-8 wheras 3.51 does not!!!
+	'AJAXED_CONNSTRING = "Driver={MySQL ODBC 5.1 Driver};Server=localhost;Database=YOUR_DB;User=YOUR_USER;Password=YOUR_PASSWORD;Option=3;"
 	'AJAXED_CONNSTRING = "Driver={MySQL ODBC 3.51 Driver};Server=localhost;Database=YOUR_DB;User=YOUR_USER;Password=YOUR_PASSWORD;Option=3;"
 'MS ACCESS 2008
 	'AJAXED_CONNSTRING = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\myFolder\myAccess2007file.accdb;Persist Security Info=False;"

@@ -6,9 +6,19 @@
 '' @CREATEDON:		12.09.2003
 '' @STATICNAME:		lib
 '' @CDESCRIPTION:	This class holds all general methods used within the library. They are accessible
-''					through an already existing instance called "lib". It represents the Library itself somehow.
-''					Thats why e.g. its possible to get the current version of the library using lib.version
-''					- environment specific configs are loaded when an instance of Library is created (thus its possible to override configs dependent on the environment). just place a sub called envDEV to override configs for the dev environment. envLIVE for the live.
+''					through an already existing instance called <em>lib</em>. It represents the Ajaxed Library itself somehow ;)
+''					Thats why e.g. its possible to get the current version of the library using <em>lib.version</em>
+''					- environment specific configs are loaded when an instance of Library is created (thus its possible to override configs dependent on the environment). just place a sub called <em>envDEV</em> to override configs for the <em>dev</em> environment. <em>envLIVE</em> for the <em>live</em>. Note: The config var must be defined outside the sub in order to work:
+''					<code>
+''					<%
+''					'by default we disable the logging
+''					AJAXED_LOGLEVEL = 0
+''					sub envDEV()
+''					.	'but we enable it on the dev environment
+''					.	AJAXED_LOGLEVEL = 1
+''					end sub
+''					% >
+''					</code>
 '' @VERSION:		1.0
 
 '**************************************************************************************************************
@@ -39,7 +49,7 @@ class Library
 		version = "1.1"
 	end property
 	
-	public property get env ''[string] gets the current environment. LIVE or DEV
+	public property get env ''[string] gets the current environment. <em>LIVE</em> or <em>DEV</em>
 		env = uCase(init(AJAXED_ENVIRONMENT, "DEV"))
 		'always return development unless its really live
 		if env <> "LIVE" then env = "DEV"
@@ -49,7 +59,7 @@ class Library
 		LIVE = env = "LIVE"
 	end property
 	
-	public property get dev ''[bool] indicates if the environment is the development evn
+	public property get dev ''[bool] indicates if the environment is the development env
 		DEV = env = "DEV"
 	end property
 	
@@ -77,8 +87,8 @@ class Library
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	gets the virtual path of the ajaxed library root folder.
 	'' @DESCRIPTION:	useful for static files like e.g. javascript, css which are used internally by the library
-	'' @PARAM:			filename [string]: some file which should be appended to the root path. e.g. class_rss/rss.asp would return /ajaxed/class_rss/rss.asp leave empty if not required
-	'' @RETURN:			[string] path of ajaxed root folder. e.g. /ajaxed/
+	'' @PARAM:			filename [string]: some file which should be appended to the root path. e.g. <em>class_rss/rss.asp</em> would return <em>/ajaxed/class_rss/rss.asp</em> leave EMPTY if not required
+	'' @RETURN:			[string] path of ajaxed root folder. e.g. <em>/ajaxed/</em>
 	'**********************************************************************************************************
 	public function path(filename)
 		path = libraryLocation & filename
@@ -101,7 +111,7 @@ class Library
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	Detects the first loadable server component from a given list. 
 	'' @PARAM:			components [array]: names of the components you want to try to detect
-	'' @RETURN:			[string] name of the component which could be loaded first or empty if no one could be loaded
+	'' @RETURN:			[string] name of the component which could be loaded first or EMPTY if no one could be loaded
 	'**********************************************************************************************************
 	public function detectComponent(components)
 		detectComponent = empty
@@ -118,24 +128,17 @@ class Library
 	end function
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION:	checks if a given datastructure contains a given value
-	'' @DESCRIPTION:	- returns false if the datastructure cannot be determined
+	'' @SDESCRIPTION:	OBSOLETE! Checks if a given datastructure contains a given value. Use <em>DataContainer.contains()</em> instead.
+	'' @DESCRIPTION:	returns FALSE if the datastructure cannot be determined
 	'' @PARAM:			data [array], [dictionary]: the data structure which should be checked against.
 	''					if its a dictionary then the key is used for comparison.
 	'' @RETURN:			[bool] true if it contains the value
 	'**********************************************************************************************************
-	public function contains(byRef data, val)
-		contains = true
-		if isArray(data) then
-			for each d in data
-				if d & "" = val & "" then exit function
-			next
-		elseif lCase(typename(data)) = "dictionary" then
-			for each k in data.keys
-				if k & "" = val & "" then exit function
-			next
-		end if
+	public function contains(byRef data, byVal val)
+		logger.warn("lib.contains() is obsolete. Use DataContainer.contains() instead.")
 		contains = false
+		set dt = (new DataContainer)(data)
+		if not dt is nothing then contains = dt.contains(val)
 	end function
 	
 	'**********************************************************************************************************
@@ -164,8 +167,8 @@ class Library
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	calls a given function/sub if it exists
 	'' @DESCRIPTION:	tries to call a given function/sub with the given parameters.
-	''					the scope is the scope when calling exec. 
-	'' @PARAM:			params [variant]: you choose how you provide your params. provide empty to call a procedure without parameters
+	''					the scope is the scope where exec is called. 
+	'' @PARAM:			params [variant]: you choose how you provide your params. provide EMPTY to call a procedure without parameters
 	'' @RETURN:			[variant] whatever the function returns
 	'**********************************************************************************************************
 	public function exec(functionName, params)
@@ -180,7 +183,8 @@ class Library
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	gets a reference to a function/sub by a given name.
-	'' @DESCRIPTION:	if function was found it can be executed afterwards. eg. set f = getFunction("test") : f
+	'' @DESCRIPTION:	if function was found it can be executed afterwards. e.g. 
+	''					<code><% set f = getFunction("test") : f % ></code>
 	'' @RETURN:			[object] reference to the function/sub or nothing if not found
 	'**********************************************************************************************************
 	public function getFunction(functionName)
@@ -192,8 +196,8 @@ class Library
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	gets a new dictionary filled with a list of values
-	'' @PARAM:			values [array]: values to fill into the dictionary. array( array(key, value), arrray(key, value) )
-	''					if the fields are not arrays (valuepairs) then the key is generated automatically. if no array
+	'' @PARAM:			values [array]: values to fill into the dictionary. <em>array( array(key, value), arrray(key, value) )</em>.
+	''					if the fields are not arrays (name value pairs) then the key is generated automatically. if no array
 	''					provided then an empty dictionary is returned
 	'' @RETURN:			[dictionary] dictionary with values.
 	'**********************************************************************************************************
@@ -211,11 +215,11 @@ class Library
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	throws an ASP runtime Error which can be handled with on error resume next
-	'' @DESCRIPTION:	if you want to throw an error where just the user should be notified use lib.error instead
+	'' @DESCRIPTION:	if you want to throw an error where just the user should be notified use <em>lib.error</em> instead
 	'' @PARAM:			args [array], [string]: 
-	''					- if array then fields => number, source, description
+	''					- if ARRAY then fields => number, source, description
 	''					- The number range for user errors is 512 (exclusive) - 1024 (exclusive)
-	''					- if args is a string then its handled as the description and an error is raised with the
+	''					- if <em>args</em> is a string then its handled as the description and an error is raised with the
 	''					number 1024 (highest possible number for user defined VBScript errors)
 	'**********************************************************************************************************
 	public sub throwError(args)
@@ -240,11 +244,11 @@ class Library
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	writes an error and ends the response. for unexpected errors
-	'' @DESCRIPTION:	this error should be used for any unexpected errors. In comparison to throwError
+	'' @DESCRIPTION:	this error should be used for any unexpected errors. In comparison to <em>throwError</em>
 	''					it should only be used if a common error message should be displayed to the user instead of
-	''					raising a real ASP error (throwError).
+	''					raising a real ASP error (<em>throwError</em>).
 	''					- if buffering is turned off then the already written response won't be cleared.
-	''					- error is logged into the log on the dev env
+	''					- error is logged into the log on the <em>dev</em> env
 	'' @PARAM:			msg [string]: error message
 	'******************************************************************************************************************
 	public sub [error](msg)
@@ -268,9 +272,9 @@ class Library
 	end function
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION:	initializes a variable with a default value if the variable is not set set (isEmpty)
+	'' @SDESCRIPTION:	initializes a variable with a default value if the variable is not set set (<em>isEmpty</em>)
 	'' @PARAM:			var [variant]: some variable
-	'' @PARAM:			default [variant]: the default value which should be taken if the var is not set
+	'' @PARAM:			default [variant]: the default value which should be taken if the var is not set (if it is EMPTY)
 	'' @RETURN:			[variant] if var is set then the var otherwise the default value.
 	'**********************************************************************************************************
 	public function init(var, default)
@@ -298,6 +302,7 @@ class Library
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Returns an unique ID for each pagerequest, starting with 1
+	'' @DESCRIPTION:	It is not assured that the returned id is always the same. But it is assured that it is unique on the current page request.
 	'' @RETURN:			uniqueID [int]: the unique id
 	'******************************************************************************************************************
 	public function getUniqueID()
@@ -306,11 +311,11 @@ class Library
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION: 	Opposite of server.URLEncode
-	'' @PARAM:			- endcodedText [string]: your string which should be decoded. e.g: Haxn%20Text (%20 = Space)
+	'' @SDESCRIPTION: 	Opposite of <em>server.URLEncode</em>
+	'' @PARAM:			- endcodedText [string]: your string which should be decoded. e.g: <em>Haxn%20Text</em> (%20 = Space)
 	'' @RETURN:			[string] decoded string
 	'' @DESCRIPTION: 	If you store a variable in the queryString then the variables input will be automatically
-	''					encoded. Sometimes you need a function to decode this %20%2H, etc.
+	''					encoded. Sometimes you need a function to decode this <em>%20%2H</em>, etc.
 	'******************************************************************************************************************
 	public function URLDecode(endcodedText)
     	decoded = endcodedText
@@ -325,14 +330,16 @@ class Library
     end function
 	
 	'******************************************************************************************************************
-	'' @DESCRIPTION: 	This will replace the IIf function that is missing from the intrinsic functions of ASP
-	'' @PARAM:			i [variant]: condition
-	'' @PARAM:			j [variant]: expression 1
-	'' @PARAM:			k [variant]: expression 2
-	'' @RETURN:			[string]
+	'' @SDESCRIPTION: 	This will replace the <em>IIf</em> function that is missing from the intrinsic functions of VBScript
+	'' @DESCRIPTION:	Makes code more readable by placing a conditional in one line:
+	''					<code><% cssClass = lib.iif(i mod 2 = 0, "even", "odd") % ></code>
+	'' @PARAM:			condition [variant]: condition (must return TRUE or FALSE)
+	'' @PARAM:			expression1 [variant]: expression which is returned if the condition is TRUE
+	'' @PARAM:			expression2 [variant]: expression which is returned if the condition is FALSE
+	'' @RETURN:			[string] returns <em>expression1</em> if <em>condition</em> is TRUE otherwise <em>expression2</em>
 	'******************************************************************************************************************
-	public function iif(i, j, k)
-    	if i then iif = j else iif = k
+	public function iif(condition, expression1, expression2)
+    	if condition then iif = expression1 else iif = expression2
 	end function
 
 end class

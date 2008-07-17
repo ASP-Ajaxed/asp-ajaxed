@@ -8,17 +8,23 @@ sub test_1()
 	set r = new RSS
 	r.url = "http://www.webdevbros.net/feed/"
 	r.load()
-	tf.assertNot r.failed, "webdevbros RSS loading failed"
-	tf.assert r.title <> "", "title of the feed must be set"
-	tf.assert r.items.count > 0, "there must be some blog posts"
+	if r.failed then
+		tf.info("Could not load the webdevbros feed. Maybe no internet connection available")
+	else
+		tf.assert r.title <> "", "title of the feed must be set"
+		tf.assert r.items.count > 0, "there must be some blog posts"
+	end if
 end sub
 
 sub test_2()
 	set r = new RSS
 	r.url = "http://www.grafix.at/ajaxed/console/version.asp"
 	r.load()
-	tf.assertNot r.failed, "ajaxed updater is not available"
-	tf.assertEqual "ajaxed version feed", r.title, "title of the feed does not match"
-	tf.assert r.description <> "", "version released text must be there"
+	if r.failed then
+		tf.info("Could not load the ajaxed version feed. Maybe no internet connection available")
+	else
+		tf.assertEqual "ajaxed version feed", r.title, "title of the feed does not match"
+		tf.assert r.description <> "", "version released text must be there"
+	end if
 end sub
 %>

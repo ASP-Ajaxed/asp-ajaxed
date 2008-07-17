@@ -10,11 +10,25 @@
 '' @CREATOR:		michal
 '' @CREATEDON:		2008-04-03 19:21
 '' @CDESCRIPTION:	Represents a test fixture which can consist of one ore more tests.
-''					- Tests must be subs which are named test_1, test_2, ...
-''					- call the different assert methods within your tests
-''					- if you need to debug your failures then turn on the 'debug' property
-''					- create a setup sub if you need a procedure which will be called before every test
-''					- run the fixture with the run-method
+''					- Tests must be subs which are named <em>test_1()</em>, <em>test_2()</em>, etc. 
+''					- Call the different assert methods within your tests
+''					- if you need to debug your failures then turn on the <em>debug</em> property
+''					- create a <em>setup()</em> sub if you need a procedure which will be called before every test
+''					- run the fixture with the <em>run()</em> method
+''					Example of a simple test (put this in an own file):
+''					<code>
+''					<!--#include virtual="/ajaxed/class_TestFixture/testFixture.asp"-->
+''					<%
+''					set tf = new TestFixture
+''					tf.run()
+''					
+''					sub test_1()
+''					.	tf.assert 1 = 1, "1 is not equal 2"
+''					.	'Lets test if our home page works
+''					.	tf.assertResponse "/default.asp", empty, "<h1>Welcome</h1>", "Welcome page seems not to work"
+''					end sub
+''					% >
+''					</code>
 '' @REQUIRES:		-
 '' @VERSION:		0.1
 
@@ -25,9 +39,9 @@ class TestFixture
 	private currentTest, assertsInCurrentTest, testsMade, testsFailed, assertsMade, assertsFailed
 	
 	'public members
-	public debug			''[bool] turn this on to debug your tests. error handlin is turned off then. default = false
-	public lineBreak		''[string] the line break which should be used between each message. default = <br>
-	public requestTimeout	''[int] timout for page requests. e.g. when using asserResponse() default = 3
+	public debug			''[bool] Turn this on to debug your tests. error handling is turned off then. default = FALSE
+	public lineBreak		''[string] The line break which should be used between each message. default = <em>&lt;br&gt;</em>
+	public requestTimeout	''[int] Timout for page requests. e.g. when using <em>asserResponse()</em> default = <em>3</em>
 	
 	'**********************************************************************************************************
 	'* constructor 
@@ -46,9 +60,10 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	runs the tests of the test fixture
-	'' @DESCRIPTION:	executes all subs starting with 'test_' followed by a number. Numbers must start with 1
-	''					- if there is a setup sub, then its called before every test
+	'' @SDESCRIPTION: 	Runs all defined tests of the test fixture
+	'' @DESCRIPTION:	Executes all subs starting with <em>test_</em> followed by a number. Numbers must start with <em>1</em>.
+	''					The execution will stop if no test with the next number is found. Thus is you define <em>test_1()</em>, <em>test_2()</em> and <em>test_4()</em> tests then the 4th test wont run because there is no 3rd test.
+	''					- if there is a <em>setup()</em> sub then its called before every test
 	'**********************************************************************************************************
 	public sub run()
 		set su = lib.getFunction("setup")
@@ -81,21 +96,29 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	checks if a given url contains a wanted response (defined with a regex pattern)
-	'' @DESCRIPTION:	- will fail if the url cannot be reached
-	''					- the regular expression will be executed case INsensitive
-	''					- if debug is on then the whole response will be shown if the assert fails
-	''					- assert will fail if the page does not return SUCCESS status code (200)
+	'' @SDESCRIPTION: 	Checks if a given url contains a given response (defined with a regex pattern)
+	'' @DESCRIPTION:	- will fail if the <em>url</em> cannot be reached
+	''					- the regular expression will run <strong>not</strong> case sensitive
+	''					- if <em>debug</em> is on then the whole response will be shown if the assert fails
+	''					- assert will fail if the page does not return SUCCESS status code (<em>200</em>)
+	''					<code>
+	''					<%
+	''					'checks if the default.asp contains a <h1> tag
+	''					assertResponse "/default.asp", empty, "<h1>.*</h1>", "Default.asp seem not to work"
+	''					
+	''					'checks if the login.asp contains a <div> tag with a css class "error" when being posted
+	''					assertResponse array("POST", "/login.asp"), empty, "<div class=""error"">", "Using login without any credentials should return an error"
+	''					% >
+	''					</code>
 	'' @PARAM:			url [string], [array]: url to request.
-	''					- if a string then it will be requested with GET
-	''					- if an array then array(method, url)
-	''					- only full (http://...) or virtual (starting with /) urls are allowed
-	'' @PARAM:			params [array]: parameters for the request. even fields are names, odd fields the values
-	''					- if POST request then send as POST values. 
-	''					- if GET request then send via querystring. 
-	''					- if querystring values needed on the POST request then use within the URL directly
-	''					- provide 'empty' if no parameters are needed
-	'' @PARAM:			pattern [string]: regex pattern which will be checked against after url has been fetched
+	''					- if a STRING then it will be requested with <em>GET</em> method
+	''					- if an ARRAY then first field is the desired method and the 2nd field the actual url e.g. <em>array(method, url)</em>
+	''					- only full (<em>http://...</em>) or virtual (starting with <em>/</em>) urls are allowed
+	'' @PARAM:			params [array]: parameters for the request. Even fields of the array hold the names and the odd fields hold the corresponding values.
+	''					- if <em>POST</em> request then send as <em>POST</em> values (if querystring values needed then add them direclty to the URL).
+	''					- if <em>GET</em> request then send via querystring. 
+	''					- provide EMPTY if no parameters are needed
+	'' @PARAM:			pattern [string]: regex pattern which will be checked against after <em>url</em> has been fetched
 	'**********************************************************************************************************
 	public sub assertResponse(byVal url, byVal params, pattern, msg)
 		assertStarted()
@@ -159,8 +182,10 @@ class TestFixture
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	expects a string to exist in a given file.
-	'' @DESCRIPTION:	- will fail if the file does not exist at all as well
-	''					- case sensitive
+	'' @DESCRIPTION:	Will fail if the file does not exist at all. <strong>Case sensitive</strong>.
+	'' @PARAM:			virtualFilePath [string]: virtual path to the file e.g. /test.txt
+	'' @PARAM:			stringToFind [string]: The string which you expect to be in the file
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertInFile(virtualFilePath, stringToFind, msg)
 		assertStarted()
@@ -178,9 +203,11 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects a string NOT to exist in a given file.
-	'' @DESCRIPTION:	- will succeed if the file does not exists
-	''					- case sensitive
+	'' @SDESCRIPTION: 	Expects a string NOT to exist in a given file.
+	'' @DESCRIPTION:	Will succeed if the file does not exists. <strong>Case sensitive</strong>
+	'' @PARAM:			virtualFilePath [string]: virtual path to the file e.g. /test.txt
+	'' @PARAM:			stringToFind [string]: The string which you expect NOT to be in the file
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertNotInFile(virtualFilePath, stringToFind, msg)
 		assertStarted()
@@ -195,7 +222,9 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects a value to be true
+	'' @SDESCRIPTION: 	Expects a value to be TRUE
+	'' @PARAM:			truth [bool]: the boolean expression which should be TRUE in order to pass the test
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assert(truth, msg)
 		assertStarted()
@@ -203,7 +232,9 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects a value to be false
+	'' @SDESCRIPTION: 	Expects a value to be FALSE
+	'' @PARAM:			expected [bool]: the boolean expression which should be FALSE in order to pass the test
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertNot(expected, msg)
 		assertStarted()
@@ -211,8 +242,22 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects two values to be equal
-	'' @DESCRIPTION:	- arrays: all its values are compared against each other and must be equal and on the same position
+	'' @SDESCRIPTION: 	Expects two values to be equal
+	'' @DESCRIPTION:	You can also compare more values by providing arrays as parameters. All values are compared against each other and must be equal and on the same position.
+	''					<code>
+	''					<%
+	''					'this will fail
+	''					assertResponse 1, 2, "values are not equal"
+	''					'array equality (will pass)
+	''					assertResponse array(1, 2), array(1, 2), "arrays are not equal"
+	''					'array equality (both will fail)
+	''					assertResponse array(1, 2), array(1, 3), "arrays are not equal"
+	''					assertResponse array(1, 2), array(1), "arrays are not equal"
+	''					% >
+	''					</code>
+	'' @PARAM:			expected [variant], [array]: The value(s) you expect. 
+	'' @PARAM:			actual [variant], [array]: The actal value(s).
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertEqual(expected, actual, msg)
 		assertStarted()
@@ -238,25 +283,37 @@ class TestFixture
 	end function
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects a value to be contained within a given data structure
-	'' @PARAM:			data [array]: data must be an array. if data is no array then the assert will fail.
+	'' @SDESCRIPTION: 	Expects a value to be contained within a given data structure
+	'' @PARAM:			data [array]: Must be an ARRAY. if it is not an ARRAY then the assert will fail.
+	'' @PARAM:			expected [variant]: The value you expects to exist within the <em>data</em>
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertHas(data, expected, msg)
 		assertStarted()
-		if not lib.contains(data, expected) then assertFailed expected, data, msg
+		set d = (new DataContainer)(data)
+		if d is nothing then assertFailed expected, data, msg
+		if not d.contains(expected) then assertFailed expected, data, msg
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects a value NOT to be contained within a given data structure
-	'' @PARAM:			data [array]: data must be an array. if data is not an array then the assert will succeed (because its not in it)
+	'' @SDESCRIPTION: 	Expects a value NOT to be contained within a given data structure
+	'' @PARAM:			data [array]: Must be an ARRAY. If data is not an ARRAY then the assert will succeed (because its not in it)
+	'' @PARAM:			expected [variant]: The value you expect NOT be in within the <em>data</em>
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertHasNot(data, expected, msg)
 		assertStarted()
-		if lib.contains(data, expected) then assertFailed expected, data, msg
+		set d = (new DataContainer)(data)
+		if d is nothing then exit sub
+		if d.contains(expected) then assertFailed expected, data, msg
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects two values not to be equal
+	'' @SDESCRIPTION: 	Expects two values not to be equal
+	'' @DESCRIPTION:	You can also compare more values by providing arrays as parameters. All values are compared against each other and must be equal and on the same position.
+	'' @PARAM:			expected [variant], [array]: The value(s) you expect. 
+	'' @PARAM:			actual [variant], [array]: The actal value(s).
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertNotEqual(expected, actual, msg)
 		assertStarted()
@@ -264,7 +321,10 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects a value to be of a given type (class)
+	'' @SDESCRIPTION: 	Expects a value to be of a given type (class)
+	'' @PARAM:			expectedClassName [string]: expected class name e.g. <em>User</em>
+	'' @PARAM:			value [variant]: The value which type will be checked.
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertInstanceOf(expectedClassName, value, msg)
 		assertStarted()
@@ -272,7 +332,11 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects a value to be of a given type (class)
+	'' @SDESCRIPTION: 	Expects a value to match a given regular expression pattern
+	'' @DESCRIPTION:	It uses <em>str.matching()</em> internally.
+	'' @PARAM:			pattern [string]: The regular expression pattern which will be used for matching.
+	'' @PARAM:			value [string]: The value which wil be checked against the <em>pattern</em>
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertMatch(pattern, value, msg)
 		assertStarted()
@@ -280,7 +344,9 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects a value to be nothing (object)
+	'' @SDESCRIPTION: 	expects a value to be nothing (<em>object</em>)
+	'' @PARAM:			value [variant]: Value which will be checked
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertNothing(value, msg)
 		assertStarted()
@@ -294,8 +360,22 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	expects two value to be equal with a given delta
-	'' @DESCRIPTION:	2 and 3 with delta of 1 would be equal
+	'' @SDESCRIPTION: 	Expects two values to be equal with a given delta
+	'' @DESCRIPTION:	<code>
+	''					<%
+	''					'these will pass
+	''					assertInDelta 10, 11, 1, "Something is wrong"
+	''					assertInDelta 5.4, 5.4, 0.1, "Something is wrong"
+	''					assertInDelta 5.4, 5.3, 0.1, "Something is wrong"
+	''					'those will fail
+	''					assertInDelta 4.4, 4.5, 0.1, "Something is wrong"
+	''					assertInDelta 33, 12, 10, "Something is wrong"
+	''					% >
+	''					</code>
+	'' @PARAM:			expected [int], [float]: The expected value
+	'' @PARAM:			actual [int], [float]: The actual value
+	'' @PARAM:			delta [int], [float]: Delta which represents the tolerance for the comparison of <em>expected</em> and <em>actual</em>.
+	'' @PARAM:			msg [string]: A message which will be shown if the assert fails
 	'**********************************************************************************************************
 	public sub assertInDelta(expected, actual, delta, msg)
 		assertStarted()
@@ -303,7 +383,7 @@ class TestFixture
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION:	allows to manually fail an assert
+	'' @SDESCRIPTION:	Allows to manually fail an assert
 	'' @PARAM:			msg [string]: message which describes the failure
 	'**********************************************************************************************************
 	public sub fail(msg)

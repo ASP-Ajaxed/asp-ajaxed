@@ -1,6 +1,7 @@
 <!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 set tf = new TestFixture
+tf.debug = true
 tf.run()
 
 sub test_1()
@@ -54,26 +55,6 @@ sub test_2()
 	tf.assertHas lib.range(1.0001, 10, 0.1), 9.9001, "lib.range"
 	tf.assertHas lib.range(1, 2, 0.01), 1.99, "lib.range"
 	tf.assertHasNot lib.range(1, 10.0001, 0.1), 11.1001, "lib.range"
-end sub
-
-sub test_3()
-	tf.assert lib.contains(array(1, 2, 3), 2), "lib.contains"
-	tf.assert lib.contains(array(1, 2, 3), "3"), "lib.contains"
-	tf.assert lib.contains(array(1, 2, 3), 2.0), "lib.contains"
-	tf.assert lib.contains(array("test", "who", 3), "3"), "lib.contains"
-	tf.assertNot lib.contains("3", "3"), "lib.contains"
-	tf.assertNot lib.contains(array(1, 2, 3, 10), 11), "lib.contains"
-	
-	set d = lib.newDict(empty)
-	d.add 1, "someting"
-	d.add 2, ""
-	d.add "3", "yeah"
-	d.add "not", empty
-	tf.assert lib.contains(d, 2), "lib.contains with dictionary"
-	tf.assert lib.contains(d, "2"), "lib.contains with dictionary"
-	tf.assertNot lib.contains(d, 0), "lib.contains with dictionary"
-	tf.assertNot lib.contains(d, 3.2), "lib.contains with dictionary"
-	tf.assert lib.contains(d, "not"), "lib.contains with dictionary"
 end sub
 
 sub test_4()

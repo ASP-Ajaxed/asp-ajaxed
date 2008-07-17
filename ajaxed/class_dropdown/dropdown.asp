@@ -6,12 +6,12 @@
 '' @CREATOR:		Michal Gabrukiewicz - gabru @ grafix.at
 '' @CREATEDON:		2005-02-01 16:31
 '' @CDESCRIPTION:	represents a HTML-selectbox in an OO-approach.
-''					- naming and functionallity is based on .NET-control dropdownList
-''					- easy use with different datasources: Recordset, Dictionary and Array
-''					- there are 3 different rendering types when using it as a multiple dropdown. e.g. you can render a dropdown where each item has a radiobutton so the user can make only one selection. check multipleSelectionType property for more details
-''					- to build a new dropdown create a new instance, set the desired properties and use draw() method to render the dropdown on the page. If the output is needed as a string then toString() can be used
-''					- in most cases you need a dropdown with data from the database. in that case you can use getNew() method which quickly creates a dropdown for you. as it is the default method you can simply use it with <code>(new Dropdown)("SELECT * FROM table", "name", "selected").toString()</code>
-''					- Example of simply creating a dropdown with all months of a year and the current month selected: <code>(new Dropdown)(lib.range(1, 12, 1), "month", month(date())).toString()</code>
+''					- naming and functionallity is based on .NET-control <em>DropdownList</em>
+''					- easy use with different datasources: RECORDSET, DICTIONARY and ARRAY
+''					- there are 3 different rendering types when using it as a multiple dropdown. e.g. you can render a dropdown where each item has a radiobutton so the user can make only one selection. check <em>multipleSelectionType</em> property for more details
+''					- to build a new dropdown create a new instance, set the desired properties and use <em>draw()</em> method to render the dropdown on the page. If the output is needed as a string then <em>toString()</em> can be used
+''					- in most cases you need a dropdown with data from the database. in that case you can use <em>getNew()</em> method which quickly creates a dropdown for you. as it is the default method you can simply use it with <code><% (new Dropdown)("SELECT * FROM table", "name", "selected").toString() % ></code>
+''					- Example of simply creating a dropdown with all months of a year and the current month selected: <code><% (new Dropdown)(lib.range(1, 12, 1), "month", month(date())).toString() % ></code>
 '' @POSTFIX:		DD
 '' @COMPATIBLE:		Internet Explorer, Mozilla Firefox
 '' @VERSION:		1.0
@@ -44,15 +44,15 @@ class Dropdown
 	'public members
 	public name						''[string] Name of the control
 	public datasource				''[array], [recordset], [dictionary], [string] when using recordset be sure 
-									''to use Database.getUnlockedRS!
-									''- if datasource is a string then it will be recognized as a SQL-query (note: after draw() datasource changes to a recordset)
-									''- When using an array as dataasource, you should set the valuesDatasource if values are different than the captions
+									''to use <em>Database.getUnlockedRS()</em>
+									''- if datasource is a string then it will be recognized as a SQL-query (note: after <em>draw()</em> datasource changes to a recordset)
+									''- When using an array as datasource, you should set the <em>valuesDatasource</em> if values are different than the captions
 									''- dictionaries values are used as values and the items as the captions for each option
 									'' property. If this is not set,the datasource elements will be used as the values and options for the dropdown
 	public ID						''[string] ID of the control. is generated automatically by default but can be set also.
 	public onItemCreated			''[string] name of function (sub) which should handle onItemCreated. Event will be raised just before printing the item.
-	public attributes				''[string] additional attributes which go into the &lt;select>-element. e.g. onClick, onChange, etc.
-	public style					''[string] css-Styles for the control. added to &lt;select style="..."
+	public attributes				''[string] additional attributes which go into the <em>&lt;select></em>-element. e.g. onClick, onChange, etc.
+	public style					''[string] css-Styles for the control. added to <em>&lt;select style="..."</em>
 	public cssClass					''[string] name of the css-class you want to assign to the control
 	public valuesDatasource			''[array] if array is used as datasource, please provide an array of same length for values too. If no array is given, values are indexed
 	public dataValueField			''[string], [int] field-name of the datasource that provides the value for each list-item. if the datasource is a recordset then its the first column by default
@@ -62,15 +62,15 @@ class Dropdown
 	public size						''[int] number of displayed rows if its a multiple dropdown. default = 1. If its not a common-multiple-dropdown
 									''then the size is used as pixels for the height of the dropdown.
 	public disabled					''[bool] indicates whether the control is disabled or not. default = false
-	public commonFieldText			''[string] text of the common-field. e.g. --- please select a value ---
+	public commonFieldText			''[string] text of the common-field. e.g. <em>"--- please select a value ---"</em>
 	public commonFieldValue			''[string] value for the common-field. default = 0
 	public multipleSelectionType	''[int] Set this property if you want to change the selectiontype of a multiple dropdown.
 									''Useful if you want to have formatted items, because the dropdown isn't rendered as a SELECT-Element. There are 3 variations:
-									''- DD_SELECTIONTYPE_COMMON = its the common one. hold down CTRL to select more
-									''- DD_SELECTIONTYPE_MULTIPLE = selection comes with checkboxes (user can select more items).
-									''- DD_SELECTIONTYPE_SINGLE = selection comes with radiobuttons. so just one selection is allowed.
-	public autoDrawItems			''[bool] defines if each item will be drawn autmatically after the onItemCreated-Event
-									''has been raised. default = true. disabling usefull if you want to add items during the runtime
+									''- <em>DD_SELECTIONTYPE_COMMON</em> = its the common one. hold down CTRL to select more
+									''- <em>DD_SELECTIONTYPE_MULTIPLE</em> = selection comes with checkboxes (user can select more items).
+									''- <em>DD_SELECTIONTYPE_SINGLE</em> = selection comes with radiobuttons. so just one selection is allowed.
+	public autoDrawItems			''[bool] defines if each item will be drawn autmatically after the <em>onItemCreated</em>-Event
+									''has been raised. default = TRUE. disabling usefull if you want to add items during the runtime
 	
 	public property get uniqueID ''[int] gets a unique ID (scope: the page) of the dropdown
 		uniqueID = p_uniqueID

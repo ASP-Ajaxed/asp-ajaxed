@@ -6,16 +6,18 @@
 '' @CREATOR:		Michal Gabrukiewicz - gabru at grafix.at
 '' @CREATEDON:		24.10.2003
 '' @CDESCRIPTION:	Represents a textbased template which can be used as content for emails, etc.
-''					It takes a file and replaces given placeholders with specific values. Placeholders can
+''					It uses a file and replaces given placeholders with specific values. Placeholders can
 ''					be common name value pairs or even whole blocks which hold name value pairs and can be
 ''					duplicated several times. It's possible to create, modify and delete the templates.
 ''					Example for the usage as an email template (first line of the template is used as subject):
 ''					<code>
+''					<%
 ''					set t = new TextTemplate
 ''					t.filename = "/sometemplatefile.txt"
 ''					t.add "name", "John Doe"
 ''					email.subject = t.getFirstLine()
 ''					email.body = t.getAllButFirstLine()
+''					% >
 ''					</code>
 '' @REQUIRES:		-
 '' @VERSION:		1.2
@@ -26,11 +28,11 @@ class TextTemplate
 
 	private vars, blocks, p_content, regex, blockBegin, blockEnd, validVarnamesPattern
 	
-	public fileName				''[string] The virtual path including the filename of your template. e.g. /userfiles/t.html
-	public placeHolderBegin		''[string] If you want to use your own placeholder characters. this is the beginning. e.g. <<<
-	public placeHolderEnd		''[string] If you want to use your own placeholder characters. this is the ending. e.g. >>>
-	public cleanParse			''[bool] should all unused blocks, vars, etc. been removed after parsing? default = true
-	public UTF8					''[bool] is the template saved as UTF8 and should it be stored as UTF8? default = true
+	public fileName				''[string] The virtual path including the filename of your template. e.g. <em>/userfiles/t.html</em>
+	public placeHolderBegin		''[string] If you want to use your own placeholder characters. this is the beginning. e.g. <em>&lt;&lt;&lt;</em>
+	public placeHolderEnd		''[string] If you want to use your own placeholder characters. this is the ending. e.g. <em>&gt;&gt;&gt;</em>
+	public cleanParse			''[bool] should all unused blocks, vars, etc. been removed after parsing? default = TRUE
+	public UTF8					''[bool] is the template saved as UTF8 and should it be stored as UTF8? default = TRUE
 	
 	public property get content	''[string] If no content is provided, we load the conents of the given file
 		if p_content = "" then p_content = getContents()
@@ -71,13 +73,13 @@ class TextTemplate
 	end sub
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	adds a variable/block which should be replaced within the template
-	'' @DESCRIPTION:	All placeholders in the template using this name (e.g. <<< VARNAME >>>) will be replaced by the
+	'' @SDESCRIPTION:	Adds a variable/block which should be replaced within the template
+	'' @DESCRIPTION:	All placeholders in the template using this name (e.g. <em>&lt;&lt;&lt; VARNAME &gt;&gt;&gt;</em>) will be replaced by the
 	''					value of the given variable. if the value was already added then it will be updated by the new value
 	'' @PARAM:			varName [string]: The name of your variable
 	''					when providing a Block the varname is the name of the block you want to add.
 	'' @PARAM:			varValue [string], [TextTemplateBlock]: The value which will be used.
-	''					if its a block then provide a TextTemplateBlock instance
+	''					if its a block then provide a <em>TextTemplateBlock</em> instance
 	'******************************************************************************************************************
 	public sub add(varName, varValue)
 		'allow only letters, numbers and "_"
@@ -101,7 +103,7 @@ class TextTemplate
 	end sub
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	the same as add(). check add() for details
+	'' @SDESCRIPTION:	Alias for <em>add()</em>.
 	'******************************************************************************************************************
 	public sub addVariable(varName, varValue)
 		add varName, varValue
