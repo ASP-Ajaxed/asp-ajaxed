@@ -28,12 +28,12 @@ class DatatableRow
 	
 	'public members
 	public dt			''[Datatable] the datatable which contains the row
-	public cssClass		''[string] css class which will be placed within the <em>&lt;tr></em> tag
+	public cssClass		''[string] css class which will be placed within the <em>&lt;tr&gt;</em> tag
 	public disabled		''[bool] indicates if the row is disabled or not. disabled does not allow to select the row and it wont be clickable
 	
 	public property get selected ''[bool] indicates if the row is selected or not. keeps state after postback as well. So when user changes the selection it will remember the selection after postback.
 		selected = p_selected
-		if lib.page.isPostback() then ((new DataContainer)(lib.page.RFA(dt.ID))).contains(PK)
+		if lib.page.isPostback() then selected = ((new DataContainer)(lib.page.RFA(dt.ID))).contains(PK)
 	end property
 	
 	public property let selected(val) ''[bool]
@@ -44,7 +44,7 @@ class DatatableRow
 		number = p_number
 	end property
 	
-	public property get ID ''[int] gets a unique ID of the row. the <em>&lt;tr></em> tag contains this ID
+	public property get ID ''[int] gets a unique ID of the row. the <em>&lt;tr&gt;</em> tag contains this ID
 		ID = dt.ID & "_row_" & PK
 	end property
 	
