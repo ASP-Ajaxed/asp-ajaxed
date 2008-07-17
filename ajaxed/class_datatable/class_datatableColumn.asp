@@ -1,17 +1,19 @@
-<%
+﻿<%
 '**************************************************************************************************************
 
 '' @CLASSTITLE:		DatatableColumn
 '' @CREATOR:		michal
 '' @CREATEDON:		2008-06-06 13:15
 '' @CDESCRIPTION:	Represents a column of the Datatable. It is identified by a name (must exist in the datatables SQL query).
-''					Use the Datatable.newColumn(name, caption) factory method to add a new column to the datatable.
+''					Use the <em>Datatable.newColumn(name, caption)</em> factory method to add a new column to the datatable.
 ''					Assigning the column to a variable allows changing further properties.<br>
-''					Example of adding a column for a database column named "firstname" and labeling it "Firstname".
-''					Furthermore it will use the css class "colFirstname" (we assume an existing Datatable instance "dt"):
+''					Example of adding a column for a database column named <em>firstname</em> and labeling it <em>Firstname</em>.
+''					Furthermore it will use the css class <em>colFirstname</em> (we assume an existing Datatable instance <em>dt</em>):
 ''					<code>
+''					<%
 ''					set c = dt.newColumn("firstname", "Firstname")
 ''					c.cssClass = "colFirstname"
+''					% >
 ''					</code>
 '' @FRIENDOF:		Datatable
 '' @VERSION:		0.1
@@ -32,10 +34,12 @@ class DatatableColumn
 							''Example of how to change the data cell value using other data columns from the current row
 							''(e.g. making the text red if the record is deleted):
 							''<code>
+							''<%
 							''function onFirstname(dt)
 							''.	color = lib.iif(dt.data("deleted") = 1, "#f00", "#000")
 							''.	onFirstname = "<span style=""color:" & color & """>" & dt.col & "</span>"
 							''end function
+							''% >
 							''</code>
 	public dt				''[Datatable] the datatable it belongs to
 	public cssClass			''[string] gets/sets the css class which should be used for the column. Its being used within the header cells (&lt;th> tags) and the data cells (&lt;td> tags).
@@ -49,9 +53,9 @@ class DatatableColumn
 							''.	color:#0f0;
 							''}
 							''</code>
-	public encodeHTML		''[bool] should the data value encode HTML markup? default = true. Set this to false if you want that HTML is recognized within the data cells
+	public encodeHTML		''[bool] should the data value encode HTML markup? default = TRUE. Set this to false if you want that HTML is recognized within the data cells
 	
-	public default property get value ''[string] gets the data value of the column when a cell is created. Its always a string. If its a null its converted into an empty string. Use nullValue property to check if it was NULL
+	public default property get value ''[string] gets the data value of the column when a cell is created. Its always a string. If its a null its converted into an empty string. Use <em>nullValue</em> property to check if it was NULL
 		value = p_value
 	end property
 	

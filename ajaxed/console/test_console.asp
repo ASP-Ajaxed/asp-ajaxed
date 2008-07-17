@@ -5,7 +5,7 @@ tf.run()
 
 sub test_1()
 	pages = array( _
-		"", "ajaxed console", _
+		"", "console.js", _
 		"configuration.asp", "ajaxed version", _
 		"tests.asp", "run all", _
 		"documentation.asp", "generate...", _
@@ -15,7 +15,8 @@ sub test_1()
 		"regex.asp", "pattern:" _
 	)
 	for i = 0 to uBound(pages) step 2
-		tf.assertResponse "/ajaxed/console/" & pages(i), empty, pages(i + 1), pages(i) & " seem not to respond!"
+		page = "/ajaxed/console/" & pages(i)
+		tf.assertResponse page, empty, pages(i + 1), page & " seem not to respond!"
 	next
 end sub
 %>

@@ -4,10 +4,14 @@
 '' @CLASSTITLE:		TextTemplateBlock
 '' @CREATOR:		Michal Gabrukiewicz
 '' @CREATEDON:		2006-10-28 14:36
-'' @CDESCRIPTION:	represents a block which is used within the TextTemplate
-''					Blocks are defined with <<< BLOCK NAME >>> ... <<< BLOCKEND NAME >>>. var can be defined between the
-''					"begin" and the "end" of the block. Each block can hold items which will
-''					be templated with the block
+'' @CDESCRIPTION:	Represents a block which is used within a <em>TextTemplate</em>.
+''					Blocks are defined with <em>&lt;&lt;&lt; BLOCK NAME &gt;&gt;&gt;</em> ... <em>&lt;&lt;&lt; BLOCKEND NAME &gt;&gt;&gt;</em>. Placeholders may be defined between the
+''					begining and the ending of the block. Example of a block
+''					<code>
+''					<<< BLOCK DETAILS >>>
+''						Name: <<< NAME >>>
+''					<<< BLOCKEND DETAILS >>>
+''					</code>
 '' @REQUIRES:		-
 '' @FRIENDOF:		TextTemplate
 '' @VERSION:		0.1
@@ -16,7 +20,7 @@
 class TextTemplateBlock
 
 	'public members
-	public items		''[dictionary] items of the block. key = autoID, value = array with vars.
+	public items		''[dictionary] Items of the block. <em>key</em> = autoID, <em>value</em> = ARRAY with vars.
 	
 	'**********************************************************************************************************
 	'* constructor 
@@ -26,11 +30,11 @@ class TextTemplateBlock
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION:	Adds an item to the block
-	'' @DESCRIPTION:	the number of items will result in the same number of copied blocks.
-	'' @PARAM:			vars [array]: a paired array. so 1st value is the name of the 1st var and 2nd value is
+	'' @SDESCRIPTION:	Adds an item to the block.
+	'' @DESCRIPTION:	The number of items will result in the same number of copied blocks.
+	'' @PARAM:			vars [array]: A paired ARRAY. so 1st value is the name of the 1st var and 2nd value is
 	''					is the value of the 1st var, etc. therfore number of values must be even!
-	''					Example: (var1, value1, var2, value2, ...)
+	''					Example: <code><% vars = array(var1, value1, var2, value2, ...) % ></code>
 	'**********************************************************************************************************
 	public sub addItem(vars)
 		if (uBound(vars) + 1) mod 2 <> 0 then

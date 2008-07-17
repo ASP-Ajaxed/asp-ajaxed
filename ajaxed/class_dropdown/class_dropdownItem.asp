@@ -13,13 +13,13 @@ class DropdownItem
 
 	'public members
 	public index				''[int] index of the item in the dropdown
-	public value				''[string] value of the item. referrs to <option value="">
+	public value				''[string] value of the item. refers to <em><option value=""></em>
 	public text					''[string] text of the item. refers to the displayed-value of the item
 	public style				''[string] css-Styles for the item
 	public title				''[string] title for the option
 	public selected				''[bool] indicates whether the item is selected or not
 	public attributes			''[string] additional attributes
-	public show					''[bool] show the item or not. default = true
+	public show					''[bool] show the item or not. default = TRUE
 	public dropdown				''[Dropdown] the dropdown it belongs to.
 	
 	'**********************************************************************************************************

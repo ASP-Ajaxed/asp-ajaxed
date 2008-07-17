@@ -5,9 +5,9 @@
 '' @CREATOR:		Michal Gabrukiewicz - gabru @ grafix.at
 '' @CREATEDON:		23.04.2008
 '' @CDESCRIPTION:	This class represents an email. It is a generic interface which internally uses
-''					a third party component.
-''					- create a new instance, set the properties and send or user newWith(template) and create a new instance with a template which will set the body and the subject of the email automatically from the TextTemplate
-''					- you should send an email whereever you want to send an email in your application. Even if you dont know if an email component will be installed. 
+''					a third party component (automatically detected).
+''					- Create a new instance, set the properties and send or use <em>newWith(template)</em> and create a new instance with a template which will set the body and the subject of the email automatically from the <em>TextTemplate</em>
+''					- You should send an email whereever you want to send an email in your application despite if you dont know if an email component will be installed. 
 '' @COMPATIBLE:		Dimac JMail.Message, ASPEmail Persists.MailSender, Microsoft cdo.message
 '' @VERSION:		0.9
 
@@ -19,12 +19,12 @@ class Email
 	private p_subject, p_body, p_sendersName, p_mailServerUsername, p_mailServerPassword, p_html
 	
 	'public members
-	public onlyValidEmails	''[bool] indicates if the email addresses (sender & recipient) should be checked for correct syntax? default = true
+	public onlyValidEmails	''[bool] indicates if the email addresses (sender & recipient) should be checked for correct syntax? default = TRUE
 	public mailServer		''[string] the host which is responsible for delivery. e.g. IP, hostname
 	public mailer			''[object] gets the actual mailer object which has been wrapped by Email. Useful if some specific settings have to be made before sending.
-	public dispatch			''[bool] indicates if the email should be dispatched when send() is called? default = true. useful to turn off if you only want to simulate sending on your dev env (to keep your inbox empty).
+	public dispatch			''[bool] indicates if the email should be dispatched when send() is called? default = TRUE. useful to turn off if you only want to simulate sending on your <em>dev</em> env (to keep your inbox empty).
 	
-	public propertY get allTo ''[string] gets the email address to which all emails should be sent. useful on the dev env if you want to pipe all emails to one email address independently of the real recipient(s). this prevents that users would recieve an unwanted email which was send during the development. can be set using the AJAXED_EMAIL_ALLTO config
+	public propertY get allTo ''[string] gets the email address to which all emails should be sent. Useful on the <em>dev</em> env if you want to pipe all emails to one email address independently of the real recipient(s). This prevents that users would recieve an unwanted email which was send during the development. Can be set using the <em>AJAXED_EMAIL_ALLTO</em> config
 		allTo = p_allTo
 	end property
 	
@@ -112,11 +112,11 @@ class Email
 		end if
 	end property
 	
-	public property get errorMsg ''[string] holds the errormessage if send() failed
+	public property get errorMsg ''[string] holds the errormessage if <em>send()</em> failed
 		errorMsg = p_errorMsg
 	end property
 	
-	public property get recipients ''[dictionary] gets already added recipients. key = auto ID, item = array(recipientstype, email, name)
+	public property get recipients ''[dictionary] gets already added recipients. <em>key</em> = auto ID, <em>item</em> = <em>array(recipientstype, email, name)</em>
 		set recipients = p_recipients
 	end property
 	
@@ -216,11 +216,11 @@ class Email
 	end sub
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION: 	STATIC! creates a new email instance with the content of a given TextTemplate
+	'' @SDESCRIPTION: 	STATIC! creates a new email instance with the content of a given <em>TextTemplate</em>
 	'' @DESCRIPTION:	first line of the template is treated as the emails subject and the rest as the body.
-	''					Dont forget to load the TextTemplate class for this.
+	''					Dont forget to load the <em>TextTemplate</em> class for this.
 	'' @PARAM:			template [TextTemplate]: template which is used within the email
-	'' @RETURN:			[Email] a ready-to-use email instance where subject and body is set
+	'' @RETURN:			[Email] a ready-to-use email instance where <em>subject</em> and <em>body</em> is set automatically from the given template
 	'******************************************************************************************************************
 	public function newWith(template)
 		if template is nothing then lib.throwError("No template givne.")
@@ -232,7 +232,7 @@ class Email
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION: 	STATIC! sends an email with a given TextTemplate to a given recipient.
+	'' @SDESCRIPTION: 	STATIC! sends an email with a given <em>TextTemplate</em> to a given recipient.
 	'' @DESCRIPTION:	a helper to quickly send an email. sender is the default one
 	'' @PARAM:			template [TextTemplate]: template which is used within the email
 	'' @PARAM:			recipient [string], [array]: if string then treated as email otherwise first
@@ -251,7 +251,7 @@ class Email
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	sends the email message
-	'' @DESCRIPTION:	- if sending failed then check errorMsg property for a detailed error
+	'' @DESCRIPTION:	If sending failed then check <em>errorMsg</em> property for a detailed error
 	'' @RETURN:			[bool] true if could be sent otherwise false
 	'******************************************************************************************************************
 	public function send()
@@ -300,7 +300,7 @@ class Email
 	'' @DESCRIPTION:	useful for displaying sender or recipient nicely. 
 	'' @PARAM:			aName [string]: name to be used
 	'' @PARAM:			anEmail [string]: email to be used
-	'' @RETURN:			[string] format: "name" <email@host.com>
+	'' @RETURN:			[string] format: <em>"name" <email@host.com></em>
 	'******************************************************************************************************************
 	public function emailName(byVal aName, byVal anEmail)
 		if aName = "" then aName = anEmail
@@ -365,18 +365,18 @@ class Email
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Adds a recipient. Can be used multiple times
-	'' @DESCRIPTION:	- recipients property holds all added recipients
-	'' @PARAM:			recipientsType [string]: Define the type of to. TO, CC, BCC
-	'' @PARAM:			email [string]: Recipients email. Required! if onlyValidEmails is true then
+	'' @DESCRIPTION:	recipients property holds all added recipients
+	'' @PARAM:			recipientsType [string]: Define the type of recipient: <em>TO</em>, <em>CC</em> or <em>BCC</em>
+	'' @PARAM:			email [string]: Recipients email. Required! if <em>onlyValidEmails</em> is true then
 	''					the recipient is only added if the email is a syntactically valid one
-	'' @PARAM:			name [string]: Recipients name. if empty then email is used as name
+	'' @PARAM:			name [string]: Recipients name. if EMPTY then email is used as name
 	'' @RETURN:			[bool] true if the recipient has been added. false if not.
 	''					Its not added if only valid emails are required and the email was not valid.
 	'******************************************************************************************************************
 	public function addRecipient(recipientsType, byVal email, byVal name)
 		addRecipient = true
 		recipientsType = lCase(recipientsType)
-		if not lib.contains(array("to", "cc", "bcc"), recipientsType) then lib.throwError("Wrong recipientstype. Only to, cc or bcc.")
+		if not ((new DataContainer)(array("to", "cc", "bcc"))).contains(recipientsType) then lib.throwError("Wrong recipientstype. Only to, cc or bcc.")
 		if onlyValidEmails then addRecipient = str.isValidEmail(email)
 		if not addRecipient then exit function
 		
@@ -386,9 +386,9 @@ class Email
 	end function
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION: 	helper which adds more than one recipient seperated by ";". Only email values. Name will be the email
-	'' @PARAM:			recipientType [string]: type of the recipient. TO, CC or BCC
-	'' @PARAM:			emails [string]: recipients emails seperated by ";"
+	'' @SDESCRIPTION: 	helper which adds more than one recipient seperated by <em>";"</em>. Only email values. Name will be the email
+	'' @PARAM:			recipientType [string]: type of the recipient. <em>TO, CC</em> or <em>BCC</em>
+	'' @PARAM:			emails [string]: recipients emails seperated by <em>";"</em>
 	'**********************************************************************************************************
 	public sub addRecipients(recipientType, emails)
 		arr = split(emails, ";")
@@ -434,11 +434,11 @@ class Email
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Adds an attachment. Can be used mutliple times
-	'' @PARAM:			filename [string]: the name and path of your file on the server (absolute). e.g. c:\www\images\logo.gif
+	'' @PARAM:			filename [string]: the name and path of your file on the server (absolute). e.g. <em>c:\www\images\logo.gif</em>
 	'' @PARAM:			inline [bool]: if true the attachment will be added as an inline attachment
 	'' @PARAM:			contentType [string]: attachments content type. leave empty if you don't want to specify it explicitly
 	'' @RETURN:			[int] A unique ID that can be used to identify this attachment. This is useful if you are 
-	''					embedding images in the email, body. Then you need to refer to it with &lt;img src="cid:xxxx">
+	''					embedding images in the email's body. Then you need to refer to it with <em>&lt;img src="cid:xxxx"></em>
 	'******************************************************************************************************************
 	public function addAttachment(fileName, inline, contentType)
 		addAttachment = lib.getUniqueID()

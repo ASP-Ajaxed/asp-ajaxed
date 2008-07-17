@@ -1,4 +1,4 @@
-﻿<!--#include file="../../ajaxed.asp"-->
+<!--#include file="../../ajaxed.asp"-->
 <%
 '******************************************************************************************
 '* Creator: 	michal
@@ -291,6 +291,13 @@ end function
 			all HTML markup is recognized within the documentation. Exceptions:
 			<ul>
 				<li>All HTML inside <code>&lt;code&gt;&lt;/code&gt;</code> is escaped and all line breaks are converted to <code>&lt;br/&gt;</code>. This makes the writing of code examples easier and more readable within the code as well (because no HTML markup is needed within code blocks).</li>
+			</ul>
+		</li>
+		<li>
+			Use <code>&lt;em&gt;&lt;/em&gt;</code> to emphasize coding keywords e.g. methodname, properties, ...<br>
+			The following keywords are emphasized automatically (case sensitive):
+			<ul>
+				<li>EMPTY, NOTHING, BOOL, INT, STRING, OBJECT, NULL, TRUE, FALSE, RECORDSET, DICTIONARY, BOOLEAN, FLOAT, DOUBLE, ARRAY</li>
 			</ul>
 		</li>
 	</ul>

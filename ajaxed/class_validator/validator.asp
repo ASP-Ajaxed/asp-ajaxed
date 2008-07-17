@@ -8,9 +8,10 @@
 ''					or any other kind of validation.
 ''					It stores invalid fields (e.g. property of a class) with an associated error message
 ''					(why is the field invalid). The underlying storage is a dictionary.
-''					- it implements a reflect() method thus it can be used nicely on callbacks. A callback could return a whole validator ;)
+''					- It implements a <em>reflect()</em> method thus it can be used nicely on callbacks. A callback could return a whole validator ;)
 ''					Example of simple usage:
 ''					<code>
+''					<%
 ''					set v = new Validator
 ''					if lastname = "" then v.add "lastname", "Lastname cannot be empty"
 ''					if str.parse(age, 0) <= 0 then v.add "age", "Age must be a number and greater than 0"
@@ -18,7 +19,8 @@
 ''					.	save()
 ''					else
 ''					.	str.write(v.getErrorSummary("<ul>", "</ul>", "<li>", "</li>"))
-''					end if 
+''					end if
+''					% >
 ''					</code>
 '' @POSTFIX:		val
 '' @VERSION:		0.2
@@ -30,8 +32,8 @@ class Validator
 	private dictInvalidData
 	
 	'public members
-	public reflectItemPrefix	''[string] the prefix for each item within the summary which is returned on reflection. default = "&lt;li>"
-	public reflectItemPostfix	''[string] the prefix for each item within the summary which is returned on reflection. default = "&lt;/li>"
+	public reflectItemPrefix	''[string] the prefix for each item within the summary which is returned on reflection. default = <em>&lt;li&gt;</em>
+	public reflectItemPostfix	''[string] the prefix for each item within the summary which is returned on reflection. default = <em>&lt;/li&gt;</em>
 	
 	public default property get valid ''[bool] indicates if the validator is valid (contains no invalid fields)
 		valid = (dictInvalidData.count <= 0)
@@ -47,8 +49,8 @@ class Validator
 	end sub
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Returns a dictionary with all invalid-fields 
-	'' @RETURN:			[dictionary] with all descriptions and fieldnames of invalid fields
+	'' @SDESCRIPTION:	Returns a DICTIONARY with all invalid-fields 
+	'' @RETURN:			[dictionary] All descriptions and fieldnames of invalid fields
 	'**************************************************************************************************************
 	public function getInvalidData()
 		set getInvalidData = dictInvalidData
@@ -57,7 +59,7 @@ class Validator
 	'**************************************************************************************************************
 	'' @SDESCRIPTION:	Returns the description of the error for the requested-field.
 	'' @PARAM:			fieldName [string]: the name of your field to get the error-description for.
-	'' @RETURN:			[string] the description of the error for the requested-field. empty if there isnt any error
+	'' @RETURN:			[string] the description of the error for the requested-field. EMPTY if there isnt any error
 	'**************************************************************************************************************
 	public function getDescription(fieldName)
 		getDescriptionFor = empty
@@ -66,8 +68,8 @@ class Validator
 	
 	'**************************************************************************************************************
 	'' @SDESCRIPTION:	Checks if a given fiel (or more fields) is invalid
-	'' @PARAM:			fieldName [string], [array]: the name of your field to check (case insensitive). can also be an array with names
-	'' @RETURN:			[bool] true if the field is invalid
+	'' @PARAM:			fieldName [string], [array]: the name of your field to check (case insensitive). can also be an ARRAY with names
+	'' @RETURN:			[bool] TRUE if the field is invalid otherwise FALSE
 	'**************************************************************************************************************
 	public function isInvalid(byVal fieldName)
 		isInvalid = false
@@ -83,9 +85,9 @@ class Validator
 	
 	'**************************************************************************************************************
 	'' @SDESCRIPTION:	Adds a new invalid field. only if it does not exists yet.
-	'' @PARAM:			fieldName [string]: the name of your field. leave empty if you want the field be auto-generated.
+	'' @PARAM:			fieldName [string]: the name of your field. leave EMPTY if you want the field be auto-generated.
 	'' @PARAM:			errorDescription [string]: a reason why the field is invalid
-	'' @RETURN:			[bool] true if added, false if not added (because already exists)
+	'' @RETURN:			[bool] TRUE if added, FALSE if not added (because already exists)
 	'**************************************************************************************************************
 	public function add(byVal fieldName, errorDescription)
 		if fieldname = empty then fieldName = lib.getUniqueID()
@@ -96,14 +98,14 @@ class Validator
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	returns a custom formatted error-summary.
-	'' @DESCRIPTION:	usefull if you want to show the errors for example in a HTML list. summary will be just
-	''					returned if there is at least one error. (so at least one field must be invalid)
-	'' @PARAM:			overallPrefix [string]: prefix for the whole summary e.g. &lt;ul>
-	'' @PARAM:			overallPostfix [string]: postfix for the whole summary e.g. &lt;/ul>
-	'' @PARAM:			itemPrefix [string]: prefix for each item &lt;li>
-	'' @PARAM:			itemPostfix [string]: prefix for each item &lt;/li>
-	'' @RETURN:			[string] formatted error-summary
+	'' @SDESCRIPTION:	Returns a custom formatted error summary.
+	'' @DESCRIPTION:	usefull if you want to show the errors for example in a HTML list. Summary will be just
+	''					returned if there is at least one error (so at least one field must be invalid).
+	'' @PARAM:			overallPrefix [string]: prefix for the whole summary e.g. <em>&lt;ul&gt;</em>
+	'' @PARAM:			overallPostfix [string]: postfix for the whole summary e.g. <em>&lt;/ul&gt;</em>
+	'' @PARAM:			itemPrefix [string]: prefix for each item <em>&lt;li&gt;</em>
+	'' @PARAM:			itemPostfix [string]: prefix for each item <em>&lt;/li&gt;</em>
+	'' @RETURN:			[string] formatted error summary
 	'**************************************************************************************************************
 	public function getErrorSummary(overallPrefix, overallPostfix, itemPrefix, itemPostfix)
 		getErrorSummary = empty
@@ -117,18 +119,20 @@ class Validator
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	reflection method which can be used by JSON (e.g. returning the validator as a whole on a callback)
+	'' @SDESCRIPTION:	Reflection method which can be used by JSON (e.g. returning the validator as a whole on a callback)
 	'' @DESCRIPTION:	as the class has no real properties the status is exposed with:
-	''					- data: holds a dictionary with the invalid fields
-	''					- valid: indicates if its valid or not
-	''					- summary: holds a summary of the invalid data (reflectItemPrefix and reflectItemPostfix can be used to format the items)
+	''					- <em>data</em>: holds a dictionary with the invalid fields
+	''					- <em>valid</em>: indicates if its valid or not
+	''					- <em>summary</em>: holds a summary of the invalid data (<em>reflectItemPrefix</em> and <em>reflectItemPostfix</em> can be used to format the items)
 	''					Example of returning it on callback (server-side asp):
 	''					<code>
+	''					<%
 	''					sub callback(a)
 	''					.	set v = new Validator
 	''					.	if str.parse(age, 0) <= 0 then v.add "age", "Age is invalid"
 	''					.	page.return v
 	''					end sub
+	''					% >
 	''					</code>
 	''					Afterwards the validator can be accessed directly within the javascript callback.
 	''					e.g. update a HTML list with the error summary of the validator (javascript):
@@ -137,7 +141,7 @@ class Validator
 	''					.	if (val.valid) $('someList').update(val.summary);
 	''					}
 	''					</code>
-	'' @RETURN:			[dictionary] it returns a dictionary with the class properties and its values
+	'' @RETURN:			[dictionary] Returns a DICTIONARY with the class properties and its values
 	'**************************************************************************************************************
 	public function reflect()
 		set reflect = lib.newDict(empty)

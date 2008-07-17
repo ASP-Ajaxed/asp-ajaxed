@@ -1,4 +1,4 @@
-<!--#include file="../class_testFixture/testFixture.asp"-->
+ï»¿<!--#include file="../class_testFixture/testFixture.asp"-->
 <% AJAXED_CONNSTRING = "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & server.mappath("../class_database/test.mdb") & ";" %>
 <%
 class Person
@@ -53,13 +53,13 @@ set empty_rs = db.getRecordset("SELECT * FROM person WHERE firstname = 'sbas' OR
 	
 	<%
 	set s = lib.newDict(empty)
-	s.add "germanumlaute", "äöüÄÖÜß"
+	s.add "germanumlaute", "Ã¤Ã¶Ã¼Ã„Ã–ÃœÃŸ"
 	s.add "newline", vbNewLine
 	s.add "specials", """\/"
 	s.add "asian", ""
 	%>
 	var jsn = <%= (new JSON).toJSON(empty, s, false) %>;
-	assert(jsn.germanumlaute == 'äöüÄÖÜß', 'german umlaute should work');
+	assert(jsn.germanumlaute == 'Ã¤Ã¶Ã¼Ã„Ã–ÃœÃŸ', 'german umlaute should work');
 	assert(jsn.newline == '\r\n', 'new lines should work');
 	assert(jsn.specials == '"\\/', 'special chars should work');
 	

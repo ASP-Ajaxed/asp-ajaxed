@@ -25,10 +25,10 @@
 ''					% >
 ''					</code>
 ''					Furthermore each page provides the functionality to call server side ASP procedures
-''					directly from client-side (using the javascript function ajaxed.callback()). A server side procedure can either
-''					return value(s) (all kind of datatypes e.g. bool, recordset, string, etc.) or act as a page part which sends back whole HTML fragments.
-''					In order to return values check return() and returnValue() for further details. Page parts can be used to update an existing page with some
-''					HTML without using a conventional postback. Simply prefix a server side sub with "pagePart_", and call it with ajaxed.callback(pagePartname, targetContainerID):
+''					directly from client-side (using the javascript function <em>ajaxed.callback()</em>). A server side procedure can either
+''					return value(s) (all kind of datatypes e.g. BOOL, RECORDSET, STRING, etc.) or act as a page part which sends back whole HTML fragments.
+''					In order to return values check <em>return()</em> and <em>returnValue()</em> for further details. Page parts can be used to update an existing page with some
+''					HTML without using a conventional postback. Simply prefix a server side sub with <em>pagePart_</em> and call it with <em>ajaxed.callback(pagePartname, targetContainerID)</em>:
 ''					<code>
 ''					<% sub pagePart_one() % >
 ''					.	<strong>some bold text</strong>
@@ -39,20 +39,23 @@
 ''					<% end sub % >
 ''					</code>
 ''					- <strong>Refer to the draw() method for more details about the ajaxed.callback() javascript function.</strong>
-''					- Whenever using the class be sure the draw() method is the first call before any other response is done.
-''					- main() must be implemented within the page. when using callbacks then a callback(action) sub must be implemented as well.
-''					- init() is always called first (before main() and callback()) and allows preperations to be done before any content is written to the response e.g. security checks and stuff which is necessary for main() and callback() should be placed into the init().
-''					- After the init() always either main() or callback() is called. They are never called both within one page execution (request).
-''					- main() = common state for the page which normally includes the page presentation (e.g. html elements)
-''					- callback() = handles all client requests done with ajaxed.callback(). callback() needs to be defined with one parameter which holds the actual action to perform. so the signature should be sub callback(action). Example of a valid callback sub
+''					- Whenever using the class be sure the <em>draw()</em> method is the first call before any other response is done.
+''					- The <em>main()</em> sub must be implemented within each page. You have to implement <em>callback(action)</em> sub if callbacks are used.
+''					- <em>init()</em> is always called first (before <em>main()</em> and <em>callback()</em>) and allows preperations to be done before any content is written to the response e.g. security checks and stuff which is necessary before <em>main()</em> and <em>callback()</em>.
+''					- After the <em>init()</em> always either <em>main()</em> or <em>callback()</em> is called. They are never called both within one page execution (request).
+''					- <em>main()</em> represents the common state of the page which normally includes the page presentation (e.g. html elements)
+''					- <em>callback()</em> handles all client requests done with <em>ajaxed.callback()</em>. It needs to be defined with <strong>one parameter</strong> which holds the actual action to perform. As a result the signature should be <em>callback(action)</em>. Example of a valid callback sub
 ''					<code>
+''					<%
 ''					sub callback(action)
 ''					.	if action = "add" then page.return(2 + 3)
 ''					end sub
+''					% >
 ''					</code>
 ''					- Requires Prototype JavaScript library (available at prototypejs.org) but can be loaded automatically by ajaxed (turn on in the config)
 ''					- access querystring and form fields using page methods:
 ''					<code>
+''					<%
 ''					sub main()
 ''					.	id = page.QS("id") ' = request.queryString("id")
 ''					.	name = page.RF("name") ' = request.form("name")
@@ -60,9 +63,10 @@
 ''					.	'automatically try to parse a querystring value into an integer.
 ''					.	id = str.parse(page.QS("id"), 0)
 ''					end sub
+''					% >
 ''					</code>
 ''					- The page also supports a mechanism called "page parts". 
-''					- use plain-property if your page is being used with in an XHR (there you dont need the whole basic structure)
+''					- use <em>plain</em> property if your page is being used with in an XHR (there you dont need the whole basic structure)
 '' @VERSION:		0.1
 
 '**************************************************************************************************************
@@ -73,13 +77,13 @@ class AjaxedPage
 	private ajaxHeaderDrawn, sessionCodePage, p_callbackType
 	
 	'public members
-	public loadPrototypeJS		''[bool] should protypeJS library be loaded. turn this off if you've done it manually. default = true
-	public buffering			''[bool] turns the response.buffering on or off (no affect on callback). default = true
-	public contentType			''[string] contenttype of the response. default = empty
+	public loadPrototypeJS		''[bool] should protypeJS library be loaded. turn this off if you've done it manually. default = TRUE
+	public buffering			''[bool] turns the <em>response.buffering </em>on or off (no affect on callback). default = TRUE
+	public contentType			''[string] contenttype of the response. default = EMPTY
 	public debug				''[bool] turns debugging on of. default = false
 	public DBConnection			''[bool] indicates if a database connection should be opened automatically for the page.
 								''If yes then a connection with the configured connectionstring (ajaxed config) is established and can be used
-								''within the init(), callback() and main() procedures. default = false
+								''within the <em>init()</em>, <em>callback()</em> and <em>main()</em> procedures. default = false
 	public plain				''[bool] indicates if the page should be a plain page. means that no header(s) and footer(s) are included.
 								''Useful for page which are actually only parts of pages and loaded with an XHR. default = false
 	public title				''[string] title for the page (useful to use within the header.asp)
@@ -138,24 +142,24 @@ class AjaxedPage
 	'' @SDESCRIPTION: 	Draws the page. Must be the first call on a page
 	'' @DESCRIPTION:	The lifecycle is the following after executing draw().
 	''					- 1. setting the HTTP Headers (response)
-	''					- 2. init() (will be only called if exists in your page)
-	''					- 3. main() or callback(action) - action is trimmed to 255 chars (for security reasons),
-	''					ajaxed.callback(theAction, func, params, onComplete, url) is the Javascript function
+	''					- 2. <em>init()</em> (will be only called if exists in your page)
+	''					- 3. <em>main()</em> or <em>callback(action)</em> - action is trimmed to 255 chars (for security reasons),
+	''					<em>ajaxed.callback(theAction, func, params, onComplete, url)</em> is the Javascript function
 	''					which can be used within your HTML to call serverside functions and page parts. The server side execution can either
 	''					return value(s) which are accessible as JSON after execution or it returns a page part (some HTML) to update the current page.
 	''					The params are described as followed:
-	''					- <strong>theAction</strong>: is the action which will be passed as parameter to the server-side callback function e.g. 'do'. if there is a sub starting with 'pagePart_' and the action name (e.g. for action 'do' it would be 'pagePart_do') then its treated as a page part and returns the subs content.
-	''					- <strong>func</strong>: the client-side javascript function which will be called after server-side processing finished SUCCESSFULLY. e.g. done. It accepts one parameter which holds either the returned JSON (on cmmon callback) or the html of the page part. In case of a page part callback its possible to use the ID of the container which should be updated. e.g. ajaxed.callback('one', 'content') => this would update the element with ID 'content' with the response of server side 'pagePart_one()' sub
-	''					- <strong>params</strong> (optional): javascript hash with POST parameters you want to pass to the callback function. They are accessible with e.g. lib.RF on within the callback function. e.g. {a:1,b:2}. if there is a form called "frm" with your page then all its values are passed as POST values to the callback (if you havent specified any params manually). 
+	''					- <strong>theAction</strong>: is the action which will be passed as parameter to the server-side callback function e.g. 'do'. if there is a sub starting with <em>pagePart_</em> and the action name (e.g. for action 'do' it would be <em>pagePart_do</em>) then its treated as a page part and returns the subs content.
+	''					- <strong>func</strong>: the client-side javascript function which will be called after server-side processing finished SUCCESSFULLY. e.g. done. It accepts one parameter which holds either the returned JSON (on common callback) or the html of the page part. In case of a page part callback its possible to use the ID of the container which should be updated. e.g. <em>ajaxed.callback('one', 'content')</em> => this would update the element with ID <em>content</em> with the response of server side <em>pagePart_one()</em> sub
+	''					- <strong>params</strong> (optional): javascript hash with POST parameters you want to pass to the callback function. They are accessible with e.g. lib.RF on within the callback function. e.g. <em>{a:1,b:2}</em>. if there is a form called <em>frm</em> with your page then all its values are passed as POST values to the callback (if you havent specified any params manually). 
 	''					- <strong>onComplete</strong> (optional): client-side function which should be invoked when the server-side processing has been completed. This is called even if there was an error (same as with native XMLHttpRequest).
 	''					- <strong>url</strong> (optional): you can specify the url of the page where the callback sub is located. Normally the page itself is called but you could also call callbacks of other pages. Note: use this also if you use callbacks on pages which are recognized as default in a folder. So when a user can call them without specifying the file itself. e.g. /demo/ (bug in iis5: http://support.microsoft.com/kb/216493)
-	''					Calling a page part named "profile" and inserting its content into a HTML element with the ID "userProfile":
+	''					Calling a page part named <em>profile</em> and inserting its content into a HTML element with the ID <em>userProfile</em>:
 	''					<code>ajaxed.callback('profile', 'userProfile')</code>
 	''					Calling a page part named "info" and executing a javascript function "updateInfo" afterwards (which gets the content from the page part as an argument)
 	''					We also send a parameter called "id" with the value 1 to the page part:
 	''					<code>ajaxed.callback('info', updateInfo, {id: 1})</code>
-	''					Calling a server side procedure called "getSales" which gets the current year and current month as parameters.
-	''					The javascript function "gotSales" is executed after the server side processing of "getSales" has been completed:
+	''					Calling a server side procedure called <em>getSales</em> which gets the current year and current month as parameters.
+	''					The javascript function <em>gotSales</em> is executed after the server side processing of <em>getSales</em> has been completed:
 	''					<code>ajaxed.callback('getSales', gotSales, {year: <%= year(date()) % >, month: <%= year(date()) % >})</code>
 	'**********************************************************************************************************
 	public sub draw()
@@ -259,7 +263,7 @@ class AjaxedPage
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	draws all necessary headers for ajaxed (js, css, etc.)
 	'' @DESCRIPTION:	call this method within the HEAD-tag of your header.asp
-	'' @PARAM:			params [array]: not used yet (provide empty array)
+	'' @PARAM:			params [array]: not used yet, provide empty array array()
 	'******************************************************************************************************************
 	public sub ajaxedHeader(params)
 		if loadPrototypeJS then loadJSFile(lib.path("prototypejs/prototype.js"))
@@ -272,9 +276,10 @@ class AjaxedPage
 	end sub
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	returns a value on callback()
-	'' @DESCRIPTION:	those values are accessible on the javascript callback function defined in ajaxed.callback()
-	'' @PARAM:			val [variant]: check JSON.toJSON() for more details
+	'' @SDESCRIPTION:	returns a value on <em>callback()</em>
+	'' @DESCRIPTION:	Those values are accessible on the javascript callback function defined in <em>ajaxed.callback()</em>.
+	''					See also <em>returnValue()</em> if you consider returning more than one value.
+	'' @PARAM:			val [variant]: check <em>JSON.toJSON()</em> for more details
 	'******************************************************************************************************************
 	public sub return(val)
 		if callbackType > 1 then exit sub
@@ -289,11 +294,11 @@ class AjaxedPage
 	end sub
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	returns a named value on callback(). call this within the callback() sub
+	'' @SDESCRIPTION:	returns a name value pair on <em>callback()</em>.
 	'' @DESCRIPTION:	this method can be called more than once because the value will be named and therefore more 
-	''					values can be returned. 
-	'' @PARAM:			name [string]: name of the value (accessible within the javascript callback)
-	'' @PARAM:			val [variant]: refer to JSON.toJSON() method for details
+	''					values can be returned.
+	'' @PARAM:			name [string]: name of the value
+	'' @PARAM:			val [variant]: refer to <em>JSON.toJSON()</em> method for details
 	'******************************************************************************************************************
 	public sub returnValue(name, val)
 		if callbackType > 1 then exit sub
@@ -307,7 +312,7 @@ class AjaxedPage
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	Returns wheather the page was already sent to server or not.
-	'' @DESCRIPTION:	It should be the same as the isPostback() from asp.net.
+	'' @DESCRIPTION:	It should be the same as the <em>isPostback()</em> from asp.net.
 	'' @RETURN:			[bool] posted back (true) or not (false)
 	'******************************************************************************************************************
 	public function isPostback()
@@ -316,7 +321,7 @@ class AjaxedPage
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	writes a string to the output in the same line
-	'' @DESCRIPTION:	just a wrapper to str.write
+	'' @DESCRIPTION:	just a wrapper to <em>str.write()</em>
 	'' @PARAM:			value [string]: output string
 	'******************************************************************************************************************
 	public function write(value)
@@ -325,7 +330,7 @@ class AjaxedPage
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	writes a line to the output
-	'' @DESCRIPTION:	just a wrapper to str.writeln
+	'' @DESCRIPTION:	just a wrapper to <em>str.writeln()</em>
 	'' @PARAM:			value [string]: output string
 	'******************************************************************************************************************
 	public function writeln(value)
@@ -334,7 +339,7 @@ class AjaxedPage
 	
 	'***********************************************************************************************************
 	'' @SDESCRIPTION:	executes a given javascript. input may be a string or an array. each field = a line
-	'' @PARAM:			JSCode [string]. [array]: your javascript-code. e.g. window.location.reload()
+	'' @PARAM:			JSCode [string]. [array]: your javascript-code. e.g. <em>window.location.reload()</em>
 	'***********************************************************************************************************
 	public sub execJS(JSCode)
 		writeln("<script>")
@@ -351,7 +356,7 @@ class AjaxedPage
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	gets the value from a given form field after postback
 	'' @DESCRIPTION:	just an equivalent for request.form. Note: if you expecting the value to be an array
-	''					(e.g. more fields with the same name) then use RFA() method.
+	''					(e.g. more fields with the same name) then use <em>RFA()</em> method.
 	'' @PARAM:			name [string]: name of the value you want to get
 	'' @RETURN:			[string] value from the request-form-collection.
 	'******************************************************************************************************************
@@ -420,8 +425,8 @@ class AjaxedPage
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	just an equivalent for request.querystring. if empty then returns whole querystring.
-	'' @PARAM:			name [string]: name of the value you want to get. leave it empty to get the whole querystring
+	'' @SDESCRIPTION:	just an equivalent for <em>request.querystring</em>. if empty then returns whole querystring.
+	'' @PARAM:			name [string]: name of the value you want to get. leave it EMPTY to get the whole querystring
 	'' @RETURN:			[string] value from the request querystring collection
 	'******************************************************************************************************************
 	public function QS(name)
@@ -434,10 +439,10 @@ class AjaxedPage
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	Loads a specified javscript-file
-	'' @DESCRIPTION:	it will load the file only if it has not been already loaded on the page before.
-	''					so you can load the file and dont have to worry if it will be loaded more than once.
-	''					differentiation between the files is the filename (case-sensitive!).
-	''					does not work on callback()
+	'' @DESCRIPTION:	it will load the file only if it has not been already loaded in the page before.
+	''					so you can load the file (more times) and dont have to worry that it might be loaded more than once.
+	''					Differentiation between the files is the filename (case-sensitive!).
+	''					Does not work on <em>callback()</em>
 	'' @PARAM:			url [string]: url of your javascript-file
 	'******************************************************************************************************************
 	public sub loadJSFile(url)
@@ -451,10 +456,10 @@ class AjaxedPage
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	Loads a specified stylesheet-file
-	'' @DESCRIPTION:	does not work on callback()
+	'' @DESCRIPTION:	Does not work on <em>callback()</em>
 	'' @PARAM:			url [string]: url of your stylesheet
 	'' @PARAM:			media [string]: what media is this stylesheet for. screen, etc.
-	''					leave it blank if its for every media
+	''					Leave it EMPTY if its for every media
 	'******************************************************************************************************************
 	public sub loadCSSFile(url, media)
 		if isCallback() then exit sub
@@ -467,8 +472,8 @@ class AjaxedPage
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	gets the location of the page you are in. virtual, physical, file or the full URL of the page
-	'' @PARAM:			format [string]: the format you want the location be returned: PHYSICAL (c:\web\f.asp), VIRTUAL (/web/f.asp),
-	''					FULL (http://web/f.asp) or FILE (f.asp). Full takes the protocol into consideration (https or http)
+	'' @PARAM:			format [string]: the format you want the location be returned: <em>PHYSICAL</em> (c:\web\f.asp), <em>VIRTUAL</em> (/web/f.asp),
+	''					<em>FULL</em> (http://web/f.asp) or <em>FILE</em> (f.asp). Full takes the protocol into consideration (https or http)
 	'' @PARAM:			withQS [bool]: should the querystring be appended or not?
 	'' @RETURN:			[string] the location of the executing page in the wanted format
 	'******************************************************************************************************************
@@ -521,7 +526,7 @@ class AjaxedPage
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION:	OBSOLETE! use lib.throwError instead
+	'' @SDESCRIPTION:	OBSOLETE! use <em>lib.throwError</em> instead
 	'**********************************************************************************************************
 	public sub throwError(args)
 		lib.logger.warn("AjaxedPage.throwError() is obsolete. lib.throwError() should be used instead.")
@@ -529,7 +534,7 @@ class AjaxedPage
 	end sub
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	OBSOLETE! use lib.error() instead.
+	'' @SDESCRIPTION:	OBSOLETE! use <em>lib.error()</em> instead.
 	'******************************************************************************************************************
 	public sub [error](msg)
 		lib.logger.warn("AjaxedPage.error() is obsolete. lib.error() should be used instead.")
@@ -537,7 +542,7 @@ class AjaxedPage
 	end sub
 	
 	'******************************************************************************************************************
-	'' @DESCRIPTION: 	OBSOLETE! use lib.iif instead
+	'' @DESCRIPTION: 	OBSOLETE! use <em>lib.iif</em> instead
 	'******************************************************************************************************************
 	public function iif(i, j, k)
 		lib.logger.warn("AjaxedPage.iif() is obsolete. lib.iif() should be used instead.")

@@ -5,11 +5,11 @@
 '' @CREATOR:		Michal Gabrukiewicz
 '' @CREATEDON:		2007-07-16 21:01
 '' @CDESCRIPTION:	This class offers methods for database access. All of them are accessible
-''					directly through "db" without creating an own instance. The AjaxedPage
-''					offers a property "DBConnection" which automatically opens and closes the connection
+''					directly through <em>db</em> without creating an own instance. The AjaxedPage
+''					offers a property <em>DBConnection</em> which automatically opens and closes the default connection
 ''					within a page.
-''					- the database type is automatically detected but it can also be set manually in the config (AJAXED_DBTYPE).
-''					- if the database type could not be detected then the type is "unknown" and all operations are exectuted as it would be Microsoft SQL Server
+''					- the database type is automatically detected but it can also be set manually in the config (<em>AJAXED_DBTYPE</em>).
+''					- if the database type could not be detected then the type is <em>unknown</em> and all operations are exectuted as it would be Microsoft SQL Server
 '' @STATICNAME:		db
 '' @COMPATIBLE:		Microsoft Sql Server, Microsoft Access, Sqlite, MySQL
 '' @REQUIRES:		-
@@ -28,11 +28,11 @@ class Database
 		numberOfDBAccess = p_numberOfDBAccess
 	end property
 	
-	public property get defaultConnectionString ''[string] gets the default connectionsstring which can be configured in the ajaxed config. if no configured then empty
+	public property get defaultConnectionString ''[string] gets the default connectionsstring which can be configured in the ajaxed config (<em>AJAXED_CONNSTRING</em>). if no configured then EMPTY
 		defaultConnectionString = lib.init(AJAXED_CONNSTRING, empty)
 	end property
 	
-	public property get dbType ''[string] gets the type of the currently opened db. access, sqlite, mysql, mssql. unknown if the database type could not be detected. If your database could not be detected then its possible to set the type manually in the config using AJAXED_DBTYPE
+	public property get dbType ''[string] gets the type of the currently opened db. access, sqlite, mysql, mssql. unknown if the database type could not be detected. If your database could not be detected then its possible to set the type manually in the config using <em>AJAXED_DBTYPE</em>
 		if connection is nothing then lib.throwError("Database.dbType needs an opened connection.")
 		if isEmpty(p_dbType) then
 			p_dbType = "unknown"
@@ -67,7 +67,7 @@ class Database
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Opens a database connection with a given connection string
-	'' @DESCRIPTION:	- The connection is available afterwards in the connection property
+	'' @DESCRIPTION:	- The connection is available afterwards in the <em>connection</em> property
 	''					- if the connection is already opened then it gets closed a the new is opened
 	'' @PARAM:			connectionString [string]: a connection string
 	'******************************************************************************************************************
@@ -81,7 +81,7 @@ class Database
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Opens the connection to the default database
-	'' @DESCRIPTION:	- uses open() for it
+	'' @DESCRIPTION:	- uses <em>open()</em> for it
 	''					- throws an error if default connectionstring is NOT configured
 	'******************************************************************************************************************
 	public sub openDefault()
@@ -103,11 +103,11 @@ class Database
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	deletes a record from a given database table.
-	'' @DESCRIPTION:	- its required that the id column is named "id" if condition is used with int.
-	''					- ID is parsed and only ID greater 0 are recognized
+	'' @DESCRIPTION:	- its required that the id column is named <em>id</em> if condition is used with an INT datatype.
+	''					- <em>id</em> is parsed into a number and only <em>id</em> greater 0 are recognized
 	'' @PARAM:			tablename [string]: the name of the table you want to delete the record from
-	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. "id = 20 AND cool = 1"
-	''					- if condition is a string then you need to ensure sql-safety with str.sqlsafe yourself.
+	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. <em>"id = 20 AND cool = 1"</em>
+	''					- if condition is a string then you need to ensure sql-safety with <em>str.sqlsafe</em> yourself.
 	'******************************************************************************************************************
 	public sub delete(tablename, byVal condition)
 		checkBeforeExec "db.delete", empty, false
@@ -118,11 +118,11 @@ class Database
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	inserts a record into a given database table and returns the record ID
-	'' @DESCRIPTION:	- primary key column must be named ID
+	'' @DESCRIPTION:	- primary key column must be named <em>id</em>
 	''					- the values are not type converted in any way. you need to do it yourself
 	''					- columns with string values are trimmed if they exceed the maximum allowed length. e.g. if column A only accepts 50 chars it will be trimmed to 50 if it exceeds the length of 50
 	'' @PARAM:			tablename [string]: name of the table
-	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. array("name", "jack johnson")
+	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. <em>array("name", "jack johnson")</em>
 	''					- length must be even otherwise error is thrown
 	'' @RETURN:			[int] ID of the inserted record
 	'******************************************************************************************************************
@@ -149,14 +149,14 @@ class Database
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	updates a record in a given database table
-	'' @DESCRIPTION:	- primary key column must be named ID if condition is int
+	'' @DESCRIPTION:	- primary key column must be named <em>id</em> if condition is int
 	''					- the values are not type converted in any way. you need to do it yourself
 	''					- columns with string values are trimmed if they exceed the maximum allowed length. e.g. if column A only accepts 50 chars it will be trimmed to 50 if it exceeds the length of 50
 	'' @PARAM:			tablename [string]: name of the table
-	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. array("name", "jack johnson")
+	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. <em>array("name", "jack johnson")</em>
 	''					- length must be even otherwise error is thrown
-	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. "id = 20 AND cool = 1"
-	''					- if condition is a string then you need to ensure sql-safety with str.sqlsafe yourself.
+	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. <em>"id = 20 AND cool = 1"</em>
+	''					- if condition is a string then you need to ensure sql-safety with <em>str.sqlsafe</em> yourself.
 	'******************************************************************************************************************
 	public sub update(tablename, data, byVal condition)
 		checkBeforeExec "db.update", empty, false
@@ -177,6 +177,7 @@ class Database
 	'******************************************************************************************************************
 	private sub fillRSWithData(byRef RS, dataArray, callingFunctionName)
 		if (uBound(dataArray) + 1) mod 2 <> 0 then lib.throwError(array(100, callingFunctionName, "data length must be even. array(column, value, ...) "))
+		set strFieldTypes = (new DataContainer)(stringFieldTypes)
 		for i = 0 to ubound(dataArray) step 2
 			desc = ""
 			col = dataArray(i)
@@ -185,7 +186,7 @@ class Database
 			on error resume next
 				'we trim the value to the length which is allowed by the database
 				if not isNull(val) then
-					if lib.contains(stringFieldTypes, RS(col).type) then val = left(val, size)
+					if strFieldTypes.contains(RS(col).type) then val = left(val, size)
 				end if
 				RS(col) = val
 				failed = err <> 0
@@ -198,7 +199,7 @@ class Database
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	gets the recordcount for a given table.
 	'' @PARAM:			tablename [string]: name of the table
-	'' @PARAM:			condition [string]: condition for the count. e.g. "deleted = 0". leave empty to get all
+	'' @PARAM:			condition [string]: condition for the count. e.g. <em>"deleted = 0"</em>. leave empty to get all
 	'' @RETURN:			[int] number of records
 	'******************************************************************************************************************
 	public function count(tablename, byVal condition)
@@ -209,7 +210,7 @@ class Database
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	toggles the state of a flag column. if the value is 1 its turned into 0 and vicaversa.
-	'' @DESCRIPTION:	useful if you dont delete records but mark them deleted. e.g. toggle("user", "deleted", 10)
+	'' @DESCRIPTION:	useful if you dont delete records but mark them deleted. e.g. <em>toggle("user", "deleted", 10)</em>
 	'' @PARAM:			tablename [string]: name of the table
 	'' @PARAM:			columnName [string]: name of the flag column. must be a numeric column accepting 1 and 0
 	'' @PARAM:			condition [string], [int]: if number then treated as ID of the record otherwise condition for WHERE clause.
@@ -235,12 +236,13 @@ class Database
 	end function
 	
 	'******************************************************************************************************************
+	'' @SDESCRIPTION:	Gets a locked recordset
 	'' @DESCRIPTION: 	Gets a LOCKED recordset from the currently opened database. Example of usage:
-	''					set RS = lib.getRS("SELECT * FROM users WHERE name = '{0}'", "john")
-	'' @PARAM:			sql [string]: Your SQL query. placeholder for params are {0}, {1}, ... check str.format() for details
+	''					<code>set RS = lib.getRS("SELECT * FROM users WHERE name = '{0}'", "john")</code>
+	'' @PARAM:			sql [string]: Your SQL query. placeholder for params are {0}, {1}, ... check <em>str.format()</em> for details
 	'' @PARAM:			params [array], [string]: parameters for the query which are used within the sql query. 
 	''					- Parameters are made sql injection safe.
-	''					- Leave empty if no params are needed
+	''					- Leave EMPTY if no params are needed
 	''					- provide an array if you have more parameters in your sql
 	''					- provide a string if you have only one parameter
 	'' @RETURN:			[recordset] recordset with data matching the sql query
@@ -260,9 +262,9 @@ class Database
 	end function
 	
 	'******************************************************************************************************************
-	'' @DESCRIPTION: 	Gets an UNLOCKED recordset from the currently opened database. check getRS() doc
-	'' @PARAM:			sql [string]: check getRS() doc
-	'' @PARAM:			params [array], [string]: check getRS() doc
+	'' @DESCRIPTION: 	Gets an UNLOCKED recordset from the currently opened database. check <em>getRS()</em> documentation
+	'' @PARAM:			sql [string]: check <em>getRS()</em> doc
+	'' @PARAM:			params [array], [string]: check <em>getRS()</em> doc
 	'' @RETURN:			[recordset] recordset with data matching the sql query
 	'******************************************************************************************************************
 	public function getUnlockedRS(byVal sql, params)
@@ -299,10 +301,11 @@ class Database
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	executes a given sql-query and returns the first value of the first row.
-	'' @DESCRIPTION:	if there is no record given then the alternative will be returned.
-	''					the returned value (if available) will be converted to the type of which the alternative is.
-	''					example: calling getScalar("...", 0) will convert the returned value into an integer. if no record
-	''					then 0 will be returned
+	'' @DESCRIPTION:	If there is no record available then the alternative will be returned.
+	''					The returned value (if available) will be converted to the type of <em>alternative</em>.
+	''					Example:
+	''					<code>set val = db.getScalar("SELECT sales FROM table", 0)</code>
+	''					This will set the variable <em>val</em> to an integer for sure. If no records found then 0 will be returned otherwise the <em>sales</em> column value of the first record.
 	'' @PARAM:			sql [string]: sql-query to be executed
 	'' @PARAM:			alternative [variant]: what should be returned when there is no record returned
 	'' @RETURN:			[variant] the first value of the result converted to the type of alternative
@@ -317,9 +320,9 @@ class Database
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION: 	OBSOLETE! use getRS() instead.
+	'' @SDESCRIPTION: 	OBSOLETE! use <em>getRS()</em> instead.
 	'' @DESCRIPTION:	Default method which should be always used to get a LOCKED recordset. Example for use:
-	''					set RS = db.getRecordset("SELECT * FROM user")
+	''					<code>set RS = db.getRecordset("SELECT * FROM user")</code>
 	'' @PARAM:			sql [string]: Your SQL query
 	'' @RETURN:			[Recordset] recordset-Object
 	'******************************************************************************************************************
@@ -329,9 +332,9 @@ class Database
 	end Function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	OBSOLETE! use getUnlockedRS() instead
+	'' @SDESCRIPTION:	OBSOLETE! use <em>getUnlockedRS()</em> instead
 	'' @DESCRIPTION: 	Default method which should be always used to get an UNLOCKED recordset. Example for use:
-	''					set RS = db.getUnlockedRecordset("SELECT * FROM user")
+	''					<code>set RS = db.getUnlockedRecordset("SELECT * FROM user")</code>
 	'' @PARAM:			sql [string]: Your SQL query
 	'' @RETURN:			[Recordset] returns a recordset object (adOpenStatic & adUseClient)
 	'******************************************************************************************************************
