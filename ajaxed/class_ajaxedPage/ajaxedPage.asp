@@ -77,23 +77,27 @@ class AjaxedPage
 	private ajaxHeaderDrawn, sessionCodePage, p_callbackType
 	
 	'public members
-	public loadPrototypeJS		''[bool] should protypeJS library be loaded. turn this off if you've done it manually. default = TRUE
+	public loadPrototypeJS		''[bool] should protypeJS library be loaded. Turn this off if you've done it manually (e.g. in your <em>header.asp</em>). default = TRUE
 	public buffering			''[bool] turns the <em>response.buffering </em>on or off (no affect on callback). default = TRUE
 	public contentType			''[string] contenttype of the response. default = EMPTY
-	public debug				''[bool] turns debugging on of. default = false
+	public debug				''[bool] turns debugging on of. default = FALSE
 	public DBConnection			''[bool] indicates if a database connection should be opened automatically for the page.
-								''If yes then a connection with the configured connectionstring (ajaxed config) is established and can be used
-								''within the <em>init()</em>, <em>callback()</em> and <em>main()</em> procedures. default = false
-	public plain				''[bool] indicates if the page should be a plain page. means that no header(s) and footer(s) are included.
-								''Useful for page which are actually only parts of pages and loaded with an XHR. default = false
+								''If yes then a connection for the default database (default database is the one configured with <em>AJAXED_CONNSTRING</em> config) will be established and can be used
+								''within the <em>init()</em>, <em>callback()</em> and <em>main()</em> procedures. default = FALSE
+	public plain				''[bool] indicates if the page should be a plain page. means that no header and footer is rendered.
+								''Useful for page which are actually only parts of pages and loaded with an XHR. default = FALSE
 	public title				''[string] title for the page (useful to use within the header.asp)
-	public onlyDev				''[bool] should the page only be rendered on the development environment? default = false
-	public defaultStructure		''[bool] should the header and the footer be generated automatically by the Page itself?
-								''if true then it will load a default header.asp and footer.asp which holds the common HTML elements
-								''like HTML, BODY, doctype, etc. This is useful when you dont really care about an own structure.
-								''(e.g. the ajaxed console uses this). If false then the header.asp and footer.asp from the "ajaxedConfig"
-								''is loaded. default = false
-	
+	public onlyDev				''[bool] should the page only be rendered on the development environment? default = FALSE
+	public defaultStructure		''[bool] Should the header and the footer be generated automatically by the Page itself?
+								''if TRUE then it will <strong>always</strong> (ignoring all other header/footer settings) load a default <em>header.asp</em> and <em>footer.asp</em> which holds the common HTML elements
+								''like <em>html</em>, <em>body</em>, a <em>doctype</em>, etc. This is useful when you dont really care about an own structure but want a valid page structure.
+								''e.g. the ajaxed console uses this. If false then the <em>header.asp</em> and <em>footer.asp</em> from <em>/ajaxedConfig</em>
+								''is loaded unless <em>headerFooter</em> property is set. default = FALSE
+	public headerFooter			''[array] The procedures which should be executed for the header and the footer instead of loading the
+								''<em>header.asp</em> and <em>footer.asp</em> from the config. Useful if you need more headers and footers within one website
+								''e.g. site and backend. This example presumes a <em>pageHeader</em> and a <em>pageFooter</em> sub in your code (usually in some custom global config file):
+								''<code><% page.headerFooter = array("pageHeader", "pageFooter") % ></code>
+ 	
 	private property get callbackAction
 		callbackAction = left(RF(callbackFlagName), 255)
 	end property
@@ -240,10 +244,13 @@ class AjaxedPage
 		if not plain then
 			if defaultStructure then %>
 				<!--#include file="header.asp"-->
-			<% else %>
-				<!--#include virtual="/ajaxedConfig/header.asp"-->
-			<% end if
-			if not ajaxHeaderDrawn then lib.throwError("ajaxedHeader(params) must be called within the /ajaxedConfig/header.asp.")
+			<%
+			else
+				if not callHeaderFooterFunc(0) then
+					%><!--#include virtual="/ajaxedConfig/header.asp"--><%
+				end if
+			end if
+			if not ajaxHeaderDrawn then lib.throwError("AjaxedPage.ajaxedHeader(params) must be called within the /ajaxedConfig/header.asp or the custom header (you can also use lib.page to call the ajaxedHeader() method).")
 		end if
 	end sub
 	
@@ -254,11 +261,29 @@ class AjaxedPage
 		if not plain then
 			if defaultStructure then %>
 				<!--#include file="footer.asp"-->
-			<% else %>
-				<!--#include virtual="/ajaxedConfig/footer.asp"-->
-			<% end if %>
-		<% end if
+			<%
+			else
+				if not callHeaderFooterFunc(1) then
+					%><!--#include virtual="/ajaxedConfig/footer.asp"--><%
+				end if
+			end if
+		end if
 	end sub
+	
+	'******************************************************************************************************************
+	'* callHeaderFooterFunc 
+	'******************************************************************************************************************
+	private function callHeaderFooterFunc(idx)
+		callHeaderFooterFunc = false
+		set func = nothing
+		if isArray(headerFooter) then
+			if ubound(headerFooter) >= idx then set func = lib.getFunction(headerFooter(idx))
+		end if
+		if not func is nothing then
+			callHeaderFooterFunc = true
+			func
+		end if
+	end function
 	
 	'******************************************************************************************************************
 	'' @SDESCRIPTION:	draws all necessary headers for ajaxed (js, css, etc.)

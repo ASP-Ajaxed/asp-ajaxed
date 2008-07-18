@@ -1,4 +1,4 @@
-<!--#include file="../class_testFixture/testFixture.asp"-->
+﻿<!--#include file="../class_testFixture/testFixture.asp"-->
 <%
 set tf = new TestFixture
 tf.run()
