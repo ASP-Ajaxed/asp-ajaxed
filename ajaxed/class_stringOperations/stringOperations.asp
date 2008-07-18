@@ -644,6 +644,15 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
+	'' @SDESCRIPTION:	Writes a formatted string. (combination of <em>write()</em> and <em>format()</em>)
+	'' @PARAM:			str [string]: the source string
+	'' @PARAM:			values [array], [string]: your values which should replace the placeholders. Use a STRING if you have only one placeholder to replace. Check <em>format()</em> function for more details
+	'**************************************************************************************************************
+	public sub writef(byVal str, byVal values)
+		write(format(str, values))
+	end sub
+	
+	'**************************************************************************************************************
 	'' @SDESCRIPTION:	Encodes a string into ASCII Characters
 	'' @DESCRIPTION:	This function takes a string (for example an email-address) and converts it to
 	''					standardized ASCII Character codes, thus blocking bots/spiders from reading your

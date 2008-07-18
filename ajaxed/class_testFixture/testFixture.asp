@@ -128,57 +128,24 @@ class TestFixture
 		'we want to catch all errors when getting the request, because we dont want
 		'an error. we rather want the assert to fail
 		on error resume next
-			set req = getRequest(url(0), uri, params, requestTimeout)
+			set req = lib.requestURL(url(0), uri, params, requestTimeout)
 			if err <> 0 then eDesc = err.description
 		on error goto 0
-		if eDesc <> "" then
+		if not isEmpty(eDesc) then
 			assertFailed uri, eDesc, msg
 			exit sub
 		end if
-		resp = req.responseText
-		if req.status <> 200 then
-			assertFailed uri & " match '" & pattern & "'", "Status-code: " & req.status, msg
-		elseif not str.matching(resp, pattern, true) then
-			assertFailed uri & " match '" & pattern & "'", lib.iif(debug, resp, str.shorten(resp, 200, "...")), msg
-		end if
-		set xmlhttp = nothing
-	end sub
-	
-	'**********************************************************************************************************
-	'* request 
-	'**********************************************************************************************************
-	private function getRequest(byVal method, byVal url, byVal params, byVal timeout)
-		if str.startsWith(url, "/") then
-			protocol = lib.iif(lcase(request.serverVariables("HTTPS")) = "off", "http://", "https://")
-			url = protocol & request.serverVariables("SERVER_NAME") & url
-		end if
-		if isArray(params) then
-			if (uBound(params) + 1) mod 2 <> 0 then lib.throwError("getRequest() params must have an even length")
-			for i = 0 to uBound(params) step 2
-				pQS = pQS & params(i) & "=" & server.URLEncode(params(i + 1)) & "&"
-			next
-		end if
-		'4.0 version cannot be used due to the following problem on WIN2003 server
-		'http://support.microsoft.com/default.aspx?scid=kb;en-us;820882#6
-		set getRequest = server.createObject("Msxml2.ServerXMLHTTP.3.0")
-		timeout = timeout * 1000
-		with getRequest
-			'resolve, connect, send, receive
-			.setTimeouts timeout, timeout, timeout, timeout
-			if lcase(method) = "get" then
-				if not str.endsWith(url, "?") then url = url & "?"
-				.open "GET", url & pQS, false
-				.send()
-			elseif lcase(method) = "post" then
-				.open "POST", url, false
-				.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
-				.setRequestHeader "Encoding", "UTF-8"
-				.send(pQS)
-			else
-				lib.throwError("Not supported method '" & uCase(method) & "' for " & url)
+		if req is nothing then
+			assertFailed uri & " match '" & pattern & "'", "Could not request URL", msg
+		else
+			resp = req.responseText
+			if req.status <> 200 then
+				assertFailed uri & " match '" & pattern & "'", "Status-code: " & req.status, msg
+			elseif not str.matching(resp, pattern, true) then
+				assertFailed uri & " match '" & pattern & "'", lib.iif(debug, resp, str.shorten(resp, 200, "...")), msg
 			end if
-		end with
-	end function
+		end if
+	end sub
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	expects a string to exist in a given file.

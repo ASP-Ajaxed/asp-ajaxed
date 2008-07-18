@@ -110,7 +110,7 @@ class Database
 	''					- if condition is a string then you need to ensure sql-safety with <em>str.sqlsafe</em> yourself.
 	'******************************************************************************************************************
 	public sub delete(tablename, byVal condition)
-		checkBeforeExec "db.delete", empty, false
+		checkBeforeExec "Database.delete()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.delete", "tablename cannot be empty"))
 		if condition = "" then exit sub
 		getRS "DELETE FROM " & str.sqlSafe(tablename) & getWhereClause(condition), empty
@@ -127,12 +127,12 @@ class Database
 	'' @RETURN:			[int] ID of the inserted record
 	'******************************************************************************************************************
 	public function insert(tablename, data)
-		checkBeforeExec "db.insert", empty, false
+		checkBeforeExec "Database.insert()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.insert()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		aRS.open tablename, connection, 1, 2, 2
 		aRS.addNew()
-		fillRSWithData aRS, data, "db.insert"
+		fillRSWithData aRS, data, "Database.insert()"
 		aRS.update()
 		if dbType = "sqlite" then
 			insert = getScalar("SELECT last_insert_rowid();", 0)
@@ -148,46 +148,66 @@ class Database
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION: 	updates a record in a given database table
-	'' @DESCRIPTION:	- primary key column must be named <em>id</em> if condition is int
-	''					- the values are not type converted in any way. you need to do it yourself
-	''					- columns with string values are trimmed if they exceed the maximum allowed length. e.g. if column A only accepts 50 chars it will be trimmed to 50 if it exceeds the length of 50
+	'' @SDESCRIPTION: 	Updates record(s) in a given database table. Return number of updated records.
+	'' @DESCRIPTION:	- Primary key column must be named <em>id</em> if condition is int
+	''					- The values are not type converted in any way. you need to do it yourself
+	''					- Columns with string values are trimmed if they exceed the maximum allowed length. e.g. if column A only accepts 50 chars it will be trimmed to 50 if it exceeds the length of 50
+	''					- If the condition matches more records then all are updated (batch updating)
+	''					<code>
+	''					<%
+	''					'updates the firstname of all records of the table "person"
+	''					to the value "leila"
+	''					updated = db.update("person", array("firstname", "leila"), empty)
+	''					str.writef("Updated {0} records", updated)
+	''					% >
+	''					</code>
 	'' @PARAM:			tablename [string]: name of the table
 	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. <em>array("name", "jack johnson")</em>
 	''					- length must be even otherwise error is thrown
 	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. <em>"id = 20 AND cool = 1"</em>
-	''					- if condition is a string then you need to ensure sql-safety with <em>str.sqlsafe</em> yourself.
+	''					- If condition is a string then you need to ensure sql-safety with <em>str.sqlsafe</em> yourself.
+	''					- Leave EMPTY if you want to update all records of the table (Note: this could take some time when there are a lot of records).
+	'' @RETURN:			[int] Number of updated records. <em>0</em> if non updated (e.g. condition didnt match any records)
 	'******************************************************************************************************************
-	public sub update(tablename, data, byVal condition)
-		checkBeforeExec "db.update", empty, false
+	public function update(tablename, data, byVal condition)
+		checkBeforeExec "Database.update()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.update()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		sql = "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition)
 		aRS.open sql, connection, 1, 2
-		fillRSWithData aRS, data, "db.update"
-		aRS.update()
+		update = 0
+		while not aRS.eof
+			fillRSWithData aRS, data, "Database.update()"
+			aRS.update()
+			update = update + 1
+			aRS.movenext()
+		wend
 		aRS.close()
 		set aRS = nothing
 		debug(array("updated record in '" & tablename & "' with condition '" & condition & "':", sql))
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
-	end sub
+	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION: 	Inserts (<em>insert()</em>) a record if it does not exist otherwise it updates the record (<em>update()</em>).
-	'' @DESCRIPTION:	For more details about the functionality refer to the <em>insert()</em> and <em>update()</em> method. Those are used internally.
+	'' @SDESCRIPTION: 	Inserts (<em>insert()</em>) a record if it does not exist otherwise it updates the record(s) (<em>update()</em>).
+	'' @DESCRIPTION:	For more details about the functionality refer to the <em>insert()</em> and <em>update()</em> methods. Those are used internally. 
+	''					<strong>Note:</strong> Table must contain a column named <em>id</em>.
 	'' @PARAM:			tablename [string]: name of the table
 	'' @PARAM:			data [array]: array which holds the columnames and its values.
-	'' @PARAM:			condition [int], [string]: ID of the record or a condition
-	'' @RETURN:			[int] ID of the record if the condition is an ID or if an insert has been performed. Otherwise <em>0</em>
+	'' @PARAM:			condition [int], [string]: ID of the record or a condition. Must be provided (cannot be EMPTY)
+	'' @RETURN:			[int] ID of the record if inserted otherwise <em>0</em>
 	'******************************************************************************************************************
 	public function insertOrUpdate(tablename, data, byVal condition)
-		checkBeforeExec "db.insertOrUpdate", empty, false
+		checkBeforeExec "Database.insertOrUpdate()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.insertOrUpdate()", "tablename cannot be empty"))
-		insertOrUpdate = 0
-		if count(tablename, condition) > 0 then
+		if trim(condition) = "" then lib.throwError("Database.insertOrUpdate() must contain a condition")
+		insertOrUpdate = str.parse(condition, 0)
+		countCond = condition & ""
+		if countCond = "0" or insertOrUpdate > 0 then countCond = "id = " & insertOrUpdate
+		c = count(tablename, countCond)
+		if c > 0 then
 			update tablename, data, condition
-			ID = str.parse(condition, 0)
-			if ID > 0 then insertOrUpdate = ID
+			insertOrUpdate = 0
 		else
 			insertOrUpdate = insert(tablename, data)
 		end if
@@ -224,7 +244,7 @@ class Database
 	'' @RETURN:			[int] number of records
 	'******************************************************************************************************************
 	public function count(tablename, byVal condition)
-		checkBeforeExec "db.count", empty, false
+		checkBeforeExec "Database.count()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.count()", "tablename cannot be empty"))
 		count = getScalar("SELECT COUNT(*) FROM " & str.SQLSafe(tablename) & lib.iif(condition <> "", " WHERE " & condition, ""), 0)
 	end function
@@ -237,7 +257,7 @@ class Database
 	'' @PARAM:			condition [string], [int]: if number then treated as ID of the record otherwise condition for WHERE clause.
 	'******************************************************************************************************************
 	public sub toggle(tablename, columnName, byVal condition)
-		checkBeforeExec "db.toggle", empty, false
+		checkBeforeExec "Database.toggle()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.toggle()", "tablename cannot be empty"))
 		if trim(columnName) = "" then lib.throwError(array(100, "Database.toggle()", "columnname cannot be empty"))
 		sql = "UPDATE " & str.SQLSafe(tablename) & " SET " & str.SQLSafe(columnName) & " = 1 - " & str.SQLSafe(columnName) & getWhereClause(condition)
@@ -269,14 +289,14 @@ class Database
 	'' @RETURN:			[recordset] recordset with data matching the sql query
 	'******************************************************************************************************************
 	public function getRS(byVal sql, params)
-		sql = parametrizeSQL(sql, params, "db.getRS")
+		sql = parametrizeSQL(sql, params, "Database.getRS()")
 		debug(sql)
 		on error resume next
  		set getRS = connection.execute(sql)
 		if err <> 0 then
 			errdesc = err.description
 			on error goto 0
-			lib.throwError(array(101, "db.getRS", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
+			lib.throwError(array(101, "Database.getRS()", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
 		end if
 		on error goto 0
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
@@ -289,7 +309,7 @@ class Database
 	'' @RETURN:			[recordset] recordset with data matching the sql query
 	'******************************************************************************************************************
 	public function getUnlockedRS(byVal sql, params)
-		sql = parametrizeSQL(sql, params, "db.getUnlockedRS")
+		sql = parametrizeSQL(sql, params, "Database.getUnlockedRS()")
 		debug(sql)
 		on error resume next
 		set getUnlockedRS = server.createObject("ADODB.RecordSet")
@@ -299,7 +319,7 @@ class Database
 		if err <> 0 then
 			errdesc = err.description
 			on error goto 0
-			lib.throwError(array(101, "db.getUnlockedRS", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
+			lib.throwError(array(101, "Database.getUnlockedRS()", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
 		end if
 		on error goto 0
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
@@ -333,7 +353,7 @@ class Database
 	''					or the alternative itself if no records available
 	'******************************************************************************************************************
 	public function getScalar(byVal sql, alternative)
-		checkBeforeExec "db.getScalar", sql, true
+		checkBeforeExec "Database.getScalar()", sql, true
 		getScalar = alternative
 		set aRS = getRS(sql, empty)
 		if not aRS.eof then getScalar = str.parse(aRS(0) & "", alternative)

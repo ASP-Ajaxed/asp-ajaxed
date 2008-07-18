@@ -89,6 +89,37 @@ sub performDBOperations()
 	tf.assert not db.getRS("SELECT * FROM person WHERE id = {0}", id).eof, "db.getRS should take only one param as argument"
 	tf.assert not db.getRS("SELECT * FROM person WHERE id = {0}", array(id)).eof, "db.getRS should also take an array as arg"
 	
+	'batch update
+	tf.assertEqual 2, db.update("person", array("firstname", "batch"), empty), "update() returns wrong"
+	tf.assertEqual 2, db.count("person", "firstname = 'batch'"), "Batch update failed"
+	tf.assertEqual 1, db.update("person", array("firstname", "notbatch"), 1), "update() returns wrong"
+	tf.assertEqual 1, db.count("person", "firstname = 'batch'"), "Batch update failed"
+	tf.assertEqual 1, db.count("person", "firstname = 'notbatch'"), "Batch update failed"
+	tf.assertEqual 0, db.update("person", array("firstname", "notbatch"), "firstname = 'batman'"), "update() returns wrong"
+	
+	'test insertOrUpdate()
+	ID = db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "gabru", "age", 40), 0)
+	tf.assertEqual 40, db.getScalar("SELECT age FROM person WHERE id = " & id, 0), "insertOrUpdate problem"
+	
+	ID = db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "gabru", "age", 88), "id = -1")
+	tf.assertEqual 88, db.getScalar("SELECT age FROM person WHERE id = " & id, 0), "insertOrUpdate problem"
+	
+	on error resume next
+	ID = db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "gabru", "age", 26), empty)
+	failed = err <> 0
+	on error goto 0
+	tf.assert failed, "update() must fail with empty condition"
+	
+	tf.assertEqual 0, db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "gabru", "age", 27), ID), "insertOrUpdate() must return 0 on updates"
+	tf.assertEqual 27, db.getScalar("SELECT age FROM person WHERE id = " & ID, 0), "insertOrUpdate problem"
+	tf.assertEqual 2, db.count("person", "firstname = 'mirjam'"), "should be still 2"
+	
+	tf.assertEqual 0, db.insertOrUpdate("person", array("age", 99), "firstname = 'mirjam'"), "insertOrUpdate() must return 0 on updates"
+	tf.assertEqual 99, db.getScalar("SELECT age FROM person WHERE id = " & ID, 0), "insertOrUpdate problem"
+	tf.assertEqual 2, db.count("person", "firstname = 'mirjam'"), "should be even now 2"
+	tf.assertEqual 2, db.count("person", "age = 99"), "should be 2 with age of 99"
+	
+	'rollback all changes
 	db.connection.rollbackTrans()
 end sub
 %>

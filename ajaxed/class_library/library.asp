@@ -1,4 +1,4 @@
-<%
+﻿<%
 '**************************************************************************************************************
 
 '' @CLASSTITLE:		Library
@@ -83,6 +83,100 @@ class Library
 	public sub class_terminate()
 		set fso = nothing
 	end sub
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	Tries to request an URL and loads its response into an <em>XMLDOM</em> object. Uses <em>requestURL()</em> internally.
+	'' @DESCRIPTION:	<code>
+	''					<%
+	''					set xml = lib.loadXML("get", "http://someurl.com", empty, 1)
+	''					if xml is nothing then str.writeend("XML loading failed")
+	''					% >
+	''					</code>
+	'' @PARAM:			method [string]: see <em>requestURL()</em>
+	'' @PARAM:			url [int]: see <em>requestURL()</em>
+	'' @PARAM:			params [array]: see <em>requestURL()</em>
+	'' @PARAM:			timeout [int]: see <em>requestURL()</em>
+	'' @RETURN:			[Microsoft.XMLDOM] Returns an XMLDOM if the <em>xmlString</em> could be loaded otherwise
+	''					NOTHING is returned.
+	'**********************************************************************************************************
+	public function requestXML(method, url, params, timeout)
+		set requestXML = nothing
+		set xmlhttp = lib.requestURL(method, url, params, timeout)
+		if xmlhttp is nothing then exit function
+		if xmlhttp.status <> 200 then exit function
+		set requestXML = server.createObject("Microsoft.XMLDOM")
+		requestXML.loadxml(xmlhttp.responseText)
+		if requestXML.parseError.errorCode <> 0 then
+			lib.logger.log 1, "XML parse error: " & requestXML.parseError.errorCode, "0;32"
+			set requestXML = nothing
+		end if
+		set xmlhttp = nothing
+	end function
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	Requests an URL and returns an XMLHttpRequest object.
+	'' @DESCRIPTION:	Post parameters are always encoded with UTF-8. Often use in combination with <em>lib.loadXML()</em>
+	'' @PARAM:			method [string]: <em>GET</em> or <em>POST</em>
+	'' @PARAM:			url [int]: URL for the request. Only full URLs are supported (starting with <em>http://</em>, <em>https://</em>, etc.) 
+	''					or virtual URLs (starting with <em>/</em>) to request internal pages
+	'' @PARAM:			params [array]: Parameters for the request. Even fields of the array hold the names and the odd fields hold the corresponding values.
+	''					Values are automatically <em>urlEncoded</em>.
+	''					- if <em>POST</em> request then send as <em>POST</em> values (if querystring values needed then add them direclty to the URL).
+	''					- if <em>GET</em> request then send via querystring.
+	''					- provide EMPTY if no parameters are needed
+	'' @PARAM:			timeout [int]: Timeout in seconds for the request. <em>0</em> means unlimited (not recommended!)
+	'' @RETURN:			[IXMLHttpRequest] Returns an XHR object. Check if it was successful by checking its <em>status</em> property. Use <em>responseText</em> to get the response. (see the logfile to debug). NOTHING if an exception occured (e.g. timeout)
+	'**********************************************************************************************************
+	public function requestURL(byVal method, byVal url, byVal params, byVal timeout)
+		if str.startsWith(url, "/") then
+			protocol = lib.iif(lcase(request.serverVariables("HTTPS")) = "off", "http://", "https://")
+			url = protocol & request.serverVariables("SERVER_NAME") & url
+		end if
+		if isArray(params) then
+			if (uBound(params) + 1) mod 2 <> 0 then lib.throwError("Library.requestURL() params must have an even length")
+			for i = 0 to uBound(params) step 2
+				pQS = pQS & params(i) & "=" & server.URLEncode(params(i + 1)) & "&"
+			next
+		end if
+		
+		'4.0 version cannot be used due to the following problem on WIN2003 server
+		'http://support.microsoft.com/default.aspx?scid=kb;en-us;820882#6
+		set requestURL = server.createObject("Msxml2.ServerXMLHTTP.3.0")
+		timeout = timeout * 1000
+		logStyle = "0;32"
+		'resolve, connect, send, receive
+		if timeout > 0 then requestURL.setTimeouts timeout, timeout, timeout, timeout
+		
+		method = uCase(method)
+		if method = "GET" or method = "POST" then
+			lib.logger.log 1, array(method & ": " & url, "params: " & pQS), logStyle
+			if method = "GET" then
+				if not str.endsWith(url, "?") then url = url & "?"
+				url = url & pQS
+				on error resume next
+					requestURL.open "GET", url, false
+					requestURL.send()
+					if err <> 0 then desc = err.description
+				on error goto 0
+			else
+				on error resume next
+					requestURL.open "POST", url, false
+					requestURL.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
+					requestURL.setRequestHeader "Encoding", "UTF-8"
+					requestURL.send(pQS)
+					if err <> 0 then desc = err.description
+				on error goto 0
+			end if
+			if isEmpty(desc) then
+				lib.logger.log 1, array("Response-code " & requestURL.status & ": ", requestURL.responseText), logStyle
+			else
+				lib.logger.log 1, array("Request failed: " & desc), logStyle
+				set requestURL = nothing
+			end if
+		else
+			throwError("Library.requestURL() does not support '" & uCase(method) & "'")
+		end if
+	end function
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	gets the virtual path of the ajaxed library root folder.

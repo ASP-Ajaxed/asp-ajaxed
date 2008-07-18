@@ -79,4 +79,10 @@ sub test_2()
 	tf.assertInFile lib.logger.logFile, "errorMSG", "logile should contain 'error' msg if level is set to error (8)"
 	lib.logger.clearLogs()
 end sub
+
+sub test_3()
+	'log utf8 chars
+	lib.logger.logLevel = 1
+	lib.logger.debug chrw(352)
+end sub
 %>
