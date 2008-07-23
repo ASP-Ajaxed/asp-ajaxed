@@ -34,8 +34,8 @@ class JSON
 	private output, innerCall
 	
 	'public members
-	public toResponse		''[bool] should the generated representation be written directly to the response (using <em>response.write</em>)? default = false
-	public recordsetPaging	''[bool] indicates if only the current page should be processed on paged recordsets.
+	public toResponse		''[bool] Should the generated representation be written directly to the response (using <em>response.write</em>)? default = false
+	public recordsetPaging	''[bool] Indicates if only the current page should be processed on paged recordsets.
 							''e.g. would return only 10 records if <em>RS.pagesize</em> is set to 10. default = false (means that always all records are processed)
 	
 	'**********************************************************************************************************

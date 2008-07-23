@@ -5,7 +5,7 @@ tf.run()
 
 sub test_1()
 	pages = array( _
-		"", "console.js", _
+		"default.asp", "console.js", _
 		"configuration.asp", "ajaxed version", _
 		"tests.asp", "run all", _
 		"documentation.asp", "generate...", _

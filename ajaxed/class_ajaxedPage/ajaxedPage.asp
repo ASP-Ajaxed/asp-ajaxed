@@ -436,6 +436,39 @@ class AjaxedPage
 	end function
 	
 	'******************************************************************************************************************
+	'' @SDESCRIPTION:	Combination of <em>RF()</em> and <em>str.parse()</em> which allows you to get & parse a posted value in one go.
+	'' @DESCRIPTION:	See <em>StringOperations.parse()</em> for more details about parsing:
+	''					<code>
+	''					<%
+	''					'ensures that a posted value ID always is an integer
+	''					ID = page.RFP("id", 0)
+	''					if ID <= 0 then lib.error("wrong ID")
+	''					'now we can use it e.g. within the database
+	''					set RS = lib.getRS("SELECT * FROM table WHERE id = {0}", ID)
+	''					% >
+	''					</code>
+	''					<strong>Note:</strong> The same method for querystring values is called <em>QSP()</em>
+	'' @PARAM:			name [string]: name of the formfield you want to get
+	'' @PARAM:			alternative [string]: The alternative value for parsing (which also indicates the returned type).
+	'' @RETURN:			[variant] Value parsed into the type of <em>alternative</em>
+	'******************************************************************************************************************
+	public function RFP(name, alternative)
+		RFP = str.parse(RF(name), alternative)
+	end function
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION:	Combination of <em>QS()</em> and <em>str.parse()</em> which allows you to get & parse a querystring value in one go.
+	'' @DESCRIPTION:	See <em>StringOperations.parse()</em> for more details about parsing.
+	''					See <em>RFP()</em> for a code example.
+	'' @PARAM:			name [string]: name of the querystring value you want to get
+	'' @PARAM:			alternative [string]: The alternative value for parsing (which also indicates the returned type).
+	'' @RETURN:			[variant] Value parsed into the type of <em>alternative</em>
+	'******************************************************************************************************************
+	public function QSP(name, alternative)
+		QSP = str.parse(QS(name), alternative)
+	end function
+	
+	'******************************************************************************************************************
 	'' @SDESCRIPTION:	returns true if a given value exists in the request.form
 	'' @DESCRIPTION:	good usage on submit buttons or checkboxes. Example of how to check a checkbox if it has been
 	''					checked after posting the form:

@@ -19,6 +19,8 @@ BUGFIX: str.format used to have a bug when arguments contained a placeholder str
 	- removes square brackets on a methodname (reserved words)
 	- parameter lists have a "," now between every parameter
 	- use <em></em> to emphasize code words (e.g. methodnames, etc.). EMPTY is emphasized automatically
+	- @ALIAS keyword added for methods.
+	- options are detected in the documentation
 - added db.getRS() and db.getUnlockedRS(). those should be used instead of db.getRecordset and db.getUnlockedRecordset
 	because they can be used with parameters which will be sql-safe. e.g. db.getRS("SELECT * FROM user WHERE id = {0}", 1)
 - added some more error checks to the db class
@@ -89,7 +91,13 @@ BUGFIX: str.format used to have a bug when arguments contained a placeholder str
 	- str.parse() parses float number with the comma according to the local settings 
 - added str.writef() function which is a combination of write() and format()
 - AjaxedPage.headerFooter property introduced to allow adding custom headers.
-- added lib.requestURL() and lib.requestXML() to easily request urls
+- added lib.requestURL() to easily request urls with IServerXMLHTTPRequest
+- added AjaxedPage.QFP() and AjaxedPage.RFP() methods to get values and parse them in on go.
+- added lib.arrayize() which ensures a value to be an array.
+	- alias: []
+- introduced optionsHash which can be seen as an own ajaxed datatype.
+	- can be created using lib.options or ["O"] function
+- lib.newDict() got an alias ["D"] => create dictionaries only with: set d = ["D"](empty)
 
 v 1.0
 

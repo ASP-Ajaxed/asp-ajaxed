@@ -1,4 +1,5 @@
-<!--#include file="../../ajaxed.asp"-->
+﻿<!--#include file="../../ajaxed.asp"-->
+<!--#include file="config.asp"-->
 <%
 '******************************************************************************************
 '* Creator: 	michal
@@ -44,12 +45,19 @@ sub content() %>
 			padding:0.2em;
 			padding-right:2em;
 		}
+		li {
+			margin-bottom:5px;
+			margin-top:5px;
+		}
 	</style>
 
-	<h1>ASP Documentor Reference</h1>
+	<h1>
+		<img src="../img/ajaxed.png" align="absmiddle">&nbsp;
+		ASP Documentor Reference
+	</h1>
 
 	<p>
-		The following things are important in order to create a documentation for your ASP code:
+		The following things are important in order to create a documentation for your ASP (VBScript) code:
 		<ul>
 			<li>Works only for ASP written with VBScript</li>
 			<li>
@@ -58,10 +66,11 @@ sub content() %>
 					<li>Only one class per .asp file</li>
 				</ul>
 			</li>
-			<li>comments recognized by documentor must start with <code>''</code></li>
-			<li>documentor keywords always start with <code>@</code> and end with <code>:</code></li>
-			<li>types are surrounded by <code>[]</code> e.g. <code>[bool]</code></li>
+			<li>Comments recognized by documentor must start with <code>''</code></li>
+			<li>Documentor keywords always start with <code>@</code> and end with <code>:</code></li>
+			<li>Types are surrounded by <code>[]</code> e.g. <code>[bool]</code></li>
 			<li>Documentor can be found in the ajaxed console. <code>http://yourhost.com/ajaxed/console/</code> (<a href="http://www.webdevbros.net/ajaxed/">ajaxed</a> must be installed)</li>
+			<li>It's always good to take a look at the ajaxed code to see how the ajaxed team is creating the documentation.</li>
 		</ul>
 	</p>
 	
@@ -162,12 +171,19 @@ end class
 		<td><code>@DESCRIPTION</code></td>
 		<td>The full description of the method. Includes all the details which short description does not.</td>
 	</tr>
+	<tr>
+		<td><code>@ALIAS</code></td>
+		<td>Alias names for the same method (comma separated).</td>
+	</tr>
 	<tr valign="top">
 		<td><code>@PARAM</code></td>
 		<td>
 			Documentation of a method's parameter.
 			The parameter should contain one (or more) type definition(s).
 			<code>byRef</code> and <code>byVal</code> are recognized as well.
+			<ul>
+				<li>If a parameter cannot be found in the method signature and there is a parameter called <code>option</code> then its assumed as documentation of an <code>option</code></li>
+			</ul>
 		</td>
 	</tr>
 	<tr>
@@ -278,9 +294,9 @@ end function
 			Lines starting with a "<code>-</code>" are treated as list items within your documentation.
 			<div class="code">
 				<div class="comment">
-					''@DESCRIPTION: performs some action. The following needs to be considered:<br>
-					''- some list first list item<br>
-					''- and another list item. The text must stay in the same line
+					'' @DESCRIPTION: performs some action. The following needs to be considered:<br>
+					'' - some list first list item<br>
+					'' - and another list item. The text must stay in the same line
 				</div>
 				public sub perform()<br>
 				end sub
@@ -297,7 +313,9 @@ end function
 			Use <code>&lt;em&gt;&lt;/em&gt;</code> to emphasize coding keywords e.g. methodname, properties, ...<br>
 			The following keywords are emphasized automatically (case sensitive):
 			<ul>
-				<li>EMPTY, NOTHING, BOOL, INT, STRING, OBJECT, NULL, TRUE, FALSE, RECORDSET, DICTIONARY, BOOLEAN, FLOAT, DOUBLE, ARRAY</li>
+				<li>
+					<code><%= str.arrayToString(DOCUMENTOR_KEYWORDS, ", ") %></code>
+				</li>
 			</ul>
 		</li>
 	</ul>

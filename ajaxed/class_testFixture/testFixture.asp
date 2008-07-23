@@ -56,7 +56,7 @@ class TestFixture
 		assertsInCurrentTest = 0
 		debug = false
 		lineBreak = "<br>"
-		requestTimeout = 3
+		requestTimeout = 10
 	end sub
 	
 	'**********************************************************************************************************
@@ -128,7 +128,7 @@ class TestFixture
 		'we want to catch all errors when getting the request, because we dont want
 		'an error. we rather want the assert to fail
 		on error resume next
-			set req = lib.requestURL(url(0), uri, params, requestTimeout)
+			set req = lib.requestURL(url(0), uri, params, array("timeout", requestTimeout))
 			if err <> 0 then eDesc = err.description
 		on error goto 0
 		if not isEmpty(eDesc) then
@@ -136,7 +136,7 @@ class TestFixture
 			exit sub
 		end if
 		if req is nothing then
-			assertFailed uri & " match '" & pattern & "'", "Could not request URL", msg
+			assertFailed uri & " match '" & pattern & "'", "Could not request URL (e.g. network error, timeout, ...)", msg
 		else
 			resp = req.responseText
 			if req.status <> 200 then

@@ -258,7 +258,7 @@ class Email
 		send = false
 		if p_recipients.count <= 0 then p_errorMsg = "no recipient(s) email given"
 		if sendersEmail = "" then p_errorMsg = "no sender email given"
-		if p_errorMsg = "" then
+		if isEmpty(p_errorMsg) then
 			send = true
 			if component = "persists.mailsender" then
 				if dispatch then send = sendWithAspEmail()
