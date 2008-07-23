@@ -57,11 +57,11 @@ sub test_2()
 	tf.assertHasNot lib.range(1, 10.0001, 0.1), 11.1001, "lib.range"
 end sub
 
-sub test_4()
+sub test_3()
 	tf.assertEqual "scripting.dictionary", lib.detectComponent(array("bla", "scripting.dictionary")), "lib.detectComponent does not work"
 end sub
 
-sub test_5()
+sub test_4()
 	on error resume next
 		lib.require "SomeNonExistingClass", "Test_5"
 	if err <> 0 then
@@ -76,8 +76,66 @@ sub test_5()
 	on error goto 0
 end sub
 
-sub test_6()
+sub test_5()
 	tf.assertEqual "/ajaxed/", lib.path(empty), "lib.path seem not to work"
 	tf.assertEqual "/ajaxed/class_rss/rss.asp", lib.path("class_rss/rss.asp"), "lib.path seem not to work"
+end sub
+
+sub test_6()
+	set o = ["O"](array("a", "b"), array("B", 1), empty)
+	tf.assertEqual empty, o("a"), "Library.options() does not work"
+	tf.assertEqual 1, o("b"), "Library.options() does not work"
+	
+	set o = ["O"](array("a", "b"), array("B", 1), empty)
+	
+	on error resume next
+		set o = ["O"](array("a", ""), array("B", 1), empty)
+	if err = 0 then tf.fail("Library.options() must raise an error")
+	on error goto 0
+	
+	on error resume next
+		set o = ["O"](empty, array("B", 1), empty)
+	if err = 0 then tf.fail("Library.options() must raise an error")
+	on error goto 0
+	
+	on error resume next
+		set o = ["O"](array(), array("B", 1), empty)
+	if err = 0 then tf.fail("Library.options() must raise an error")
+	on error goto 0
+	
+	on error resume next
+		set o = ["O"](array("B"), array("B"), empty)
+	if err = 0 then tf.fail("Library.options() must raise an error")
+	on error goto 0
+	
+	options = array("b", 2)
+	["O"] array("a", "b"), options, empty
+	tf.assert options.exists("a"), "Library.options() does not change the original value"
+	
+	options = empty
+	["O"] array("a", "b"), options, 0
+	tf.assertEqual 0, options("a"), "Library.options() does not change the original value"
+	tf.assertEqual 0, options("b"), "Library.options() does not change the original value"
+	
+	set o = ["O"](array("a", "b", "c"), array(), array(1, 0))
+	tf.assertEqual 1, o("a"), "Library.options() default values"
+	tf.assertEqual 0, o("b"), "Library.options() default values"
+	tf.assertEqual 0, o("c"), "Library.options() default values"
+	
+	set o = ["O"](array("a", "b", "c"), array(), empty)
+	tf.assertEqual empty, o("a"), "Library.options() default values"
+	tf.assertEqual empty, o("b"), "Library.options() default values"
+	tf.assertEqual empty, o("c"), "Library.options() default values"
+	
+	set o = ["O"](array("a", "b", "c"), array(), array(2, empty))
+	tf.assertEqual 2, o("a"), "Library.options() default values"
+	tf.assertEqual empty, o("b"), "Library.options() default values"
+	tf.assertEqual empty, o("c"), "Library.options() default values"
+end sub
+
+sub test_7()
+	tf.assertEqual "x", []("x")(0), "Alias [] not working"
+	tf.assertEqual "y", [](array("x", "y"))(1), "Alias [] not working"
+	tf.assertEqual -1, ubound([](empty)), "Alias [] not working"
 end sub
 %>

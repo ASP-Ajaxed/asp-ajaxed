@@ -17,8 +17,12 @@ class Localization
 		comma = left(right(formatNumber(1.1, 1), 2), 1)
 	end property
 	
+	public property get IP ''[string] gets the clients IP address (can also be the clients ISP IP).
+		IP = request.serverVariables("REMOTE_HOST")
+	end property
+	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Gets geoinformation about the clients ISP according to its IP address like e.g. country, coordinates, etc.
+	'' @SDESCRIPTION:	Gets geo information about the clients ISP according to its IP address like e.g. country, coordinates, etc.
 	'' @DESCRIPTION:	Information is gathered from the free service at http://www.hostip.info and the clients IP is
 	''					taken from the <em>serverVariables</em>. Note: As the location is the ISPs location its not sure that the
 	''					client is located in the same location.
@@ -37,16 +41,46 @@ class Localization
 	'' @PARAM:			timeout [int]: Timeout for the request in seconds. <em>0</em> mean as long as possible (not recommended!)
 	'' @RETURN:			[Dictionary] Returns a DICTIONARY with the following lowercased keys:
 	''					- <em>country</em>: 2-letter uppercased countrycode
-	''					- <em>countryname</em>: Uppercased countryname. (EMPTY if unknown)
-	''					- <em>lat</em>: Latitude (EMPTY if unknown)
-	''					- <em>lng</em>: Longitude (EMPTY if unknown)
+	''					- <em>lat</em>: Latitude of the location (EMPTY if unknown)
+	''					- <em>lng</em>: Longitude of the location (EMPTY if unknown)
 	''					All the different failures are handled as followed:
 	''					- NOTHING is returned on a failure (xml parsing errors & network errors e.g. timeout, service down, etc.)
 	''					- DICTIONARY with no keys (<em>count = 0</em>) is returned if the location is unknown (service is available but could not determine location).
 	'**************************************************************************************************************
-	public function getClientInfo(timeout)
-		set getClientInfo = nothing
-		ip = request.serverVariables("REMOTE_HOST")
+	public function geocodeClient(timeout)
+		set geocodeClient = nothing
+		set ixmlhttp = lib.requestURL("get", "http://api.hostip.info/", _
+			array("ip", IP), empty)
+		if ixmlhttp is nothing then exit function
+		if ixmlhttp.status <> 200 then
+			lib.logger.debug "Localization.geocodeClient() response was not a success: " & ixmlhttp.status
+			exit function
+		end if
+		set xml = server.createObject("microsoft.xmldom")
+		xml.loadXML(ixmlhttp.responseText)
+		if xml.parseError.errorCode <> 0 then
+			lib.logger.debug "Localization.geocodeClient() could not parse XML: " & xml.parseError.reason
+			exit function
+		end if
+		set geocodeClient = ["D"](empty)
+		set n = xml.getElementsByTagName("countryAbbrev")
+		if n.length > 0 then
+			country = uCase(n(0).text)
+			'if the country abbreviation is XX then its an unknown address
+			if country = "XX" then exit function
+			geocodeClient.add "country", uCase(n(0).text)
+			set n = xml.getElementsByTagName("gml:coordinates")
+			if n.length > 0 then
+				latlng = split(n(0).text, ",")
+				old = setLocale("en-us")
+				geocodeClient.add "lng", str.parse(latlng(0), 0.0)
+				geocodeClient.add "lat", str.parse(latlng(1), 0.0)
+				setLocale(old)
+			else
+				geocodeClient.add "lng", empty
+				geocodeClient.add "lat", empty
+			end if
+		end if
 	end function
 
 end class

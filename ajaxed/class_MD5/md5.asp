@@ -101,7 +101,7 @@ class MD5
 	'' @PARAM:			val [string]: the string for hashing
 	'' @RETURN:			[string] MD5 hash
 	'**********************************************************************************************************************
-	public function hash(val)
+	public default function hash(val)
 		hash = MD5(val & "")
 	end function
 	

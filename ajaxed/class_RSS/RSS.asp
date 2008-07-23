@@ -43,7 +43,7 @@ class RSS
 	public language			''[string] the language of the feed. e.g. <em>en</em>
 	public publishedDate	''[date] date when the feed has been published. you local timezone!
 	public items			''[dictionary] collection of the items (<em>RSSItem</em>). after <em>load()</em> this gets filled
-							''- for writing a feed this collection needs to be filled with items which sould be published. use addItem()
+							''- for writing a feed this collection needs to be filled with items which sould be published. Use <em>addItem()</em>
 	public theCache			''[Cache] holds the cache which is used for caching the feed. by default it is nothing and
 							''should only be set by <em>setCache()</em>. afterwards this property can be used.
 	public debug			''[bool] turns debuging on/off. if on then useful information will be shown which can be used
@@ -150,16 +150,44 @@ class RSS
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	generates a feed with the given items and the metadata (title, etc.). Returns the
 	''					generated XMLDOM and provides the possibility to save it into a file immediately
-	'' @DESCRIPTION:	Feed is generate with UTF-8 (Note: your file must be saved as UTF-8 in order to support this).
-	''					there are two ways to generate the feed:
-	''					1. create a file which will be stored on your server (by providing a target param)
+	'' @DESCRIPTION:	Feed is generated with UTF-8 (Note: your file must be saved as UTF-8 in order to support this).
+	''					there are two ways to generate the feed:<br><br>
+	''					<strong>1.</strong> Using a file which will be stored on your server (by providing a target param)
 	''					(normally used if you have an action in your application which invokes the feed
-	''					generation. e.g. new post in a blog system)
-	''					2. getting the XML and using it as desired. e.g. sending to the response (no target param)
+	''					generation. e.g. new post in a blog system)<br><br>
+	''					<strong>2.</strong> Getting the XML and using it as desired. e.g. sending to the response (no target param)
 	''					(normally used if the feed is generated on each feed request - so the feed is an ASP file
-	''					itself and is generated on each request.)
-	''					- supported formats: RSS2.0
-	'' @PARAM:			format [string]: RSS2.0
+	''					itself and is generated on each request.)<br><br>
+	''					Example (2nd approach) of how to create a feed on your site (the example creates the feed everytime a feed reader accesses the page)
+	''					which gets the news from a <em>news</em> database table:
+	''					<code>
+	''					<%
+	''					set r = new RSS
+	''					r.title = "My new ajaxed feed"
+	''					r.description = "important stuff"
+	''					r.language = "en"
+	''					r.link = "http://mysite.com"
+	''					
+	''					set RS = db.getRS("SELECT * FROM news ORDER BY published_on DESC LIMIT 10", empty)
+	''					while not RS.eof
+	''					.	if isEmpty(pubDate) then pubDate = cDate(RS("published_on"))
+	''					.	set it = new RSSItem
+	''					.	it.author = RS("author")
+	''					.	it.description = RS("excerpt")
+	''					.	it.link = "http://mysite.com/news/?" & RS("id")
+	''					.	it.guid = it.link
+	''					.	it.title = RS("title")
+	''					.	it.publishedDate = cDate(RS("published_on"))
+	''					.	r.addItem(it)
+	''					.	RS.movenext()
+	''					wend
+	''					if isEmpty(pubDate) then pubDate = now()
+	''					r.publishedDate = pubDate
+	''					set xml = r.generate("RSS2.0", empty)
+	''					xml.save(response)
+	''					% >
+	''					</code>
+	'' @PARAM:			format [string]: Currently only the option <em>RSS2.0</em> is possible
 	'' @PARAM:			target [string]: path to the file you want to save the feed to. e.g. <em>/feeds/feed.xml</em>
 	''					leave EMPTY if you want to get the XML returned
 	'' @RETURN:			[microsoft.xmldom] the resulted xmldom
@@ -170,7 +198,7 @@ class RSS
 			lib.throwError("Title, Link and description are required.")
 		end if
 		
-		select case format
+		select case uCase(format)
 			case "RSS2.0"
 				set RSSNode = generateRSS20()
 			case else

@@ -1,4 +1,5 @@
 <!--#include file="../../ajaxed.asp"-->
+<!--#include file="config.asp"-->
 <%
 '******************************************************************************************
 '* Creator: 	David Rankin, adapted by Michal
@@ -116,10 +117,13 @@ end function
 '******************************************************************************************
 function formatComment(byVal val)
 	'first emphasize all keywords
-	keywords = array("EMPTY", "NOTHING", "BOOL", "NULL", "OBJECT", "TRUE", "FALSE", "INT", "STRING", "RECORDSET", "DICTIONARY", "BOOLEAN", "FLOAT", "DOUBLE", "ARRAY")
-	for each k in keywords
+	for each k in DOCUMENTOR_KEYWORDS
 		val = str.rReplace(val, "\b" & k & "\b", "<em>" & lCase(k) & "</em>", false)
 	next
+	'make urls clickable
+	'val = str.rReplace(val, _
+		'"((((file|gopher|news|nntp|telnet|http|ftp|https|ftps|sftp)://)|(www\.))+(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(/[a-zA-Z0-9\&amp;%_\./-~-]*)?)", _
+		'"<a href=""$1"">$1</a>", true)
 	'now check highlight all codeblocks
 	formatComment = formatCodeBlock(val)
 end function
@@ -381,6 +385,7 @@ function parseFile(file)
 						sdescription = ""
 						parameter = ""
 						ldescription = ""
+						alias = ""
 						returns = ""
 						'get the details about the method
 						for j = (i - 1) to 0 Step -1
@@ -395,9 +400,7 @@ function parseFile(file)
 									'get all lines for the description, if the description is breaked up in new lines
 									parameterFor = split(aLine," ")
 									'remove the parameter from the start of the parameter description
-									if ubound(parameterFor) >=0 then
-										aLine = str.trimStart(aLine, len(trim(parameterFor(0))))
-									end if
+									if ubound(parameterFor) >=0 then aLine = str.trimStart(aLine, len(trim(parameterFor(0))))
 									parameter = trim(aLine)
 									for k = (j + 1) to i
 										addLine = trim(lines(k))
@@ -411,13 +414,24 @@ function parseFile(file)
 										end if
 									next
 									'loop through parameters found in method, and add description
+									paramfound = false
+									hasOptions = false
 									for each key in params.keys
-										akey = trim(str.rReplace(key, "byRef|byVal", "", true))
-										if ubound(parameterFor) >=0 then
-											if uCase(akey) = uCase(parameterFor(0)) then params(key) = formatComment(parameter)
+										akey = uCase(trim(str.rReplace(key, "byRef|byVal", "", true)))
+										if not hasOptions and akey = "OPTIONS" then hasOptions = true
+										if ubound(parameterFor) >= 0 then
+											if akey = uCase(parameterFor(0)) then
+												params(key) = formatComment(parameter)
+												paramfound = true
+											end if
 										end if
 									next
 									
+									'if the param is not in the methods signature then
+									'we assume its an option for
+									if not paramfound and hasOptions then
+										params.add "option """ & parameterFor(0) & """", formatComment(parameter)
+									end if
 								end if
 								if str.startsWith(aLine, "'' @RETURN:") then
 									aLine = replace(aline,"'' @RETURN:", "")
@@ -476,6 +490,11 @@ function parseFile(file)
 									next
 									sDescription = formatComment(sDescription)
 								end if
+								if str.startsWith(aLine, "'' @ALIAS:") then
+									aLine = replace(aline,"'' @ALIAS:", "")
+									aLine = replace(aLine, vbtab, "")
+									alias = trim(aLine)
+								end if
 							else
 								exit for
 							end if
@@ -496,6 +515,7 @@ function parseFile(file)
 							end if
 							.appendChild(getNewNode("shortdescription", sdescription))
 							.appendChild(getNewNode("longdescription", ldescription))
+							.appendChild(getNewNode("alias", alias))
 							if ExpectReturn and trim(returns) = "" and EnforceRulz then
 								lib.error("Error in class:" & getVirtualPath(file.path) & "<br> - No return parameter provided for method<b> " & methodname & " </b>in class <b>" & title & "</b>")
 							end if
@@ -511,6 +531,8 @@ function parseFile(file)
 							set aName = getNewNode("name", trim(akey))
 							if instr(ucase(key), "BYREF") > 0 then aName.setAttribute "passed", "byRef"
 							if instr(ucase(key), "BYVAL") > 0 then aName.setAttribute "passed", "byVal"
+							aParameter.setAttribute "option", "0"
+							if str.startsWith(key, "option ") then aParameter.setAttribute "option", "1"
 							
 							paramDesc = params(key)
 							if trim(paramDesc) = "" and EnforceRulz then 
@@ -538,7 +560,7 @@ function parseFile(file)
 							aParameter.appendChild(typesNode)
 							Parameters.appendChild(aParameter)
 							set aParameter = nothing
-							set aName	= nothing
+							set aName = nothing
 							set aDescription = nothing
 						next
 						

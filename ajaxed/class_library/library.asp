@@ -85,37 +85,133 @@ class Library
 	end sub
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION:	Tries to request an URL and loads its response into an <em>XMLDOM</em> object. Uses <em>requestURL()</em> internally.
-	'' @DESCRIPTION:	<code>
-	''					<%
-	''					set xml = lib.loadXML("get", "http://someurl.com", empty, 1)
-	''					if xml is nothing then str.writeend("XML loading failed")
-	''					% >
-	''					</code>
-	'' @PARAM:			method [string]: see <em>requestURL()</em>
-	'' @PARAM:			url [int]: see <em>requestURL()</em>
-	'' @PARAM:			params [array]: see <em>requestURL()</em>
-	'' @PARAM:			timeout [int]: see <em>requestURL()</em>
-	'' @RETURN:			[Microsoft.XMLDOM] Returns an XMLDOM if the <em>xmlString</em> could be loaded otherwise
-	''					NOTHING is returned.
+	'' @SDESCRIPTION:	Returns a random number within a given range
+	'' @PARAM:			min [int]: The minimum possible number (inclusive)
+	'' @PARAM:			max [int]: The maximum possible number (inclusive)
+	'' @RETURN:			[int] Number within the desired range
 	'**********************************************************************************************************
-	public function requestXML(method, url, params, timeout)
-		set requestXML = nothing
-		set xmlhttp = lib.requestURL(method, url, params, timeout)
-		if xmlhttp is nothing then exit function
-		if xmlhttp.status <> 200 then exit function
-		set requestXML = server.createObject("Microsoft.XMLDOM")
-		requestXML.loadxml(xmlhttp.responseText)
-		if requestXML.parseError.errorCode <> 0 then
-			lib.logger.log 1, "XML parse error: " & requestXML.parseError.errorCode, "0;32"
-			set requestXML = nothing
-		end if
-		set xmlhttp = nothing
+	public function random(min, max)
+		randomize
+		random = int((max - min + 1) * rnd() + min)
 	end function
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION:	Requests an URL and returns an XMLHttpRequest object.
-	'' @DESCRIPTION:	Post parameters are always encoded with UTF-8. Often use in combination with <em>lib.loadXML()</em>
+	'' @SDESCRIPTION:	Creates an OPTIONSHASH out of an ARRAY.
+	'' @ALIAS:			["O"]()
+	'' @DESCRIPTION:	OPTIONSHASH is the term for a hash with name value pairs. Its main idea is to simulate optional parameters
+	''					for VBScript methods and transform an ARRAY into an associative ARRAY (collection of unique keys and a collection of values, where each key is associated with one value).
+	''					With this its possible to extend a methods input without changing the methods signature.
+	''					The OPTIONSHASH is represented with a DICTIONARY (The idea of options has been taken from Ruby on Rails as those guys
+	''					also often use a hash as the last argument of a function. And it works great ;)). Example of usage:
+	''					<code>
+	''					<%
+	''					'a function which accepts options
+	''					function doSomething(options)
+	''					.	lib.options array("a", "b"), options, 0
+	''					.	'or you can also use the alias
+	''					.	["O"] array("a", "b"), options, 0
+	''					.	'now the variable options has been transformed into an optionshash...
+	''					.	str.write(options("a"))
+	''					.	str.write(options("b"))
+	''					end function
+	''					
+	''					'now calling the function in various ways..
+	''					doSomething(array("a", 1, "b", 2))
+	''					'prints: 12
+	''					doSomething(array("b", "cool"))
+	''					'prints: cool
+	''					doSomething(empty)
+	''					'prints: 00
+	''					% >
+	''					</code>
+	''					Assurances for an OPTIONSHASH:
+	''					- Keys of the DICTIONARY represent the option names and items represent the option values. One option name incl its corresponding value is called <em>option</em>.
+	''					- Each OPTIONSHASH can contain <em>1-n</em> options
+	''					- Each OPTIONSHASH is always an instance of a DICTIONARY and is never NOTHING.
+	''					- Option names are always <strong>lowercased</strong> strings and contain at least one character.
+	''					- The order of options within an OPTIONSHASH is arbitrary.
+	'' @PARAM:			optionNames [array], [string]: Name(s) of the options which are part of the OPTIONSHASH.
+	'' @PARAM:			actualOptions [array]: Contains the options which will be converted into an OPTIONSHASH. It must be an ARRAY with an even amount of fields or EMPTY (if no options).
+	''					Each odd field represents the name of the options and each even field its value. Example:
+	''					<code>
+	''					<%
+	''					'valid options
+	''					array("option1", "value1", "option2", "value2")
+	''					array("option1", empty)
+	''					array()
+	''					'invalid options
+	''					array("option1", "value1", "option2")
+	''					% >
+	''					</code>
+	''					<strong>Important:</strong> This variable is an OPTIONSHASH (DICTIONARY) afterwards!
+	'' @PARAM:			defaultValues [variant], [array]: The default value(s) for each option which does not exist within the <em>options</em>. Usually EMPTY.
+	''					Its possible to provide an ARRAY and give each option a different default value. If there are more options then default values then the last
+	''					defaut value is used. Example with more default values:
+	''					<code>
+	''					<%
+	''					["O"] array("a", "b", "c"), empty, array(1, 0)
+	''					'=> a=1, b=0, c=0
+	''					["O"] array("a", "b", "c"), empty, array(1, 2, 3)
+	''					'=> a=1, b=2, c=3
+	''					% >
+	''					</code>
+	'' @RETURN:			[optionshash] Also returns the generated OPTIONSHASH. See the method details for the definition of an OPTIONSHASH
+	'**********************************************************************************************************
+	public function options(byVal optionNames, byRef actualOptions, byVal defaultValues)
+		actualOptions = [](actualOptions)
+		if (ubound(actualOptions) + 1) mod 2 <> 0 then throwError("Library.options() actualOptions argument must contain an even amount of fields.")
+		set options = ["D"](empty)
+		for i = 0 to uBound(actualOptions) step 2
+			n = lCase(actualOptions(i))
+			if n = "" then throwError("Library.options() cannot contain empty option names")
+			options.add n, actualOptions(i + 1)
+		next
+		optionNames = [](optionNames)
+		if uBound(optionNames) < 0 then throwError("Library.options() optionNames parameter must contain at least on field.")
+		defaultValues = [](defaultValues)
+		if ubound(defaultValues) = -1 then defaultValues = array(empty)
+		for i = 0 to ubound(optionNames)
+			name = lCase(optionNames(i))
+			def = defaultValues(ubound(defaultValues))
+			if ubound(defaultValues) >= i then def = defaultValues(i)
+			if name = "" then throwError("Library.options() cannot contain empty option names")
+			if not options.exists(name) then options.add name, def
+		next
+		set actualOptions = options
+	end function
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	Ensures that a given value will be returned as an ARRAY.
+	'' @DESCRIPTION:	If the <em>value</em> is already
+	''					an ARRAY then its just passed through otherwise an ARRAY is created and the first field contains the <em>value</em>.
+	''					Unless: If the <em>value</em> is EMPTY then an empty ARRAY is returned.
+	''					<code>
+	''					<%
+	''					'the same as array("x")
+	''					arr = lib.arrayize("x")
+	''					'the same as array("x", "y")
+	''					arr = lib.arrayize(array("x", "y"))
+	''					'or use the shortcut alias
+	''					arr = ["O"](array(1, 2, 3))
+	''					% >
+	''					</code>
+	'' @ALIAS:			[]()
+	'' @PARAM:			value [variant]: The value which should be ensured to be an ARRAY
+	'' @RETURN:			[array] Resulting ARRAY
+	'**********************************************************************************************************
+	public function arrayize(value)
+		if isArray(value) then
+			arrayize = value
+		elseif isEmpty(value) then
+			arrayize = array()
+		else
+			arrayize = array(value)
+		end if
+	end function
+	
+	'**********************************************************************************************************
+	'' @SDESCRIPTION:	Requests an URL and returns an <em>IXMLDOMDocument</em>.
+	'' @DESCRIPTION:	Post parameters are always encoded with UTF-8.
 	'' @PARAM:			method [string]: <em>GET</em> or <em>POST</em>
 	'' @PARAM:			url [int]: URL for the request. Only full URLs are supported (starting with <em>http://</em>, <em>https://</em>, etc.) 
 	''					or virtual URLs (starting with <em>/</em>) to request internal pages
@@ -124,25 +220,30 @@ class Library
 	''					- if <em>POST</em> request then send as <em>POST</em> values (if querystring values needed then add them direclty to the URL).
 	''					- if <em>GET</em> request then send via querystring.
 	''					- provide EMPTY if no parameters are needed
-	'' @PARAM:			timeout [int]: Timeout in seconds for the request. <em>0</em> means unlimited (not recommended!)
-	'' @RETURN:			[IXMLHttpRequest] Returns an XHR object. Check if it was successful by checking its <em>status</em> property. Use <em>responseText</em> to get the response. (see the logfile to debug). NOTHING if an exception occured (e.g. timeout)
+	'' @PARAM:			timeout [int]: Timeout in seconds for the request. <em>0</em> means unlimited (not recommended!). Default is <em>3</em>
+	'' @PARAM:			implementation [string]: Define a desired <em>IServerXMLHTTPRequest</em>. Default: <em>Msxml2.ServerXMLHTTP.3.0</em>
+	'' @RETURN:			[IServerXMLHTTPRequest] Returns an object which implements <em>IServerXMLHTTPRequest</em>.
+	''					- It returns NOTHING if the page could not be requested at all (timout & network errors)
+ 	''					- You can check if request was successful by checking the <em>status</em> property (<em>200</em> means succesful).
+	''					- If you need xml then use the <em>responseXML</em> property. Be sure to check if <em>responseXML.parseError.errorCode</em> is <em>0</em> before you proceed using xml.
+	''					- Check your logfile to see more details for debugging
+	''					- Check http://msdn.microsoft.com/en-us/library/ms754586(VS.85).aspx for more members of <em>IServerXMLHTTPRequest</em>
 	'**********************************************************************************************************
-	public function requestURL(byVal method, byVal url, byVal params, byVal timeout)
+	public function requestURL(method, url, params, options)
 		if str.startsWith(url, "/") then
 			protocol = lib.iif(lcase(request.serverVariables("HTTPS")) = "off", "http://", "https://")
 			url = protocol & request.serverVariables("SERVER_NAME") & url
 		end if
 		if isArray(params) then
-			if (uBound(params) + 1) mod 2 <> 0 then lib.throwError("Library.requestURL() params must have an even length")
+			if (uBound(params) + 1) mod 2 <> 0 then throwError("Library.requestURL() params must have an even length")
 			for i = 0 to uBound(params) step 2
 				pQS = pQS & params(i) & "=" & server.URLEncode(params(i + 1)) & "&"
 			next
 		end if
+		["O"] array("timeout", "implementation"), options, array(3, "Msxml2.ServerXMLHTTP.3.0")
 		
-		'4.0 version cannot be used due to the following problem on WIN2003 server
-		'http://support.microsoft.com/default.aspx?scid=kb;en-us;820882#6
-		set requestURL = server.createObject("Msxml2.ServerXMLHTTP.3.0")
-		timeout = timeout * 1000
+		set requestURL = server.createObject(options("implementation"))
+		timeout = options("timeout") * 1000
 		logStyle = "0;32"
 		'resolve, connect, send, receive
 		if timeout > 0 then requestURL.setTimeouts timeout, timeout, timeout, timeout
@@ -151,7 +252,7 @@ class Library
 		if method = "GET" or method = "POST" then
 			lib.logger.log 1, array(method & ": " & url, "params: " & pQS), logStyle
 			if method = "GET" then
-				if not str.endsWith(url, "?") then url = url & "?"
+				if not str.endsWith(url, "?") and pQS <> "" then url = url & "?"
 				url = url & pQS
 				on error resume next
 					requestURL.open "GET", url, false
@@ -172,6 +273,7 @@ class Library
 			else
 				lib.logger.log 1, array("Request failed: " & desc), logStyle
 				set requestURL = nothing
+				exit function
 			end if
 		else
 			throwError("Library.requestURL() does not support '" & uCase(method) & "'")
@@ -289,7 +391,8 @@ class Library
 	end function
 	
 	'**********************************************************************************************************
-	'' @SDESCRIPTION:	gets a new dictionary filled with a list of values
+	'' @SDESCRIPTION:	Gets a new dictionary filled with a list of values
+	'' @ALIAS:			["D"]()
 	'' @PARAM:			values [array]: values to fill into the dictionary. <em>array( array(key, value), arrray(key, value) )</em>.
 	''					if the fields are not arrays (name value pairs) then the key is generated automatically. if no array
 	''					provided then an empty dictionary is returned
@@ -437,4 +540,14 @@ class Library
 	end function
 
 end class
+
+function [](value)
+	[] = lib.arrayize(value)
+end function
+function ["O"](optionNames, actualOptions, defaultValue)
+	set ["O"] = lib.options(optionNames, actualOptions, defaultValue)
+end function
+function ["D"](values)
+	set ["D"] = lib.newDict(values)
+end function
 %>

@@ -159,6 +159,10 @@
 						padding:0px;
 						list-style-type:disc;
 					}
+					.alias {
+						color:#aaa;
+						margin-top:6px;
+					}
 				</style>
 				
 				<style media="print">
@@ -462,7 +466,7 @@
 											</xsl:attribute>
 										</xsl:if>
 										<xsl:value-of select="name"/>
-										(<xsl:for-each select="parameters/parameter">
+										(<xsl:for-each select="parameters/parameter[@option='0']">
 											<xsl:value-of select="name" />
 											<xsl:if test="position() &lt; last()">
 											    <xsl:text>, </xsl:text>
@@ -475,6 +479,9 @@
 										<span class="obsolete">This method is obsolete.</span>
 									</xsl:if>
 									<xsl:value-of select="shortdescription"  disable-output-escaping="yes" />
+									<xsl:if test="string-length(alias/text()) &gt; 0">
+										<div class="alias">alias: <em><xsl:value-of select="alias" disable-output-escaping="yes" /></em></div>
+									</xsl:if>
 								</div>
 								<div style="display:none" class="mdetails alwaysPrint" id="mdetails_{$currentClass}{generate-id(name)}">
 									<xsl:if test="string-length(longdescription/text()) &gt; 0">
