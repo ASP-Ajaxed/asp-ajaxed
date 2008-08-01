@@ -50,7 +50,7 @@ sub main() %>
 		</div>
 	<% end if %>
 	
-	<h1 id="headline"><img src="img/ajaxed.png" alt="ajaxed logo" width="163" height="37"></h1>
+	<h1 id="headline"><img src="../logo.png" alt="ajaxed logo"></h1>
 	
 	<ul class="tab">
 		<li onclick="loadContent('configuration.asp', this)" id="tConfig">

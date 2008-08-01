@@ -28,7 +28,7 @@ em {
 button {
 	padding:0.1em 1em;
 }
-small, .small, .small * {
+small, .small, .small *, small * {
 	font-size:8pt;
 }
 .indent {

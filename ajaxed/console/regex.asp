@@ -14,39 +14,41 @@ set page = nothing
 '* callback 
 '******************************************************************************************
 sub callback(a)
-	if a = "exec" then
-		if page.RF("type") = "execute" then
-			set result = getResult(true)
-			if not result is nothing then
-				i = 1
-				for each m in result
-					ret = ret & "Match " & i & " '" & m.value & "' starts at index " & m.firstIndex & " with a length " & m.length & "<br>"
-					i = i + 1
-				next
-				page.returnValue "result", ret
-				if result.count = 0 then
-					page.returnValue "result", "No matches found."
-				end if
+	if not a = "exec" then exit sub
+	
+	session("ajaxedConsoleRegexPattern") = page.RF("pattern")
+	session("ajaxedConsoleRegexSourceString") = page.RF("searchstring")
+	if page.RF("type") = "execute" then
+		set result = getResult(true)
+		if not result is nothing then
+			i = 1
+			for each m in result
+				ret = ret & "Match " & i & " '" & m.value & "' starts at index " & m.firstIndex & " with a length " & m.length & "<br>"
+				i = i + 1
+			next
+			page.returnValue "result", ret
+			if result.count = 0 then
+				page.returnValue "result", "No matches found."
 			end if
+		end if
+	else
+		result = getResult(false)
+		page.returnValue "result", result
+	end if
+	page.returnValue "err", regexError
+	if page.RFHas("showCode") then
+		code = 	"set rgx = new Regexp<br>" & _
+				"rgx.pattern = """ & page.RFE("pattern") & """<br>" & _
+				lib.iif(page.RFHas("ignorecase"), "rgx.ignoreCase = true<br>", "") & _
+				lib.iif(page.RFHas("global"), "rgx.global = true<br>", "")
+		if page.RF("type") = "test" then
+			code = code & "result = rgx.test(""" & page.RFE("searchstring") & """)<br>"
+		elseif page.RF("type") = "execute" then
+			code = code & "set matches = rgx.execute(""" & page.RFE("searchstring") & """)<br>"
 		else
-			result = getResult(false)
-			page.returnValue "result", result
+			code = code & "result = rgx.replace(""" & page.RFE("searchstring") & """, """ & page.RF("replaceby") & """)<br>"
 		end if
-		page.returnValue "err", regexError
-		if page.RFHas("showCode") then
-			code = 	"set rgx = new Regexp<br>" & _
-					"rgx.pattern = """ & page.RFE("pattern") & """<br>" & _
-					lib.iif(page.RFHas("ignorecase"), "rgx.ignoreCase = true<br>", "") & _
-					lib.iif(page.RFHas("global"), "rgx.global = true<br>", "")
-			if page.RF("type") = "test" then
-				code = code & "result = rgx.test(""" & page.RFE("searchstring") & """)<br>"
-			elseif page.RF("type") = "execute" then
-				code = code & "set matches = rgx.execute(""" & page.RFE("searchstring") & """)<br>"
-			else
-				code = code & "result = rgx.replace(""" & page.RFE("searchstring") & """, """ & page.RF("replaceby") & """)<br>"
-			end if
-			page.returnValue "code", "Code used:<br>" & code & "set rgx = nothing"
-		end if
+		page.returnValue "code", "Code used:<br>" & code & "set rgx = nothing"
 	end if
 end sub
 
@@ -96,7 +98,8 @@ sub main() %>
 	
 	<div style="float:left;width:50%">
 		<strong>Pattern:</strong><br>
-		<div><textarea rows="2" style="width:90%;" class="code" name="pattern">^$</textarea></div>
+		<div><textarea id="tPattern" rows="2" style="width:90%;" class="code" name="pattern"><%= session("ajaxedConsoleRegexPattern") %></textarea></div>
+		<small><a href="javascript:void(0)" onclick="$('tPattern').rows += 3">larger</a></small>
 		<br>
 		<a href="http://msdn2.microsoft.com/en-us/library/ms974570.aspx" target="_blank">Regex Reference</a>
 		<br><br>
@@ -139,7 +142,8 @@ sub main() %>
 	</div>
 	<div style="float:left;width:50%">
 		<strong>Search string:</strong><br>
-		<div><textarea rows="2" class="code" style="width:100%" name="searchstring"></textarea></div>
+		<div><textarea rows="2" class="code" style="width:100%" id="tSearchstring" name="searchstring"><%= session("ajaxedConsoleRegexSourceString") %></textarea></div>
+		<small><a href="javascript:void(0)" onclick="$('tSearchstring').rows += 3">larger</a></small>
 		<br><br>
 		<div class="console" id="regexConsole">&gt; Ready.</div>
 		<a href="javascript:void(0)" onclick="$('regexConsole').update('&gt; Ready.')">clear console</a>
