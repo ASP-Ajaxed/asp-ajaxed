@@ -417,6 +417,7 @@ class Library
 	''					- if ARRAY then fields => number, source, description
 	''					- The number range for user errors is 512 (exclusive) - 1024 (exclusive)
 	''					- if <em>args</em> is a string then its handled as the description and an error is raised with the
+	''					- Error is logged into the logger
 	''					number 1024 (highest possible number for user defined VBScript errors)
 	'**********************************************************************************************************
 	public sub throwError(args)
@@ -445,14 +446,13 @@ class Library
 	''					it should only be used if a common error message should be displayed to the user instead of
 	''					raising a real ASP error (<em>throwError</em>).
 	''					- if buffering is turned off then the already written response won't be cleared.
-	''					- error is logged into the log on the <em>dev</em> env
+	''					- error is logged into the log
 	'' @PARAM:			msg [string]: error message
 	'******************************************************************************************************************
 	public sub [error](msg)
 		if response.buffer then response.clear()
 		str.writeln(init(AJAXED_ERRORCAPTION, "Erroro: "))
 		str.writeln(str.HTMLEncode(msg))
-		me.logger.error(msg)
 		str.end()
 	end sub
 	

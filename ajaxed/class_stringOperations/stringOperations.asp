@@ -169,7 +169,7 @@ class StringOperations
 	'' @RETURN:			[variant] the string parsed into the alternative type or the alternative itself
 	'******************************************************************************************************************
 	public function parse(value, alternative)
-		val = trim(value & "")
+		val = trim(cstr(value) & "")
 		parse = alternative
 		if val = "" then exit function
 		on error resume next
@@ -459,20 +459,14 @@ class StringOperations
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Converts an ARRAY to a STRING
+	'' @SDESCRIPTION:	OBSOLETE! Converts an ARRAY to a STRING. Use native <em>join()</em> function instead
 	'' @DESCRIPTION:	<code><% str.arrayToString(array(1, 2, 3), ",") '=> 1,2,3 % ></code>
 	'' @PARAM:			arr [Array]: the array you want to concat
 	'' @PARAM:			seperator [string]: seperator between the array fields e.g. <em>,</em>
 	'' @RETURN:			[string] concated array
 	'**************************************************************************************************************
 	public function arrayToString(byVal arr, seperator)
-		for i = 0 to uBound(arr)
-			if i > 0 then
-				strObj = strObj & seperator
-			end if
-			strObj = strObj & arr(i)
-		next
-		arrayToString = strObj
+		arrayToString = join(arr, seperator)
 	end function
 	
 	'******************************************************************************************

@@ -220,12 +220,12 @@ class AjaxedPage
 		lines = array(method & " " & getLocation("FULL", true))
 		for each f in request.form
 			redim preserve lines(uBound(lines) + 1)
-			'we hide all fields if they contain "password" in the fieldname
-			lines(uBound(lines)) = "RF(""" & f & """): " & lib.iif(str.matching(f, "password", true), pwd, RF(f))
+			'we hide all fields if they contain "password" or "pwd" in the fieldname
+			lines(uBound(lines)) = "RF(""" & f & """): " & lib.iif(str.matching(f, "(password|pwd)", true), pwd, RF(f))
 		next
 		for each f in request.queryString
 			redim preserve lines(uBound(lines) + 1)
-			lines(uBound(lines)) = "QS(""" & f & """): " & lib.iif(str.matching(f, "password", true), pwd, QS(f))
+			lines(uBound(lines)) = "QS(""" & f & """): " & lib.iif(str.matching(f, "(password|pwd)", true), pwd, QS(f))
 		next
 		doLog(lines)
 	end sub

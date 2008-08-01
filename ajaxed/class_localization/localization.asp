@@ -6,6 +6,7 @@
 '' @CREATEDON:		2008-07-16 11:18
 '' @CDESCRIPTION:	Contains all stuff which has to do with Localization.
 ''					"Localization is the configuration that allows a program to be adaptable to local national-language features."
+''					Also stuff about the client can be found in this class e.g. clients IP address (often needed to localize the user)
 '' @REQUIRES:		-
 '' @VERSION:		0.1
 '' @STATICNAME:		local
@@ -18,8 +19,19 @@ class Localization
 	end property
 	
 	public property get IP ''[string] gets the clients IP address (can also be the clients ISP IP).
-		IP = request.serverVariables("REMOTE_HOST")
+		IP = request.serverVariables("REMOTE_ADDR")
 	end property
+	
+	'**************************************************************************************************************
+	'' @SDESCRIPTION:	Checks if the client supports cookies
+	'' @DESCRIPTION:	Basically a cookies is written to the client and tried to retrieve it. If cannot retrieve it then no cookies support is assumed.
+	'' @RETURN:			[bool] TRUE if supports cookies otherwise FALSE
+	'**************************************************************************************************************
+	function supportsCookies()
+		response.cookies("ajaxedTestCookie") = "1"
+		response.cookies("ajaxedTestCookie").expires = dateAdd("yyyy", 1, now())
+		supportsCookies = request.cookies("ajaxedTestCookie") = "1"
+	end function
 	
 	'**************************************************************************************************************
 	'' @SDESCRIPTION:	Gets geo information about the clients ISP according to its IP address like e.g. country, coordinates, etc.
