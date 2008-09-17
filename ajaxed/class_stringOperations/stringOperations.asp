@@ -625,7 +625,7 @@ class StringOperations
 	'' @RETURN:			[string] changed string
 	'**************************************************************************************************************
 	public function format(byVal str, byVal values)
-		escapeChar = asc(24) & asc(27)
+		escapeChar = chr(24) & chr(27)
 		if instr(str, escapeChar) > 0 then lib.throwError("input string of StringOperations.format() contains unsupported character sequence.")
 		if not isArray(values) then values = array(values)
 		for i = 0 to ubound(values)

@@ -130,6 +130,13 @@ class Database
 		checkBeforeExec "Database.insert()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.insert()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
+		
+		'cursorLocation Note: we set the cursor location to client only on mysql
+		'because otherwise it does not work with TEXT UTF-8 COLUMNS when using adUseServer 
+		'see http://bugs.mysql.com/bug.php?id=26985
+		'see also http://dev.mysql.com/tech-resources/articles/vb-cursors-and-locks.html
+		if dbtype = "mysql" then aRS.cursorLocation = 3 'adUseClient
+		
 		aRS.open tablename, connection, 1, 2, 2
 		aRS.addNew()
 		fillRSWithData aRS, data, "Database.insert()"
@@ -174,6 +181,8 @@ class Database
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.update()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		sql = "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition)
+		'see insert() method for an important note about the cursorLocation.
+		if dbtype = "mysql" then aRS.cursorLocation = 3
 		aRS.open sql, connection, 1, 2
 		update = 0
 		while not aRS.eof
@@ -216,20 +225,20 @@ class Database
 	'******************************************************************************************************************
 	'* fillRSWithData 
 	'******************************************************************************************************************
-	private sub fillRSWithData(byRef RS, dataArray, callingFunctionName)
+	private sub fillRSWithData(byRef myRS, byRef dataArray, callingFunctionName)
 		if (uBound(dataArray) + 1) mod 2 <> 0 then lib.throwError(array(100, callingFunctionName, "data length must be even. array(column, value, ...) "))
 		set strFieldTypes = (new DataContainer)(stringFieldTypes)
 		for i = 0 to ubound(dataArray) step 2
 			desc = ""
 			col = dataArray(i)
 			val = dataArray(i + 1)
-			size = RS(col).definedSize
+			size = myRS(col).definedSize
 			on error resume next
 				'we trim the value to the length which is allowed by the database
 				if not isNull(val) then
-					if strFieldTypes.contains(RS(col).type) then val = left(val, size)
+					if strFieldTypes.contains(myRS(col).type) then val = left(val, size)
 				end if
-				RS(col) = val
+				myRS(col) = val
 				failed = err <> 0
 				if failed then desc = err.description
 			on error goto 0
