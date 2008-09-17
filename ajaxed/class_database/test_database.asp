@@ -104,9 +104,15 @@ sub performDBOperations()
 	ID = db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "gabru", "age", 88), "id = -1")
 	tf.assertEqual 88, db.getScalar("SELECT age FROM person WHERE id = " & id, 0), "insertOrUpdate problem"
 	
+	mirID = db.getScalar("SELECT id FROM person WHERE firstname = 'mirjam'", 0)
+	if mirID <= 0 then tf.fail("Must get the record of 'Mirjam'")
+	mirID = db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "checker", "age", 70), mirID)
+	tf.assertEqual 70, db.getScalar("SELECT age FROM person WHERE firstname = 'mirjam'", 0), "insertOrUpdate() should really update the values if it says that it did the update."
+	tf.assertEqual "checker", db.getScalar("SELECT lastname FROM person WHERE firstname = 'mirjam'", ""), "insertOrUpdate() should really update the values if it says that it did the update."
+	
 	on error resume next
-	ID = db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "gabru", "age", 26), empty)
-	failed = err <> 0
+		ID = db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "gabru", "age", 26), empty)
+		failed = err <> 0
 	on error goto 0
 	tf.assert failed, "update() must fail with empty condition"
 	
