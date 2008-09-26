@@ -23,6 +23,12 @@ class Database
 	
 	'public members
 	public connection		''[ADODB.Connection] holds the database connection
+	public clientCursor		''[bool] Indicates if the <em>insert()</em> and <em>update()</em> methods should use client cursor (<em>adUseClient</em>) for the used recordset.
+							''This property exists due to a bug with MySQL and UTF-8 text columns. If you have columns of type <em>text</em> in any mySQL table and you want to update it then it will
+							''result in strange chars. Using a client cursor solves this problem. Dont use it in other scenarios as mySQL behaves strange when using a client cursor.
+							''default = FALSE (by default its <em>adUseServer</em>).<br/><br/>(Note: use this property only if you really experience this problem)
+							''More info: http://bugs.mysql.com/bug.php?id=26985 or see also http://dev.mysql.com/tech-resources/articles/vb-cursors-and-locks.html<br/>
+							''Don't forget to set this property back after you have used it.
 	
 	public property get numberOfDBAccess ''[int] gets the number which indicates how many database accesses has been made till now
 		numberOfDBAccess = p_numberOfDBAccess
@@ -130,13 +136,7 @@ class Database
 		checkBeforeExec "Database.insert()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.insert()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
-		
-		'cursorLocation Note: we set the cursor location to client only on mysql
-		'because otherwise it does not work with TEXT UTF-8 COLUMNS when using adUseServer 
-		'see http://bugs.mysql.com/bug.php?id=26985
-		'see also http://dev.mysql.com/tech-resources/articles/vb-cursors-and-locks.html
-		if dbtype = "mysql" then aRS.cursorLocation = 3 'adUseClient
-		
+		if clientCursor then aRS.cursorLocation = 3 'adUseClient
 		aRS.open tablename, connection, 1, 2, 2
 		aRS.addNew()
 		fillRSWithData aRS, data, "Database.insert()"
@@ -181,8 +181,7 @@ class Database
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.update()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
 		sql = "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition)
-		'see insert() method for an important note about the cursorLocation.
-		if dbtype = "mysql" then aRS.cursorLocation = 3
+		if clientCursor then aRS.cursorLocation = 3 'adUseClient
 		aRS.open sql, connection, 1, 2
 		update = 0
 		while not aRS.eof

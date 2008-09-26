@@ -438,6 +438,7 @@ class Library
 		logger.error(description)
 		'user errors start after 512 (VB spec)
 		err.raise nr, source, description
+		on error goto 0
 	end sub
 	
 	'******************************************************************************************************************

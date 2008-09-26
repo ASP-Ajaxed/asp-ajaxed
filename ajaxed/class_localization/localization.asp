@@ -34,8 +34,8 @@ class Localization
 	end function
 	
 	'**************************************************************************************************************
-	'' @SDESCRIPTION:	Gets geo information about the clients ISP according to its IP address like e.g. country, coordinates, etc.
-	'' @DESCRIPTION:	Information is gathered from the free service at http://www.hostip.info and the clients IP is
+	'' @SDESCRIPTION:	Locates the country of a given clients IP address.
+	'' @DESCRIPTION:	Currently Information is gathered from the free service at http://www.hostip.info and the clients IP is
 	''					taken from the <em>serverVariables</em>. Note: As the location is the ISPs location its not sure that the
 	''					client is located in the same location.
 	''					- The location is cached within the users session. Therefore only the first call will access the service (unless its a failure).
@@ -43,29 +43,32 @@ class Localization
 	''					Example of a correct call:
 	''					<code>
 	''					<%
-	''					set gInfo = local.getClientInfo(2)
-	''					if gInfo is nothing then str.writeEnd("Service unavailable")
-	''					if gInfo.count = 0 thn str.writeEnd("Location unknown")
+	''					countryCode = local.locateClient(2, empty)
+	''					if isEmpty(countryCode) then str.writeEnd("Service unavailable")
+	''					if countryCode = "XX" then str.writeEnd("Location unknown")
 	''					'if location was found then the country is available for sure
-	''					str.writef("You are located in '{0}', arent you?", gInfo("country"))
+	''					str.writef("You are located in '{0}', arent you?", countryCode)
 	''					% >
 	''					</code>
 	'' @PARAM:			timeout [int]: Timeout for the request in seconds. <em>0</em> mean as long as possible (not recommended!)
-	'' @RETURN:			[Dictionary] Returns a DICTIONARY with the following lowercased keys:
-	''					- <em>country</em>: 2-letter uppercased countrycode
-	''					- <em>lat</em>: Latitude of the location (EMPTY if unknown)
-	''					- <em>lng</em>: Longitude of the location (EMPTY if unknown)
-	''					All the different failures are handled as followed:
-	''					- NOTHING is returned on a failure (xml parsing errors & network errors e.g. timeout, service down, etc.)
-	''					- DICTIONARY with no keys (<em>count = 0</em>) is returned if the location is unknown (service is available but could not determine location).
+	'' @PARAM:			clientIP [string]: The IP you want to check. Provide EMPTY to check the clients IP (<em>Localization.IP</em>). Only if EMPTY is given then the query will be temporary cached in the session.
+	'' @RETURN:			[string]
+	''					- Returns the 2 letters upper-cased country code (if could determine) as given in ISO 3166-1.
+	''					- Returns <em>XX</em> if the location is unknown (service is available but could not determine location). Also if the IP is private.
+	''					- Returns EMPTY on a failure (xml parsing errors & network errors e.g. timeout, service down, etc.)
 	'**************************************************************************************************************
-	public function geocodeClient(timeout)
-		set geocodeClient = nothing
-		set ixmlhttp = lib.requestURL("get", "http://api.hostip.info/", _
-			array("ip", IP), empty)
+	public function locateClient(timeout, clientIP)
+		locateClient = empty
+		'if its cached then take it and run...
+		if isEmpty(clientIP) and session("ajaxed_locateClient") <> "" then
+			locateClient = session("ajaxed_locateClient")
+			lib.logger.debug "Got cached Localization.locateClient() from session."
+			exit function
+		end if
+		set ixmlhttp = lib.requestURL("get", "http://api.hostip.info/", array("ip", lib.iif(isEmpty(clientIP), IP, clientIP)), empty)
 		if ixmlhttp is nothing then exit function
 		if ixmlhttp.status <> 200 then
-			lib.logger.debug "Localization.geocodeClient() response was not a success: " & ixmlhttp.status
+			lib.logger.debug "Localization.geocodeClient() response was NOT successful: " & ixmlhttp.status
 			exit function
 		end if
 		set xml = server.createObject("microsoft.xmldom")
@@ -74,25 +77,17 @@ class Localization
 			lib.logger.debug "Localization.geocodeClient() could not parse XML: " & xml.parseError.reason
 			exit function
 		end if
-		set geocodeClient = ["D"](empty)
+		locateClient = "XX"
+		'now lets parse the XML. its specific to the provider (currently api.hostip.info)
 		set n = xml.getElementsByTagName("countryAbbrev")
 		if n.length > 0 then
-			country = uCase(n(0).text)
+			locateClient = uCase(n(0).text)
 			'if the country abbreviation is XX then its an unknown address
-			if country = "XX" then exit function
-			geocodeClient.add "country", uCase(n(0).text)
-			set n = xml.getElementsByTagName("gml:coordinates")
-			if n.length > 0 then
-				latlng = split(n(0).text, ",")
-				old = setLocale("en-us")
-				geocodeClient.add "lng", str.parse(latlng(0), 0.0)
-				geocodeClient.add "lat", str.parse(latlng(1), 0.0)
-				setLocale(old)
-			else
-				geocodeClient.add "lng", empty
-				geocodeClient.add "lat", empty
-			end if
+			if len(locateClient) <> 2 then locateClient = "XX"
 		end if
+		set xml = nothing
+		'cache the value if its for the clients IP
+		if isEmpty(clientIP) then session("ajaxed_locateClient") = locateClient
 	end function
 
 end class
