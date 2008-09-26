@@ -209,6 +209,7 @@ class RSS
 		set PINF = xml.createProcessingInstruction("xml", "version=""1.0""  encoding=""UTF-8""")
 		xml.insertBefore PINF, xml.childNodes(0)
 		if not isEmpty(target) then xml.save(server.mapPath(target))
+		if lib.logger.logsOnLevel(1) then lib.logger.debug xml.xml
 		set generate = xml
 	end function
 	

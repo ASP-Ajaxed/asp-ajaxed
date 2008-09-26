@@ -13,15 +13,21 @@ sub test_1()
 end sub
 
 sub test_2()
-	set d = local.geocodeClient(0)
-	if d is nothing then
+	'this IP is located in austria
+	anIP = "213.129.245.250"
+	
+	code = local.locateClient(0, anIP)
+	if isempty(code) then
 		tf.info "Could not test Localization.geocodeClient() because it seems there is no network connection."
 		exit sub
 	end if
-	if d.count > 0 then
-		tf.assert d("country") <> "", "Country not identified"
+	if code = "XX" then
+		tf.info "Localization.geocodeClient() does not contain information about your IP. " & anIP
 	else
-		tf.info "Localization.geocodeClient() does not contain information about your IP."
+		tf.assert code <> "", "Country not identified"
 	end if
+	
+	'private IP
+	tf.assertEqual "XX", local.locateClient(0, "127.0.0.1"), "Private addresses should be marked as unknown"
 end sub
 %>

@@ -42,12 +42,13 @@ class TestFixture
 	public debug			''[bool] Turn this on to debug your tests. error handling is turned off then. default = FALSE
 	public lineBreak		''[string] The line break which should be used between each message. default = <em>&lt;br&gt;</em>
 	public requestTimeout	''[int] Timout for page requests. e.g. when using <em>asserResponse()</em> default = <em>3</em>
+	public allEnvs			''[bool] should the test run on all environments? default = FALSE (tests run only on DEV env if this option is enabled).
+							''Enabling this option should be done only if the test files are somehow protected from public access (e.g. http basic authentication).
 	
 	'**********************************************************************************************************
 	'* constructor 
 	'**********************************************************************************************************
 	public sub class_initialize()
-		if not lib.dev then lib.error("Wrong environment.")
 		currentTest = empty
 		testsMade = 0
 		testsFailed = 0
@@ -57,6 +58,7 @@ class TestFixture
 		debug = false
 		lineBreak = "<br>"
 		requestTimeout = 10
+		allEnvs = false
 	end sub
 	
 	'**********************************************************************************************************
@@ -66,6 +68,7 @@ class TestFixture
 	''					- if there is a <em>setup()</em> sub then its called before every test
 	'**********************************************************************************************************
 	public sub run()
+		if not lib.dev and not allEnvs then lib.error("Test on the wrong environment.")
 		set su = lib.getFunction("setup")
 		do while true
 			'try to get the test function
