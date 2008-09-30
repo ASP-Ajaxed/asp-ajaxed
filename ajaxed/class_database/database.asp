@@ -72,6 +72,21 @@ class Database
 	end sub
 	
 	'******************************************************************************************************************
+	'' @SDESCRIPTION:	This function is used to create a legal SQL string that you can use in an SQL statement.
+	'' @DESCRIPTION:	this is necessary to pass user input directly into a SQL Query
+	''					e.g. on a basic login scenario: <code><% sql = "SELECT * FROM user WHERE login = " & db.SQLSafe(username) % ></code>
+	''					- Note: It may sanitize differently for the different database types.
+	''					- Warn: Its highliy recommended to additionally validate user input when using parameters directly within the SQL query
+	'' @PARAM:			value [string]: the value which should be made "safe"
+	'' @RETURN:			[string] safe value. e.g. <em>'</em> are escaped with <em>''</em>, etc.
+	'******************************************************************************************************************
+	public function SQLSafe(value)
+		SQLSafe = replace(value & "", "'", "''")
+		'mySql need to escape more. check http://dev.mysql.com/doc/refman/5.0/en/mysql-real-escape-string.html
+		if dbType = "mysql" then SQLSafe = replace(SQLSafe, "\'", "\\'")
+	end function
+	
+	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	Opens a database connection with a given connection string
 	'' @DESCRIPTION:	- The connection is available afterwards in the <em>connection</em> property
 	''					- if the connection is already opened then it gets closed a the new is opened
@@ -113,13 +128,13 @@ class Database
 	''					- <em>id</em> is parsed into a number and only <em>id</em> greater 0 are recognized
 	'' @PARAM:			tablename [string]: the name of the table you want to delete the record from
 	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. <em>"id = 20 AND cool = 1"</em>
-	''					- if condition is a string then you need to ensure sql-safety with <em>str.sqlsafe</em> yourself.
+	''					- if condition is a string then you need to ensure sql safety with <em>db.SQLsafe</em> manually.
 	'******************************************************************************************************************
 	public sub delete(tablename, byVal condition)
 		checkBeforeExec "Database.delete()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "lib.delete", "tablename cannot be empty"))
 		if condition = "" then exit sub
-		getRS "DELETE FROM " & str.sqlSafe(tablename) & getWhereClause(condition), empty
+		getRS "DELETE FROM " & sqlSafe(tablename) & getWhereClause(condition), empty
 	end sub
 	
 	'******************************************************************************************************************
@@ -172,7 +187,7 @@ class Database
 	'' @PARAM:			data [array]: array which holds the columnames and its values. e.g. <em>array("name", "jack johnson")</em>
 	''					- length must be even otherwise error is thrown
 	'' @PARAM:			condition [int], [string]: ID of the record or a condition e.g. <em>"id = 20 AND cool = 1"</em>
-	''					- If condition is a string then you need to ensure sql-safety with <em>str.sqlsafe</em> yourself.
+	''					- If condition is a string then you need to ensure sql safety with <em>db.SQLsafe</em> manually.
 	''					- Leave EMPTY if you want to update all records of the table (Note: this could take some time when there are a lot of records).
 	'' @RETURN:			[int] Number of updated records. <em>0</em> if non updated (e.g. condition didnt match any records)
 	'******************************************************************************************************************
@@ -180,7 +195,7 @@ class Database
 		checkBeforeExec "Database.update()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.update()", "tablename cannot be empty"))
 		set aRS = server.createObject("ADODB.Recordset")
-		sql = "SELECT * FROM " & str.sqlSafe(tablename) & getWhereClause(condition)
+		sql = "SELECT * FROM " & sqlSafe(tablename) & getWhereClause(condition)
 		if clientCursor then aRS.cursorLocation = 3 'adUseClient
 		aRS.open sql, connection, 1, 2
 		update = 0
@@ -254,7 +269,7 @@ class Database
 	public function count(tablename, byVal condition)
 		checkBeforeExec "Database.count()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.count()", "tablename cannot be empty"))
-		count = getScalar("SELECT COUNT(*) FROM " & str.SQLSafe(tablename) & lib.iif(condition <> "", " WHERE " & condition, ""), 0)
+		count = getScalar("SELECT COUNT(*) FROM " & SQLSafe(tablename) & lib.iif(condition <> "", " WHERE " & condition, ""), 0)
 	end function
 	
 	'******************************************************************************************************************
@@ -268,7 +283,7 @@ class Database
 		checkBeforeExec "Database.toggle()", empty, false
 		if trim(tablename) = "" then lib.throwError(array(100, "Database.toggle()", "tablename cannot be empty"))
 		if trim(columnName) = "" then lib.throwError(array(100, "Database.toggle()", "columnname cannot be empty"))
-		sql = "UPDATE " & str.SQLSafe(tablename) & " SET " & str.SQLSafe(columnName) & " = 1 - " & str.SQLSafe(columnName) & getWhereClause(condition)
+		sql = "UPDATE " & SQLSafe(tablename) & " SET " & SQLSafe(columnName) & " = 1 - " & SQLSafe(columnName) & getWhereClause(condition)
 		getRS sql, empty
 	end sub
 	
@@ -342,7 +357,7 @@ class Database
 		if not isEmpty(params) then
 			if not isArray(params) then params = array(params)
 			for i = 0 to uBound(params)
-				params(i) = str.sqlSafe(params(i))
+				params(i) = sqlSafe(params(i))
 			next
 			parametrizeSQL = str.format(parametrizeSQL, params)
 		end if
