@@ -247,7 +247,7 @@ class Datatable
 		end if
 		'now execute the final sql. it is actually a subselect
 		'so all columns are passed through and can be accessed by filters, etc.
-		sqlFinal = "SELECT * FROM (" & sql & ") datatable" & lib.iif(sort <> "", " ORDER BY " & str.SqlSafe(sort), "")
+		sqlFinal = "SELECT * FROM (" & sql & ") datatable" & lib.iif(sort <> "", " ORDER BY " & db.SqlSafe(sort), "")
 		set data = db.getUnlockedRS(sqlFinal, empty)
 		autoGenerateColumns()
 		
@@ -269,7 +269,7 @@ class Datatable
 			'TODO: use wildcards *
 			'TODO: negation of the keyword with !
 			if i > 0 then fltr = fltr & " AND "
-			fltr = fltr & "(" & str.format(fTemplate, str.sqlSafe(keywords(i))) & ")"
+			fltr = fltr & "(" & str.format(fTemplate, db.sqlSafe(keywords(i))) & ")"
 		next
 		data.filter = fltr
 		

@@ -240,7 +240,8 @@ class StringOperations
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	makes a given string safe for the use within sql statements
+	'' @SDESCRIPTION:	OBSOLETE! makes a given string safe for the use within sql statements. This function is obsolete and
+	''					<em>db.SQLSafe()</em> should be used instead.
 	'' @DESCRIPTION:	e.g. if its necessary to pass through an user input directly into a sql-query
 	''					example on a basic login scenario: <code><% sql = "SELECT * FROM user WHERE login = " & str.SQLSafe(username) % ></code>
 	'' @PARAM:			value [string]: the value which should be made "safe"
@@ -249,6 +250,7 @@ class StringOperations
 	public function SQLSafe(value)
 		SQLSafe = replace(value & "", "--", "")
 		SQLSafe = replace(SQLSafe & "", "'", "''")
+		lib.logger.warn "str.SQLSafe is obsolete. Use db.SQLSafe() instead."
 	end function
 	
 	'******************************************************************************************************************
