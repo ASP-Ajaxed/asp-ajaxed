@@ -28,7 +28,9 @@ class Cache
 	private property get cachebase 'returns a dictionary which represents the cache. key = name of the cache. value = array(expires, HTML)
 		set cachebase = nothing
 		if not isArray(application(prefix & name)) then
+			application.lock()
 			application(prefix & name) = array(server.createObject("scripting.dictionary"))
+			application.unlock()
 		end if
 		
 		set cachebase = application(prefix & name)(0)
@@ -74,8 +76,10 @@ class Cache
 		expires = dateadd(interval, intervalValue, now())
 		packedItem = array(expires, item)
 		'if it exists then remove and add to the end
+		application.lock()
 		if c.exists(identifier) then c.remove(identifier)
 		c.add identifier, packedItem
+		application.unlock()
 		reOrganize()
 	end sub
 	
@@ -84,7 +88,9 @@ class Cache
 	'**********************************************************************************************************
 	public sub clear()
 		set c = cachebase
+		application.lock()
 		c.removeAll()
+		application.unlock()
 	end sub
 	
 	'**********************************************************************************************************
@@ -100,7 +106,9 @@ class Cache
 				getItem = cachedItem(1)
 			else
 				'if expired then remove immediately
+				application.lock()
 				c.remove(identifier)
+				application.unlock()
 			end if
 		end if
 	end function
@@ -117,7 +125,9 @@ class Cache
 			for each identifier in c.keys
 				rf = c(identifier)
 				if itemExpired(rf) then
+					application.lock()
 					c.remove(identifier)
+					application.unlock()
 					removedAtLeastOne = true
 				end if
 			next
@@ -125,7 +135,9 @@ class Cache
 			'then we have to remove the first one
 			if not removedAtLeastOne then
 				identifiers = c.keys
+				application.lock()
 				c.remove(identifiers(0))
+				application.unlock()
 			end if
 		end if
 	end sub
