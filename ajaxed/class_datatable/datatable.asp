@@ -248,6 +248,8 @@ class Datatable
 		'now execute the final sql. it is actually a subselect
 		'so all columns are passed through and can be accessed by filters, etc.
 		sqlFinal = "SELECT * FROM (" & sql & ") datatable" & lib.iif(sort <> "", " ORDER BY " & db.SqlSafe(sort), "")
+		'TODO: this is only a temporary solution till paging will be implemented. remove this if paging is implemtned
+		if db.dbtype = "mysql" then sqlFinal = sqlFinal & " LIMIT " & recsPerPage
 		set data = db.getUnlockedRS(sqlFinal, empty)
 		autoGenerateColumns()
 		
