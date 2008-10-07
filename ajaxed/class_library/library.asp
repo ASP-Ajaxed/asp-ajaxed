@@ -222,6 +222,8 @@ class Library
 	''					- provide EMPTY if no parameters are needed
 	'' @PARAM:			timeout [int]: Timeout in seconds for the request. <em>0</em> means unlimited (not recommended!). Default is <em>3</em>
 	'' @PARAM:			implementation [string]: Define a desired <em>IServerXMLHTTPRequest</em>. Default: <em>Msxml2.ServerXMLHTTP.3.0</em>
+	'' @PARAM:			requestheader [array]: some additional request header which should be passed to the request. It must be an array where each even value represents the name and the odd values represent the value of the header.
+	''					e.g. array("Accept-Language", "en")
 	'' @RETURN:			[IServerXMLHTTPRequest] Returns an object which implements <em>IServerXMLHTTPRequest</em>.
 	''					- It returns NOTHING if the page could not be requested at all (timout & network errors)
  	''					- You can check if request was successful by checking the <em>status</em> property (<em>200</em> means succesful).
@@ -240,7 +242,8 @@ class Library
 				pQS = pQS & params(i) & "=" & server.URLEncode(params(i + 1)) & "&"
 			next
 		end if
-		["O"] array("timeout", "implementation"), options, array(3, "Msxml2.ServerXMLHTTP.3.0")
+		["O"] array("timeout", "implementation", "requestheader"), options, array(3, "Msxml2.ServerXMLHTTP.3.0", array())
+		if (uBound(options("requestheader")) + 1) mod 2 <> 0 then throwError("Library.requestURL() requestheader option must contain an even amount of fields.")
 		
 		set requestURL = server.createObject(options("implementation"))
 		timeout = options("timeout") * 1000
@@ -255,7 +258,10 @@ class Library
 				if not str.endsWith(url, "?") and pQS <> "" then url = url & "?"
 				url = url & pQS
 				on error resume next
-					requestURL.open "GET", url, false
+					requestURL.open "GET", url, false ', username, password can be appended if it uses basic authentication
+					for i = 0 to uBound(options("requestheader")) step 2
+						requestURL.setRequestHeader options("requestheader")(i), options("requestheader")(i + 1)
+					next
 					requestURL.send()
 					if err <> 0 then desc = err.description
 				on error goto 0
@@ -264,6 +270,9 @@ class Library
 					requestURL.open "POST", url, false
 					requestURL.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
 					requestURL.setRequestHeader "Encoding", "UTF-8"
+					for i = 0 to uBound(options("requestheader")) step 2
+						requestURL.setRequestHeader options("requestheader")(i), options("requestheader")(i + 1)
+					next
 					requestURL.send(pQS)
 					if err <> 0 then desc = err.description
 				on error goto 0
