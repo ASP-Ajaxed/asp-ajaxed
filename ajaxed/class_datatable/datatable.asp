@@ -21,7 +21,7 @@
 ''					- For better performance and nicer user experience all requests are handled with ajax (using pagePart feature of ajaxed)
 ''					- all user settings (applied filters, sorting orders, current page, ...) are remembered during the session. This makes bulk editing easier for users.
 ''					- offers the possibility to change properties during runtime (hide/disable rows, change styles, change data, ...).
-''					Full example of a simple Datatable which shows all users of an application (columns are auto detected):
+''					Full example of a fsimple Datatable which shows all users of an application (columns are auto detected):
 ''					<code>
 ''					<%
 ''					set dt = new Datatable
@@ -248,8 +248,6 @@ class Datatable
 		'now execute the final sql. it is actually a subselect
 		'so all columns are passed through and can be accessed by filters, etc.
 		sqlFinal = "SELECT * FROM (" & sql & ") datatable" & lib.iif(sort <> "", " ORDER BY " & db.SqlSafe(sort), "")
-		'TODO: this is only a temporary solution till paging will be implemented. remove this if paging is implemtned
-		if db.dbtype = "mysql" then sqlFinal = sqlFinal & " LIMIT " & recsPerPage
 		set data = db.getUnlockedRS(sqlFinal, empty)
 		autoGenerateColumns()
 		
@@ -365,7 +363,7 @@ class Datatable
 	private sub drawData()
 		if not callback then output("<tbody id=""" & ID & "_body"">")
 		num = 1
-		while not data.eof
+		while not data.eof and num < recsPerPage
 			set p_row = new DatatableRow
 			set p_row.dt = me
 			p_row.draw num, p_col, columns, output
