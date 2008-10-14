@@ -7,6 +7,9 @@ sub test_1()
 	set output = new StringBuilder
 	for i = 1 to 10
 		output.append("x")
+		output.append("")
+		output.append(empty)
+		output.append(null)
 	next
 	tf.assertEqual "xxxxxxxxxx", output.toString(), "Stringbuilder does not work"
 end sub

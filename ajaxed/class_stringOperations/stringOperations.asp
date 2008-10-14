@@ -140,8 +140,8 @@ class StringOperations
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	tries to parse a given value into the datatype of the alternative. If it cannot be parsed
-	''					then the alternative is passed through
+	'' @SDESCRIPTION:	Tries to parse a given value into the datatype of the given <em>alternative</em>. If it cannot be parsed
+	''					then the <em>alternative</em> is passed through. In other words: It ensures that a given variable contains only one datatype.
 	'' @DESCRIPTION:	It ALWAYS returns the type of the alternative. Recommended usage when getting values from querystring or form:
 	''					<code>
 	''					'gets the ID value from querystring and ensures its an integer.
@@ -169,8 +169,9 @@ class StringOperations
 	'' @RETURN:			[variant] the string parsed into the alternative type or the alternative itself
 	'******************************************************************************************************************
 	public function parse(value, alternative)
-		val = trim(cstr(value) & "")
 		parse = alternative
+		if isNull(value) then exit function
+		val = trim(cstr(value) & "")
 		if val = "" then exit function
 		on error resume next
 		select case varType(parse)

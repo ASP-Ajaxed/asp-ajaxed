@@ -10,6 +10,8 @@ sub test_1()
 	tf.assertEqual year(str.parse("1/1/2007", now())), 2007, "str.parse parsing a date"
 	tf.assertEqual str.parse("True", false), true, "str.parse should parse booleans"
 	tf.assertEqual str.parse(str.format("2022{0}22", local.comma), 0.0), 2022.22, "str.parse parsing floats"
+	tf.assertEqual str.parse(null, 1), 1, "str.parse() must be able to accept NULLs as well."
+	tf.assertEqual str.parse(empty, 0.2), 0.2, "str.parse() must be able to accept EMPTY as well."
 end sub
 
 sub test_2()

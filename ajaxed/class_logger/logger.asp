@@ -106,7 +106,8 @@ class Logger
 	'******************************************************************************************************************
 	'* encodes all non ascii chars within the logged string
 	'******************************************************************************************************************
-	private function encode(val)
+	private function encode(byVal val)
+		if isNull(val) then val = ""
 		encode = val
 		'replace all UTF-8 chars to its hex notation
 		if regx.test(val) then
