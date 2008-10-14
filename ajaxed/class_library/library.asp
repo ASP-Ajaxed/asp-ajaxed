@@ -215,11 +215,12 @@ class Library
 	'' @PARAM:			method [string]: <em>GET</em> or <em>POST</em>
 	'' @PARAM:			url [int]: URL for the request. Only full URLs are supported (starting with <em>http://</em>, <em>https://</em>, etc.) 
 	''					or virtual URLs (starting with <em>/</em>) to request internal pages
-	'' @PARAM:			params [array]: Parameters for the request. Even fields of the array hold the names and the odd fields hold the corresponding values.
+	'' @PARAM:			params [array], [string]: Parameters for the request. Even fields of the array hold the names and the odd fields hold the corresponding values.
 	''					Values are automatically <em>urlEncoded</em>.
 	''					- if <em>POST</em> request then send as <em>POST</em> values (if querystring values needed then add them direclty to the URL).
 	''					- if <em>GET</em> request then send via querystring.
 	''					- provide EMPTY if no parameters are needed
+	''					- if the value is a STRING then its just passed through to POST (as post variables) or GET (as querystring) request
 	'' @PARAM:			timeout [int]: Timeout in seconds for the request. <em>0</em> means unlimited (not recommended!). Default is <em>3</em>
 	'' @PARAM:			implementation [string]: Define a desired <em>IServerXMLHTTPRequest</em>. Default: <em>Msxml2.ServerXMLHTTP.3.0</em>
 	'' @PARAM:			requestheader [array]: some additional request header which should be passed to the request. It must be an array where each even value represents the name and the odd values represent the value of the header.
@@ -241,6 +242,8 @@ class Library
 			for i = 0 to uBound(params) step 2
 				pQS = pQS & params(i) & "=" & server.URLEncode(params(i + 1)) & "&"
 			next
+		else
+			pQS = params
 		end if
 		["O"] array("timeout", "implementation", "requestheader"), options, array(3, "Msxml2.ServerXMLHTTP.3.0", array())
 		if (uBound(options("requestheader")) + 1) mod 2 <> 0 then throwError("Library.requestURL() requestheader option must contain an even amount of fields.")
