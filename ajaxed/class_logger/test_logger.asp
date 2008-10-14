@@ -24,6 +24,10 @@ sub test_1()
 	
 	lib.logger.error("some error")
 	tf.assertInFile lib.logger.logFile, "some error", "logger.error() didnt work"
+	
+	'should not throw errors
+	lib.logger.log 1, null, 31
+	lib.logger.log 1, empty, 31
 end sub
 
 sub test_2()

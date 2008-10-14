@@ -27,6 +27,7 @@ class DatatableColumn
 	'public members
 	public name				''[string], [int] name/index of the column. must exist in datatables SQL query.
 	public caption			''[string] a caption which will be displayed as the columns header
+	public help				''[string] a help string which can be used to explain the caption (e.g. if its an abbreviation)
 	public index			''[int] gets the index of the column. starting with 0 (first column)
 	public onCellCreated	''[string] name of the <strong>function</strong> which should be executed just before a data cell of this column will be drawn.
 							''expects one argument which will hold the datatable executing the function. The function must return the value which should be drawn.
@@ -85,7 +86,7 @@ class DatatableColumn
 	'' @SDESCRIPTION: 	draws the column. Internal use!
 	'**********************************************************************************************************
 	sub draw(byRef output)
-		output("<th class=""axdCol_" & lCase(name) & " " & css & """>")
+		output("<th class=""axdCol_" & lCase(name) & " " & css & """ title=""" & str(help) & """>")
 		if dt.sorting then output( _
 			"<a href=""javascript:void(0);"" " & _
 				"onclick=""" & dt.ID & ".sort('" & name & "');"" " & _

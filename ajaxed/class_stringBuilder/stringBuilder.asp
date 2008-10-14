@@ -74,6 +74,7 @@ class StringBuilder
 	'' @PARAM:			val [string]: the string you want to append
 	'**********************************************************************************************************
 	public sub append(val)
+		if isNull(val) then val = ""
 		if isEmpty(component) then
 			p_component = p_component & val
 		elseif component = "system.io.stringwriter" then

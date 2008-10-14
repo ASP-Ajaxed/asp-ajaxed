@@ -376,14 +376,20 @@ class Datatable
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	adds a new column with name and caption and returns it
 	'' @PARAM:			name [string], [int]: name/index of the column (should exist within the <em>sql</em>)
-	'' @PARAM:			caption [string]: caption for the column header
+	'' @PARAM:			caption [string], [array]: caption for the column header. If ARRAY then the first value is the caption and the second is the help text.
 	'' @RETURN:			[DatatableColumn] returns an already added column (properties can be changed afterwards).
 	'**********************************************************************************************************
 	public function newColumn(name, caption)
 		set newColumn = new DatatableColumn
 		with newColumn
 			.name = name
-			.caption = caption
+			if isArray(caption) then
+				if uBound(caption) <> 1 then lib.throwError("Datatable.newColumn() caption if used as array must contain 2 elements")
+				.caption = caption(0)
+				.help = caption(1)
+			else
+				.caption = caption
+			end if
 			set .dt = me
 			.index = uBound(columns) + 1
 			redim preserve columns(.index)
