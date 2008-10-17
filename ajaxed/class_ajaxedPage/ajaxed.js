@@ -6,8 +6,9 @@ ajaxed.prototype.indicator = Element.extend(document.createElement('div')).addCl
 Ajax.Responders.register({
 	onCreate: function() {
 		var s = ajaxed.prototype.indicator.style;
-		s.position = 'absolute';
-		s.top = ajaxed.getWindowScroll().top + 'px';
+		s.position = 'fixed';
+		s.top = '0px';
+		s.right = '0px';
 		if (Ajax.activeRequestCount == 1) document.body.appendChild(ajaxed.prototype.indicator);
 	},
 	onComplete: function() {

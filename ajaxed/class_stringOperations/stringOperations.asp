@@ -269,7 +269,7 @@ class StringOperations
 		tmp = replace(tmp, chr(92), "\\")
 		tmp = replace(val, chr(39), "\'")
 		tmp = replace(tmp, chr(34), "&quot;")
-		tmp = replace(tmp, chr(13), "<br>")
+		tmp = replace(tmp, chr(13), "\n")
 		tmp = replace(tmp, chr(10), " ")
 		JSEncode = tmp
 	end function
