@@ -1,4 +1,5 @@
 ﻿v 1.1
+BUGFIX: ajaxed loading indicator stays fixed now even if there are scrollbars and you scroll.
 BUGFIX: lib.range previously failed float tests are now running
 BUGFIX: database tests used to run with the default DB if available.
 BUGIFX: lib.throwError had a bug calling just QS but should call page.QS

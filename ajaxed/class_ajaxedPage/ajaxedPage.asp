@@ -295,7 +295,7 @@ class AjaxedPage
 		loadJSFile(lib.path("class_ajaxedPage/ajaxed.js"))
 		execJS(array(_
 			"ajaxed.prototype.debug = " & lib.iif(debug, "true", "false") & ";",_
-			"ajaxed.prototype.indicator.innerHTML = '" & loadingText & "';"_
+			"ajaxed.prototype.indicator.innerHTML = '" & str.JSEncode(loadingText) & "';"_
 		))
 		ajaxHeaderDrawn = true
 	end sub
