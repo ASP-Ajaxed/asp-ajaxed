@@ -196,7 +196,7 @@ class StringOperations
 	'' @SDESCRIPTION:	OBSOLETE! use <em>parse()</em> instead
 	'******************************************************************************************************************
 	public function toFloat(value, alternative)
-		toFload = parse(value, alternative)
+		toFloat = parse(value, alternative)
 	end function
 	
 	'******************************************************************************************************************

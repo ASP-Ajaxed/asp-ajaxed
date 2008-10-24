@@ -1,0 +1,18 @@
+- DataTable
+	- grouping ermoeglichen
+	- quersummen?
+	- wie bei google adsense
+- XMLRPC
+	- POST is eh klar
+	- bei GET kann man eine description liefern siehe wie das eine .net component macht http://www.xml-rpc.net/
+		http://www.cookcomputing.com/xmlrpcsamples/math.rem
+	- documentation sollte erstellt werden
+	- logging
+- Dropdown
+	- grouping des recordset ... mit optselect oder so &auml;hnlich
+- erropage which also logs
+- generate doc
+- comments highlight in documentor
+- alle config vars listen (AJAXED_)
+- url erkennen in der doku (lange in der mitte k&uuml;rzen)
+- nachdenken wie man die merhzahl ins str.format() einbringen koennte

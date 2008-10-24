@@ -33,7 +33,7 @@ sub callback(a)
 		end if
 	else
 		result = getResult(false)
-		page.returnValue "result", result
+		page.returnValue "result", str(result)
 	end if
 	page.returnValue "err", regexError
 	if page.RFHas("showCode") then
