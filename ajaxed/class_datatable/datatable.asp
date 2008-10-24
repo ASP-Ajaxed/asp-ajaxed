@@ -146,7 +146,7 @@ class Datatable
 	public sub class_initialize()
 		'TODO: lib.require "Pageable", "Datatable"
 		p_ID = "axdDT_" & lib.getUniqueID()
-		sessionStorageName = "ajaxed_database"
+		sessionStorageName = "ajaxed_datatable"
 		dataLoaded = false
 		recsPerPage = 100
 		auto = true
