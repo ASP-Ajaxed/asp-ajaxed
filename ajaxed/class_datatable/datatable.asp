@@ -11,15 +11,15 @@
 ''					Columns (<em>DatatableColumn</em> instances) must be added to the table. Columns are auto generated if none are defined by the client.
 ''					Datatable contains the following main features which makes it a very powerful component:
 ''					- only a SQL query is needed as the datasource. All columns which are exposed in the query can be used within the table.
-''					- sorting, pagination and quick deletion of records
-''					- filters can be applied to columns (either predefined or free text) or even to the whole datatable (fullsearch)
-''					- TODO: supports grouping of data
-''					- export of the data to all kind of different formats
+''					- supports sorting & pagination
+''					- full text search can be applied
+''					- TODO: quick deletion of records
+''					- TODO: export of the data to all kind of different formats
+''					- TODO: all user settings (sorting orders, current page, ...) are remembered during the session. This makes bulk editing easier for users.
 ''					- optimized for printing
 ''					- it is loaded with a default style but styles can be adopted to own needs and custom application design
 ''					- uses ajaxed StringBuilder so it works also with large sets of data
 ''					- For better performance and nicer user experience all requests are handled with ajax (using pagePart feature of ajaxed)
-''					- all user settings (applied filters, sorting orders, current page, ...) are remembered during the session. This makes bulk editing easier for users.
 ''					- offers the possibility to change properties during runtime (hide/disable rows, change styles, change data, ...).
 ''					Full example of a fsimple Datatable which shows all users of an application (columns are auto detected):
 ''					<code>
@@ -54,7 +54,7 @@
 class Datatable
 
 	'private members
-	private output, p_ID, columns, p_callback, sessionStorageName, dataLoaded, p_col, p_selection, p_row
+	private output, p_ID, columns, p_callback, sessionStorageName, dataLoaded, p_col, p_selection, p_row, totalRecords
 	
 	'public members
 	public sql				''[string] SQL query which gets all the data. Paging, etc. is done by the control itself so
@@ -75,9 +75,13 @@ class Datatable
 	public attributes		''[string] any attributes which will be placed within the table tag which is used for rendering a datatable.
 	public cssClass			''[string] name of the css class which should be applied to the table-tag
 	public sorting			''[bool] should it be possible to sort the data? default = TRUE
-	public sort				''[string] indicates how the data should be sorted (ORDER BY part of the SQL). on sorting this property is changed (thus its possible to access it during runtime).
+	public sort				''[string] indicates how the data should be sorted (ORDER BY part of the SQL). on sorting this property is changed (thus its possible to access it during runtime and get the actual sort).
 							''e.g. <em>"lastname"</em> or <em>"created_on DESC"</em>, etc.
-	public rememberState	''[bool] indicates if the state (page position, soring, filters, etc.) should be remembered for the next request. default = TRUE
+	public name				''[string] Required if you want to preserve the datatables state (paging, sorting, ..) during the users session.
+							''Provide a unique name for your datatable instance. (it must be unique within your calling page. e.g. if <em>mypage.asp</em> contains 2 datatable instances then each of them must have a unique name).
+							''Why would you want to preserve the state? Check this: Your datatable contains a lot of data, the user customizes its view (sorting, paging, ...), leaves the page and then comes back. Now he
+							''has to customize the datatable again. But if you preserve the state then the settings are still remembered when he comes back.
+							''Leave EMPTY if you don't want to preserve the state. default = EMPTY.
 	public css				''[string] virtual path of the CSS file which should be used for formatting. set EMPTY if no specific file should be used.
 							''by default the ajaxed default styles are used. By creating your own style files its possible to skin the datatable and share the styles with others.
 							''Refer to the <em>datatable.css</em> to see how the styling works (also check the source of a generated datatable to see the classes being used)
@@ -134,17 +138,25 @@ class Datatable
 		columnsCount = uBound(columns) + 1
 	end property
 	
-	public property get fullsearchValue ''[array] gets the value which has been used within the fullsearch. It is an array because it will return each keyword if there are more (separated with space)
+	public property get fullsearchValue ''[array] gets the value which has been used within the fullsearch. It is an ARRAY because it will return each keyword if there are more (separated with space)
 		fullsearchValue = trim(getState("fullsearch", lib.iif(callback(), RF("fullsearch"), empty)))
 		setState "fullsearch", fullsearchValue
 		fullsearchValue = split(fullsearchValue, " ")
+	end property
+	
+	private property get tableColumnsCount ''[int] gets the number of columns which define a data row
+		tableColumnsCount = columnsCount + lib.iif(selection <> "", 1, 0)
+	end property
+	
+	private property get currentPage ''[int] gets the page number which is currently active. 
+		currentPage = str.parse(RF("page"), 1)
+		if currentPage < 1 then currentPage = 1
 	end property
 	
 	'**********************************************************************************************************
 	'* constructor 
 	'**********************************************************************************************************
 	public sub class_initialize()
-		'TODO: lib.require "Pageable", "Datatable"
 		p_ID = "axdDT_" & lib.getUniqueID()
 		sessionStorageName = "ajaxed_datatable"
 		dataLoaded = false
@@ -154,12 +166,12 @@ class Datatable
 		pkColumn = 0
 		columns = array()
 		set output = new StringBuilder
-		rememberState = true
 		css = path("datatable.css")
 		set p_col = nothing
 		set p_row = new DatatableRow
 		set p_row.dt = me
 		fullsearch = true
+		totalRecords = 0
 		''set lang = lib.newDict(empty)
 		''server.execute(path("de.asp"))
 		'll(lang)
@@ -193,6 +205,7 @@ class Datatable
 		end if
 		drawHeader()
 		drawData()
+		drawFooter()
 		if not callback then
 			output("</table>")
 			output("<script>var " & ID & " = new AxdDT('" & ID & "', '" & sort & "');</script>")
@@ -212,16 +225,16 @@ class Datatable
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	indicates if the datatable is sorted by a given column name
-	'' @PARAM:			name [string]: name of column you want to check if its sorted
+	'' @PARAM:			columnName [string]: name of column you want to check if its sorted
 	'' @RETURN:			[int] EMPTY means its not sorted by this column otherwise <em>ASC</em> or <em>DESC</em>
 	'**********************************************************************************************************
-	public function sortedBy(name)
+	public function sortedBy(columnName)
 		if not dataLoaded then lib.throwError("Datatable.sortedBy is only accessible after data has been loaded.")
 		sortedBy = empty
 		sorts = split(lCase(sort), ",")
 		for each s in sorts
 			dir = split(trim(s), " ")
-			if dir(0) = lCase(name) then
+			if dir(0) = lCase(columnName) then
 				if uBound(dir) > 0 then sortedBy = uCase(dir(1))
 				exit function
 			end if
@@ -249,6 +262,7 @@ class Datatable
 		'so all columns are passed through and can be accessed by filters, etc.
 		sqlFinal = "SELECT * FROM (" & sql & ") datatable" & lib.iif(sort <> "", " ORDER BY " & db.SqlSafe(sort), "")
 		set data = db.getUnlockedRS(sqlFinal, empty)
+		totalRecords = data.recordCount
 		autoGenerateColumns()
 		
 		if data.eof then dataLoaded = true : exit sub
@@ -279,34 +293,36 @@ class Datatable
 	'******************************************************************************************
 	'* RF 
 	'******************************************************************************************
-	private function RF(name)
-		RF = lib.page.RFT("axd_dt_" & name)
+	private function RF(fieldname)
+		RF = lib.page.RFT("axd_dt_" & fieldname)
 	end function
 	
 	'******************************************************************************************
 	'* getState - gets a stored state value of the datatable from the session storage
 	'* if it does not exist then the alternative values is returned
 	'******************************************************************************************
-	private function getState(name, alternative)
+	private function getState(sname, alternative)
 		getState = alternative
-		if not rememberState then exit function
+		if name = "" then exit function
 		if isEmpty(session(sessionStorageName)) then set session(sessionStorageName) = lib.newDict(empty)
-		if session(sessionStorageName).exists(name) then getState = session(sessionStorageName)(name)
+		scope = lib.page.getLocation("virtual", false)
+		if not session(sessionStorageName).exists(scope) then exit function
+		if session(sessionStorageName)(scope).exists(sname) then getState = session(sessionStorageName)(scope)(sname)
 	end function
 	
 	'******************************************************************************************
 	'* setState 
 	'******************************************************************************************
-	private function setState(name, value)
+	private function setState(sname, value)
 		setState = value
-		if not rememberState then exit function
-		sn = sessionStorageName & "_" & lib.page.getLocation("virtual", false)
-		'TODO: make state for each datatable per page
-		if isEmpty(session(sn)) then set session(sn) = lib.newDict(empty)
-		if session(sn).exists(name) then
-			session(sn)(name) = value
+		if name = "" then exit function
+		scope = lib.page.getLocation("virtual", false)
+		if isEmpty(session(sessionStorageName)) then set session(sessionStorageName) = ["D"](array(scope, ["D"](empty)))
+		if not session(sessionStorageName).exists(scope) then session(sessionStorageName).add scope, ["D"](empty)
+		if not session(sessionStorageName)(scope).exists(sname) then
+			session(sessionStorageName)(scope).add sname, value
 		else
-			session(sn).add name, value
+			session(sessionStorageName)(scope)(sname) = value
 		end if
 	end function
 	
@@ -332,7 +348,7 @@ class Datatable
 		'afterwards stringbuilder is used. check drawHeader() for more details
 		str.write("<thead>")
 		str.write("<tr class=""axdDTControlsRow"">")
-		str.write("<td colspan=" & columnsCount + lib.iif(selection <> "", 1, 0) & ">")
+		str.write("<td colspan=" & tableColumnsCount & ">")
 		str.write("<div class=""axdDTCustomControls"">")
 		if not isEmpty(customControls) then lib.exec customControls, me
 		str.write("</div>")
@@ -358,12 +374,73 @@ class Datatable
 	end sub
 	
 	'******************************************************************************************
+	'* drawFooter 
+	'******************************************************************************************
+	private sub drawFooter()
+		if not callback then output("<tfoot>")
+		output("<tr><td colspan=""")
+		output(tableColumnsCount)
+		output(""">")
+		set dc = (new DataContainer)(data)
+		
+		'determine the bounds of displayed records
+		firstRecord = (currentPage - 1) * recsPerPage
+		lastRecord = firstRecord + recsPerPage
+		firstRecord =  firstRecord + 1
+		if lastRecord = 0 then
+			lastRecord = dc.count
+		elseif lastRecord > dc.count then
+			lastRecord = dc.count
+		end if
+		
+		output("<div class=""recordsIndicator"">")
+		if lastRecord - firstRecord + 1 = dc.count then
+			output(str.format("Displaying {0} records ", dc.count))
+		else
+			output(str.format("Displaying {0}-{1} of {2} records ", array(firstRecord, lastRecord, dc.count)))
+		end if
+		output(str.format("({0} total)", totalRecords))
+		output(".")
+		output("</div>")
+		if recsPerPage > 0 then
+			output("<div class=""pagingBar"">")
+			pages = dc.paginate(recsPerPage, currentPage, 10)
+			if ubound(pages) > 0 then
+				if currentPage > 1 then output("<a href=""javascript:" & ID & ".goTo(" & currentPage - 1 & ")"">&lt; prev " & recsPerPage & "</a>")
+				for each p in pages
+					if p = "..." then
+						output("...")
+					elseif p = currentPage then
+						output(p)
+					else
+						output("<a href=""javascript:" & ID & ".goTo(" & p & ")"">" & p & "</a>")
+					end if
+					lastPage = p
+				next
+				if lastPage = "..." then lastPage = 0
+				if currentPage < lastPage or lastPage = 0 then
+					output("<a href=""javascript:" & ID & ".goTo(" & currentPage + 1 & ")"">next " & recsPerPage & " &gt;</a>")
+				end if
+			end if
+			output("</div>")
+		end if
+		output("</td></tr>")
+		if not callback then output("</tfoot>")
+	end sub
+	
+	'******************************************************************************************
 	'* drawData 
 	'******************************************************************************************
 	private sub drawData()
 		if not callback then output("<tbody id=""" & ID & "_body"">")
 		num = 1
-		while not data.eof and num < recsPerPage
+		'if paging is enabled then prepare the recordset for paging
+		if recsPerPage > 0 then
+			data.cacheSize = recsPerPage
+			data.pageSize = recsPerPage
+			data.absolutePage = currentPage
+		end if
+		while not data.eof and (num < recsPerPage or recsPerPage = 0)
 			set p_row = new DatatableRow
 			set p_row.dt = me
 			p_row.draw num, p_col, columns, output
@@ -375,14 +452,14 @@ class Datatable
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	adds a new column with name and caption and returns it
-	'' @PARAM:			name [string], [int]: name/index of the column (should exist within the <em>sql</em>)
+	'' @PARAM:			cname [string], [int]: name/index of the column (should exist within the <em>sql</em>)
 	'' @PARAM:			caption [string], [array]: caption for the column header. If ARRAY then the first value is the caption and the second is the help text.
 	'' @RETURN:			[DatatableColumn] returns an already added column (properties can be changed afterwards).
 	'**********************************************************************************************************
-	public function newColumn(name, caption)
+	public function newColumn(cname, caption)
 		set newColumn = new DatatableColumn
 		with newColumn
-			.name = name
+			.name = cname
 			if isArray(caption) then
 				if uBound(caption) <> 1 then lib.throwError("Datatable.newColumn() caption if used as array must contain 2 elements")
 				.caption = caption(0)
@@ -400,8 +477,8 @@ class Datatable
 	'**********************************************************************************************************
 	'* attribute 
 	'**********************************************************************************************************
-	function attribute(name, val)
-		if val <> "" then attribute = " " & name & "=""" & val & """"
+	function attribute(aname, val)
+		if val <> "" then attribute = " " & aname & "=""" & val & """"
 	end function
 
 end class

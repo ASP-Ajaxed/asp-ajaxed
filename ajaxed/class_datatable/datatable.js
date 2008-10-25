@@ -4,6 +4,14 @@
 	this.sorted = '';
 	this.lastSelectedRow;
 	this.fullsearchQuery = '';
+	this.page = 1;
+	
+	this.goTo = function(pageNr) {
+		var t = this;
+		this.callback('goTo', {axd_dt_page: pageNr}, function(trans) {
+			t.page = pageNr;
+		});
+	}
 	
 	this.setSorted = function(col) {
 		this.sorted = col.toLowerCase();
@@ -27,7 +35,8 @@
 		var allParams = $H({
 			axd_dt_id: this.table.id,
 			axd_dt_sort: this.sorted,
-			axd_dt_fullsearch: this.fullsearchQuery
+			axd_dt_fullsearch: this.fullsearchQuery,
+			axd_dt_page: this.page
 		});
 		//also add the record selections
 		var selected = [];
@@ -35,11 +44,17 @@
 			selected.push(el.value);
 		})
 		allParams.set(this.table.id, selected);
+		var t = this;
 		ajaxed.callback(
 			"axd_dt_" + method, 
 			(container) ? container : this.table.id + "_body", 
 			allParams.merge(params), 
-			onCompleted
+			function(trans) {
+				//the trick with paging is that the last row of the body is the paging row
+				//we take it and move it into the footer.
+				$$('#' + t.table.id + ' tfoot')[0].update($$('#' + t.table.id + '_body > tr:last-child')[0]);
+				onCompleted();
+			}
 		);
 	}
 	
@@ -73,6 +88,8 @@
 	
 	this.search = function(query) {
 		var t = this;
+		//when fullsearch is used we need to reset it to page 1.
+		this.page = 1;
 		this.callback('fullsearch', {axd_dt_fullsearch: query}, function(trans) {
 			t.fullsearchQuery = query;
 		});
