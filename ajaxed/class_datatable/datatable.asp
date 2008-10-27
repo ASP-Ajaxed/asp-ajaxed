@@ -435,7 +435,7 @@ class Datatable
 		if not callback then output("<tbody id=""" & ID & "_body"">")
 		num = 1
 		'if paging is enabled then prepare the recordset for paging
-		if recsPerPage > 0 then
+		if not data.eof and recsPerPage > 0 then
 			data.cacheSize = recsPerPage
 			data.pageSize = recsPerPage
 			data.absolutePage = currentPage
