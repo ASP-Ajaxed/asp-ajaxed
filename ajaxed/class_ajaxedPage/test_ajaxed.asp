@@ -181,7 +181,7 @@ sub main() %>
 	<div style="font-family:courier" id="log"></div>
 	
 	<script>
-		var u = '/ajaxed/class_ajaxedPage/test_ajaxed.asp';
+		var u = '/ajaxed/class_ajaxedPage/test_ajaxed.asp#something_which_will_be_removed';
 		ajaxed.callback('bool', t_bool, null, null, u);
 		ajaxed.callback('string', t_string, null, null, u);
 		ajaxed.callback('number', t_number, null, null, u);
