@@ -28,7 +28,7 @@ ajaxed.callback = function(theAction, func, params, onComplete, url) {
 		}
 	}
 	params = params.merge({PageAjaxed: theAction});
-	uri = window.location.href;
+	uri = window.location.href.replace(/#.*$/ig, '');
 	if (ajaxed.prototype.debug) ajaxed.debug("Action (to be handled in callback):\n\n" + theAction);
 	if (uri.endsWith('/') && url) uri += url;
 	if (url) uri = url;
