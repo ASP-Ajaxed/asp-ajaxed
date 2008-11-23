@@ -8,10 +8,14 @@
 '*				and saves it into that folder with the filename doc.html
 '*				TODO: - write version of ajaxed into the documentation
 '*				TODO: recognize indentation on <code> blocks
-'* Input:		POST params: folder (folder to parse - if no given then "ajaxed" is used)
+'* Input:		POST params:
+'*				- folder [string]: folder to parse - if no given then "ajaxed" is used)
+'*				- xsl [string]: virtual path of the xsl. if no given then default is used
+'*				- target [string]: virtual path of target file (where the docs should be saved). e.g. /index.html. leave empty if it should be placed in the same dir
 '******************************************************************************************
 
 set	classNames = lib.newDict(empty)
+set initsDict = ["D"](empty)
 set xml = server.createObject("MSXML2.DOMDocument.3.0")
 set page = new AjaxedPage
 with page
@@ -33,7 +37,6 @@ sub main()
 	set classesNodes = getNewNode("classes" , "")
 	classesNodes.setAttribute "createdOn", now()
 	xml.appendChild(classesNodes)
-	
 	readFolder(lib.fso.getFolder(getFolder(true)))
 	
 	findTypesIn("requires/types/type")
@@ -44,16 +47,20 @@ sub main()
 	
 	set xsl = server.createObject("MSXML2.DOMDocument.3.0")
 	xsl.async = false
-	xsl.load(server.mapPath("style.xsl"))
+	xsl.load(server.mapPath(lib.iif(page.RFHas("xsl"), page.RF("xsl"), "style.xsl")))
 	'if its the ajaxed folder, then we call the documentation index.html
-	filename = lib.iif(getFolder(false) = "/ajaxed/", "index.html", "doc.html")
-	set f = lib.fso.createTextFile(getFolder(true) & "\" & filename, true)
+	if page.RFHas("target") then
+		filename = page.RF("target")
+	else
+		filename = getFolder(false) & lib.iif(getFolder(false) = "/ajaxed/", "index.html", "doc.html")
+	end if
+	set f = lib.fso.createTextFile(server.mappath(filename), true)
 	f.write(xml.transformNode(xsl))
 	f.close()
 	set f = nothing
 	set xsl = nothing
 	set xml = nothing
-	str.writeln("Documentation successfully created. It can be found <a href=""" & getFolder(false) & "" & filename & """>here</a>")
+	str.writeln("Documentation successfully created. It can be found <a href=""" & filename & """>here</a>")
 end sub
 
 '******************************************************************************************
@@ -151,25 +158,17 @@ function formatCodeBlock(byVal val)
 		'remove code blocks, make closing proppelers display nicely (remove space) and encode all html
 		encoded = str.HTMLEncode(str.rReplace(replace(m, "% >", "%" & ">"), "^<code>|</code>$", "", true))
 		'remove the linebreaks in the beginning and the ending if there is one
-		c = str.rReplace(encoded, "^\s\n|\n$", "", true)
-		'surround server side code with a span
-		c = str.rReplace(c, "(&lt;%[\s\S]*?%&gt;)", "<span class=""ssi-code"">$1</span>", true)
-		'TODO surround comments with a span
-		set r2 = new Regexp
-		r2.global = true
-		r2.pattern = "&lt;%[\s\S]*?%&gt;"
-		for each ssi in r2.execute(c)
-			
-		next
+		c = encoded
+		'c = str.rReplace(encoded, "^\s\n|\n$", "", true)
 		'TODO: only one level of identation is done with this. more levels are a little
 		'tricky because all tabs have been already removed in this place
-		c = str.rReplace(c, "\n\.", "<br/>&nbsp;&nbsp;&nbsp;&nbsp;", true)
-		c = str.rReplace(c, "\n", "<br/>", true)
+		c = str.rReplace(c, "\n\.+", "    ", true)
+		'c = str.rReplace(c, "\n", "<br/>", true)
 		if m.firstIndex > 0 then firstPart = left(val, m.firstIndex + offset - 1)
 		rightCut = length - len(firstPart) - len(m) - 1
 		if rightCut > 0 then lastPart = right(val, rightCut)
 		
-		val = firstPart & "<code>" & c & "</code>" & lastPart
+		val = firstPart & "<div class=""code""><pre><code>" & c & "</code></pre></div>" & lastPart
 		offset = offset + (len(val) - length)
 	next
 	formatCodeBlock = val
@@ -186,6 +185,19 @@ function parseFile(file)
 	if file.size = 0 then exit function
 	set reader = file.OpenAsTextStream(1)
 	contents = reader.readAll()
+	
+	'grab all the config vars
+	set rx = new Regexp
+	rx.pattern = "AJAXED_[A-Z0-9_]+"
+	rx.global = true
+	rx.ignoreCase = false
+	for each m in rx.execute(contents)
+		if not initsDict.exists(m & "") then
+			initsDict.add m & "", m
+			'xml.documentElement.appendChild(getNewNode("init", m & ""))
+		end if
+	next
+	
 	set reader = nothing
 	if instr(contents, "'' @CLASSTITLE:") then
 		enforceRulz = false

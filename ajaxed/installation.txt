@@ -2,7 +2,7 @@ AJAXED
 
 1. copy the whole folder (ajaxed) into your web root
 2. open http://yourserver.com/ajaxed/demo/ to check if everything works
-OPTIONAL: check the config.asp to perform any conifgurations
+OPTIONAL: check the /ajaxedConfig/config.asp to perform any conifgurations
 OPTIONAL: check http://yourserver.com/ajaxed/index.html for the documentation
 OPTIONAL: go to http://yourserver.com/ajaxed/console to see the ajaxed console
 OPTIONAL: you can set the style of the loading indicator by defining a css class called "ajaxLoadingIndicator"
@@ -13,4 +13,4 @@ IMPORTANT NOTE: in order that special chars and german umlaute work fine you nee
 HAVE FUN!
 
 for updates, suggestions, bug reports
-http://www.webdevbros.net 
+http://www.ajaxed.org

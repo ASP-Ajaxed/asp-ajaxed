@@ -43,13 +43,14 @@ class Database
 		if isEmpty(p_dbType) then
 			p_dbType = "unknown"
 			typ = connection.properties("Extended Properties")
-			if str.matching(typ, "ms access|microsoft access", true) then
+			if typ = "" then typ = connection.properties("Provider Friendly Name")
+			if str.matching(typ, "ms access|microsoft access|Provider for Jet", true) then
 				p_dbType = "access"
 			elseif str.matching(typ, "sqlite", true) then
 				p_dbType = "sqlite"
 			elseif str.matching(typ, "mysql", true) then
 				p_dbType = "mysql"
-			elseif str.matching(connection.properties("Provider Friendly Name"), "SQL Server", true) then
+			elseif str.matching(typ, "SQL Server", true) then
 				p_dbType = "sqlserver"
 			end if
 		end if
@@ -178,7 +179,7 @@ class Database
 	''					<code>
 	''					<%
 	''					'updates the firstname of all records of the table "person"
-	''					to the value "leila"
+	''					'to the value "leila"
 	''					updated = db.update("person", array("firstname", "leila"), empty)
 	''					str.writef("Updated {0} records", updated)
 	''					% >

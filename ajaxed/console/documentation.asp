@@ -27,8 +27,10 @@ end sub
 '******************************************************************************************
 sub content() %>
 
-	<a href="../index.html" target="_blank"><strong>ajaxed API</strong></a>
-	full programmers class reference.
+	<strong>ajaxed API</strong>
+	<a href="http://www.ajaxed.org/api/" target="_blank"><strong>official</strong></a>,
+	<a href="../index.html" target="_blank"><strong>local</strong></a>
+	full programmers class reference (official).
 	<br><br>
 	<a href="http://groups.google.com/group/asp-ajaxed" target="_blank">
 		<strong>asp-ajaxed google discussion group</strong></a>

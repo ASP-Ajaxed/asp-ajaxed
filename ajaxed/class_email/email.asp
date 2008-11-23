@@ -24,7 +24,7 @@ class Email
 	public mailer			''[object] gets the actual mailer object which has been wrapped by Email. Useful if some specific settings have to be made before sending.
 	public dispatch			''[bool] indicates if the email should be dispatched when send() is called? default = TRUE. useful to turn off if you only want to simulate sending on your <em>dev</em> env (to keep your inbox empty).
 	
-	public propertY get allTo ''[string] gets the email address to which all emails should be sent. Useful on the <em>dev</em> env if you want to pipe all emails to one email address independently of the real recipient(s). This prevents that users would recieve an unwanted email which was send during the development. Can be set using the <em>AJAXED_EMAIL_ALLTO</em> config
+	public property get allTo ''[string] gets the email address to which all emails should be sent. Useful on the <em>dev</em> env if you want to pipe all emails to one email address independently of the real recipient(s). This prevents that users would recieve an unwanted email which was send during the development. Can be set using the <em>AJAXED_EMAIL_ALLTO</em> config
 		allTo = p_allTo
 	end property
 	
@@ -219,11 +219,11 @@ class Email
 	'' @SDESCRIPTION: 	STATIC! creates a new email instance with the content of a given <em>TextTemplate</em>
 	'' @DESCRIPTION:	first line of the template is treated as the emails subject and the rest as the body.
 	''					Dont forget to load the <em>TextTemplate</em> class for this.
-	'' @PARAM:			template [TextTemplate]: template which is used within the email
+	'' @PARAM:			template [TextTemplate]: template which is used within the email.
 	'' @RETURN:			[Email] a ready-to-use email instance where <em>subject</em> and <em>body</em> is set automatically from the given template
 	'******************************************************************************************************************
 	public function newWith(template)
-		if template is nothing then lib.throwError("No template givne.")
+		if template is nothing then lib.throwError("Email.newWith(). No template given.")
 		set newWith = new Email
 		with newWith
 			.subject = template.getFirstLine()
@@ -234,7 +234,7 @@ class Email
 	'******************************************************************************************************************
 	'' @SDESCRIPTION: 	STATIC! sends an email with a given <em>TextTemplate</em> to a given recipient.
 	'' @DESCRIPTION:	a helper to quickly send an email. sender is the default one
-	'' @PARAM:			template [TextTemplate]: template which is used within the email
+	'' @PARAM:			template [TextTemplate]: template which is used within the email. Refer to <em>newWith()</em> for the details.
 	'' @PARAM:			recipient [string], [array]: if string then treated as email otherwise first
 	''					value email and second the name
 	'' @RETURN:			[string] error message if could not send otherwise empty

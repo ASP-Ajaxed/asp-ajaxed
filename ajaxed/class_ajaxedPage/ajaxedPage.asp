@@ -138,7 +138,7 @@ class AjaxedPage
 		plain = false
 		ajaxHeaderDrawn = false
 		onlyDev = false
-		defaultStructure = false
+		defaultStructure = lib.init(AJAXED_DEFAULT_PAGE_STRUCTURE, false)
 		callbackType = 1
 	end sub
 	

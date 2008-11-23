@@ -34,6 +34,10 @@
 'ID of the form which should be used by default when no form is specified
 	'AJAXED_FORMID = "frm"
 
+'In case you need logging, set the logging level
+'	(0 = disabled, 1 = all messages, 2 = info, warn & errors, 4 = errors and warns, 8 = only errors)
+	'AJAXED_LOGLEVEL = 1
+
 'Advanced: should the codepage be set to the session directly?
 'this is only recommended if you have IIS5 or lower which does not support
 'setting the codepage directly. If you experience an codepage property error then turn this on.

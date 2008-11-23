@@ -2,6 +2,7 @@
 <%
 set page = new AjaxedPage
 with page
+	.title = "ajaxed demo - classic asp library"
 	.onlyDev = true
 	.defaultStructure = true
 	.draw()
@@ -111,7 +112,7 @@ sub pagePart_one() %>
 	<a href="/ajaxed/console"><strong>ajaxed console</strong></a> which supports you while you develop.
 	
 	<br><br>
-	<a href="http://www.webdevbros.net/ajaxed">asp ajaxed by webdevbros.net</a>
+	<a href="http://www.ajaxed.org/">asp ajaxed</a>
 	
 	
 	

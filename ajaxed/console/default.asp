@@ -26,7 +26,7 @@ end sub
 function getVersion()
 	getVersion = ""
 	set r = new RSS
-	r.url = "http://www.grafix.at/ajaxed/console/version.asp"
+	r.url = "http://www.ajaxed.org/ajaxed/console/version.asp"
 	r.load()
 	if not r.failed then getVersion = r.description
 end function
@@ -50,7 +50,7 @@ sub main() %>
 		</div>
 	<% end if %>
 	
-	<h1 id="headline"><img src="../logo.png" alt="ajaxed logo"></h1>
+	<h1 id="headline"><a href="http://www.ajaxed.org" target="_blank"><img border="0" src="../logo.png" alt="ajaxed logo"></a></h1>
 	
 	<ul class="tab">
 		<li onclick="loadContent('configuration.asp', this)" id="tConfig">
@@ -79,13 +79,12 @@ sub main() %>
 	<div id="htmlcontent" style="padding:20px;margin:40px;background:#FFFFCC" title=""></div>
 	
 	<div class="small">
-		<a href="http://www.webdevbros.net">ajaxed</a>
+		<a href="http://www.ajaxed.org">ajaxed</a>
 		project founded by Michal Gabrukiewicz
 	</div>
 	
 	<script>
 		loadContent('configuration.asp', $('tConfig'));
-		new Effect.BlindDown('headline');
 	</script>
 	
 <% end sub %>
