@@ -148,6 +148,21 @@ class RSS
 	end sub
 	
 	'**********************************************************************************************************
+	'' @SDESCRIPTION: 	STATIC! Creates a new RSS instance and loads it immediately afterwards. Useful for quick reading of a feed
+	'' @DESCRIPTION:	<code>
+	''					set r = (new RSS)("http://feed.someurl.com")
+	''					if r.failed then lib.error("could not get.")
+	''					</code>
+	'' @PARAM:			anUrl [string]: Url of the feed you want to get
+	'' @RETURN:			[RSS] The RSS feed which has been already loaded
+	'**********************************************************************************************************
+	public default function loadNew(anUrl)
+		set loadNew = new RSS
+		loadNew.url = anUrl
+		loadNew.load()
+	end function
+	
+	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	generates a feed with the given items and the metadata (title, etc.). Returns the
 	''					generated XMLDOM and provides the possibility to save it into a file immediately
 	'' @DESCRIPTION:	Feed is generated with UTF-8 (Note: your file must be saved as UTF-8 in order to support this).
@@ -433,6 +448,7 @@ class RSS
 			.open "GET", url, false
 			.send()
 			getXMLHTTPResponse = .responseText
+			lib.logger.debug .responseText
 		end with
 		set xmlhhtp = nothing
 		if err <> 0 then failed = true

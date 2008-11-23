@@ -69,7 +69,7 @@ sub content() %>
 			<li>Comments recognized by documentor must start with <code>''</code></li>
 			<li>Documentor keywords always start with <code>@</code> and end with <code>:</code></li>
 			<li>Types are surrounded by <code>[]</code> e.g. <code>[bool]</code></li>
-			<li>Documentor can be found in the ajaxed console. <code>http://yourhost.com/ajaxed/console/</code> (<a href="http://www.webdevbros.net/ajaxed/">ajaxed</a> must be installed)</li>
+			<li>Documentor can be found in the ajaxed console. <code>http://yourhost.com/ajaxed/console/</code> (<a href="http://www.ajaxed.org/">ajaxed</a> must be installed)</li>
 			<li>It's always good to take a look at the ajaxed code to see how the ajaxed team is creating the documentation.</li>
 		</ul>
 	</p>

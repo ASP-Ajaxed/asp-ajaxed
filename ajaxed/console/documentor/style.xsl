@@ -9,6 +9,11 @@
 				<meta name="Generator" content="ASP Documentor" />
 				<meta name="description" content="ASP Documentor - documentation for classic ASP (VBScript)" />
 				<script src="/ajaxed/prototypejs/prototype.js"></script>
+				<link rel="stylesheet" type="text/css" href="/ajaxed/console/documentor/code_highlight.css" />
+				<script src="/ajaxed/console/documentor/highlight/highlight.js"></script>
+				<script>
+					hljs.initHighlightingOnLoad('html', 'vbscript', 'css', 'javascript');
+				</script>
 				<style>
 					body {
 						padding:0px; margin:0px;
@@ -33,7 +38,6 @@
 					code {
 						display:block;
 						overflow:auto;
-						white-space:nowrap;
 						margin-top:3px;
 						padding:5px 3px 3px 20px;
 					}

@@ -1,4 +1,4 @@
-﻿v 1.1
+﻿v 2.0
 BUGFIX: ajaxed loading indicator stays fixed now even if there are scrollbars and you scroll.
 BUGFIX: lib.range previously failed float tests are now running
 BUGFIX: database tests used to run with the default DB if available.
@@ -7,6 +7,7 @@ BUGFIX: lib.detectComponent didnt work due to a wrong variable name
 BUGFIX: str.format used to have a bug when arguments contained a placeholder string
 - added error handling in db.insert and db.update to get more information about an error if one happens
 - updated documentor:
+	- code is syntax highlighted
 	- support for lists added and code blocks (<code></code>) added, because docs looked a little messed up sometimes. 
 		elements supporing lists and code blocks include:
 		@CDESCRIPTION, @SDESCRIPTION, @DESCRIPTION, @PARAM, @RETURN and public properties.

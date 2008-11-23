@@ -46,7 +46,7 @@ class Library
 	end property
 	
 	public property get version ''[string] gets the version of the whole library
-		version = "1.1"
+		version = "2.0"
 	end property
 	
 	public property get env ''[string] gets the current environment. <em>LIVE</em> or <em>DEV</em>

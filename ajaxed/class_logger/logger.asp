@@ -43,11 +43,13 @@ class Logger
 	public logLevel		''[int] indicates the logger level. disabled = <em>0</em>, debug = <em>1</em>, info = <em>2</em>, warn = <em>4</em>, error = <em>8</em>
 						''- all messages with a number than the <em>loglevel</em> will be logged as well. Lower numbers wont! So e.g. setting level to <em>2</em> (info) will log info-, warn-, and error messages
 						''- by default it is set to <em>0</em> (disabled)
+	public colorize		''[bool] should the logs be colorized. Only useful if you have a shell which supports ASCII colorization. default = TRUE
 	
 	'**************************************************************************************************************
 	'* constructor 
 	'**************************************************************************************************************
 	public sub class_initialize()
+		colorize = lib.init(AJAXED_LOG_COLORIZE, true)
 		msgPrefix = lib.init(AJAXED_LOGMSG_PREFIX, request.servervariables("remote_addr") & " " & now() & vbTab)
 		defaultStyle = lib.init(AJAXED_LOGSTYLE, "0;37") 'the default style how text in the log appears.
 		extension = ".log"
@@ -94,9 +96,12 @@ class Logger
 		if isEmpty(style) then style = defaultStyle
 		if not isArray(msg) then msg = array(msg)
 		for i = 0 to uBound(msg)
-			if i = 0 then file.write(msgPrefix & getStyle(style))
+			if i = 0 then
+				file.write(msgPrefix)
+				if colorize then file.write(getStyle(style))
+			end if
 			file.write(encode(msg(i)))
-			if i = uBound(msg) then file.write(getStyle(defaultStyle))
+			if i = uBound(msg) and colorize then file.write(getStyle(defaultStyle))
 			file.write(vbNewLine)
 		next
 		file.close()

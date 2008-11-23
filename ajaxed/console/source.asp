@@ -27,8 +27,8 @@ end sub
 '******************************************************************************************
 sub content() %>
 
-	<a href="http://www.webdevbros.net/ajaxed/"><strong>download current version</strong></a>
-	the current stable version can be downloaded on webdevbros.
+	<a href="http://www.ajaxed.org/"><strong>download current version</strong></a>
+	the current stable version can be downloaded from the official site.
 
 	<br><br>
 	<a href="http://code.google.com/p/asp-ajaxed/"><strong>ajaxed SVN</strong></a>
@@ -46,6 +46,6 @@ sub content() %>
 	</ol>
 
 	<strong>Interested in development and contribution?</strong>
-	Get in touch with <a href="http://www.webdevbros.net/about-michal/">Michal</a>. He is always happy about new developers.
+	Get in touch with <a href="http://www.ajaxed.org/contact/">Michal</a>. He is always happy about new developers.
 
 <% end sub %>
