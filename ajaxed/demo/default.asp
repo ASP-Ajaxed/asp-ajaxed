@@ -3,7 +3,6 @@
 set page = new AjaxedPage
 with page
 	.title = "ajaxed demo - classic asp library"
-	.onlyDev = true
 	.defaultStructure = true
 	.draw()
 end with
