@@ -469,17 +469,35 @@ class AjaxedPage
 	end function
 	
 	'******************************************************************************************************************
-	'' @SDESCRIPTION:	returns true if a given value exists in the request.form
+	'' @SDESCRIPTION:	gets the value from the querystrgin and trims it automatically.
+	'' @PARAM:			name [string]: name of the querystring parameter you want to get
+	'' @RETURN:			[string] value from the querystring trimmed.
+	'******************************************************************************************************************
+	public function QST(name)
+		QST = trim(QS(name))
+	end function
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION:	returns TRUE if a given value exists in the <em>request.form</em>
 	'' @DESCRIPTION:	good usage on submit buttons or checkboxes. Example of how to check a checkbox if it has been
 	''					checked after posting the form:
 	''					<code>
 	''					<input type="checkbox" name="cb" value="1" <%= lib.iif(page.RFHas("cb", "checked", "")) % >>
 	''					</code>
 	'' @PARAM:			name [string]: name of the value you want to get
-	'' @RETURN:			[bool] false if there is not value returned. true if yes
+	'' @RETURN:			[bool] FALSE if there is no value otherwise TRUE
 	'******************************************************************************************************************
 	public function RFHas(name)
-		RFHas = (trim(RF(name)) <> "")
+		RFHas = RFT(name) <> ""
+	end function
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION:	returns TRUE if a given value exists in the querystring
+	'' @PARAM:			name [string]: name of the value you want to get
+	'' @RETURN:			[bool] FALSE if there is no value otherwise TRUE
+	'******************************************************************************************************************
+	public function QSHas(name)
+		QSHas = QST(name) <> ""
 	end function
 	
 	'******************************************************************************************************************

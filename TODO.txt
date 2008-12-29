@@ -10,9 +10,6 @@
 	- logging
 - Dropdown
 	- grouping des recordset ... mit optselect oder so &auml;hnlich
-- erropage which also logs
-- generate doc
-- comments highlight in documentor
 - alle config vars listen (AJAXED_)
 - url erkennen in der doku (lange in der mitte k&uuml;rzen)
 - nachdenken wie man die merhzahl ins str.format() einbringen koennte
