@@ -226,7 +226,7 @@
 <div class="menuItem"><a href="#class_23">Validator</a></div>
 <div style="margin-top:20px;"><button type="button" class="button" onclick="doPrint()">Print</button><div style="font-size:10px;margin-top:8px;">
 						documented with<br><a href="http://www.webdevbros.net/ajaxed">ASP Documentor</a><br>
-						(11/23/2008 1:46:02 PM)
+						(12/29/2008 4:04:12 PM)
 					</div>
 </div>
 </fieldset>
@@ -305,7 +305,7 @@ end sub
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>23.11.2008 05:53:14</td>
+<td>12/29/2008 1:28:52 PM</td>
 </tr>
 </table>
 <h2><span onclick="togg('props_1')" style="cursor:pointer">Properties</span> <a href="#class_1" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -391,22 +391,22 @@ Useful for page which are actually only parts of pages and loaded with an XHR. d
 <table id="meths_1" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDARMWQ" onclick="togg('mdetails_1IDARMWQ')">ajaxedHeader
+<div class="mName"><a href="#method_IDAQHUE" onclick="togg('mdetails_1IDAQHUE')">ajaxedHeader
 										(params)
 									</a></div>
 <div class="mDesc">draws all necessary headers for ajaxed (js, css, etc.)</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDARMWQ">call this method within the HEAD-tag of your header.asp<br><br><div class="param"><span class="paramName"> params</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAQHUE">call this method within the HEAD-tag of your header.asp<br><br><div class="param"><span class="paramName"> params</span><span>
 														[<span class="type">array</span>]</span><br>not used yet, provide empty array array()</div>
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDADMWQ" onclick="togg('mdetails_1IDADMWQ')">draw
+<div class="mName"><a href="#method_IDA4GUE" onclick="togg('mdetails_1IDA4GUE')">draw
 										()
 									</a></div>
 <div class="mDesc">Draws the page. Must be the first call on a page</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDADMWQ">The lifecycle is the following after executing draw().
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDA4GUE">The lifecycle is the following after executing draw().
 <li class="list">1. setting the HTTP Headers (response)</li>
 <li class="list">2. <em>init()</em> (will be only called if exists in your page)</li>
 <li class="list">3. <em>main()</em> or <em>callback(action)</em> - action is trimmed to 255 chars (for security reasons),</li>
@@ -431,22 +431,22 @@ The javascript function <em>gotSales</em> is executed after the server side proc
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAXDXQ" onclick="togg('mdetails_1IDAXDXQ')">error
+<div class="mName"><a href="#method_IDATFVE" onclick="togg('mdetails_1IDATFVE')">error
 										(msg)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>use <em>lib.error()</em> instead.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAXDXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDATFVE">
 <div class="param"><span class="paramName"> msg</span><br></div>
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHVWQ" onclick="togg('mdetails_1IDAHVWQ')">execJS
+<div class="mName"><a href="#method_IDAHVUE" onclick="togg('mdetails_1IDAHVUE')">execJS
 										(JSCode)
 									</a></div>
 <div class="mDesc">executes a given javascript. input may be a string or an array. each field = a line</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAHVWQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAHVUE">
 <div class="param"><span class="paramName"> JSCode</span><span>
 														[<span class="type">string. array</span>]</span><br>your javascript-code. e.g. <em>window.location.reload()</em></div>
 </div>
@@ -454,11 +454,11 @@ The javascript function <em>gotSales</em> is executed after the server side proc
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA1AXQ" onclick="togg('mdetails_1IDA1AXQ')">getLocation
+<div class="mName"><a href="#method_IDAXCVE" onclick="togg('mdetails_1IDAXCVE')">getLocation
 										(format, withQS)
 									</a></div>
 <div class="mDesc">gets the location of the page you are in. virtual, physical, file or the full URL of the page</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDA1AXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAXCVE">
 <div class="param"><span class="paramName">byVal format</span><span>
 														[<span class="type">string</span>]</span><br>the format you want the location be returned: <em>PHYSICAL</em> (c:\web\f.asp), <em>VIRTUAL</em> (/web/f.asp),
 <em>FULL</em> (http://web/f.asp) or <em>FILE</em> (f.asp). Full takes the protocol into consideration (https or http)</div>
@@ -472,11 +472,11 @@ The javascript function <em>gotSales</em> is executed after the server side proc
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAVEXQ" onclick="togg('mdetails_1IDAVEXQ')">iif
+<div class="mName"><a href="#method_IDARGVE" onclick="togg('mdetails_1IDARGVE')">iif
 										(i, j, k)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAVEXQ">use <em>lib.iif</em> instead<br><br><div class="param"><span class="paramName"> i</span><br></div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDARGVE">use <em>lib.iif</em> instead<br><br><div class="param"><span class="paramName"> i</span><br></div>
 <div class="param"><span class="paramName"> j</span><br></div>
 <div class="param"><span class="paramName"> k</span><br></div>
 </div>
@@ -484,11 +484,11 @@ The javascript function <em>gotSales</em> is executed after the server side proc
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHCXQ" onclick="togg('mdetails_1IDAHCXQ')">isCallback
+<div class="mName"><a href="#method_IDADEVE" onclick="togg('mdetails_1IDADEVE')">isCallback
 										()
 									</a></div>
 <div class="mDesc">indicates if the state of the page is a callback. advanced usage only!</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAHCXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDADEVE">
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">bool</span>]
 											<br>true if its a callback otherwise false</div>
@@ -497,11 +497,11 @@ The javascript function <em>gotSales</em> is executed after the server side proc
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAZSWQ" onclick="togg('mdetails_1IDAZSWQ')">isPostback
+<div class="mName"><a href="#method_IDAZSUE" onclick="togg('mdetails_1IDAZSUE')">isPostback
 										()
 									</a></div>
 <div class="mDesc">Returns wheather the page was already sent to server or not.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAZSWQ">It should be the same as the <em>isPostback()</em> from asp.net.<br><br><div class="return"><span class="returnName">Returns </span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAZSUE">It should be the same as the <em>isPostback()</em> from asp.net.<br><br><div class="return"><span class="returnName">Returns </span>
 											[<span class="type">bool</span>]
 											<br>posted back (true) or not (false)</div>
 </div>
@@ -509,11 +509,11 @@ The javascript function <em>gotSales</em> is executed after the server side proc
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAO5WQ" onclick="togg('mdetails_1IDAO5WQ')">loadCSSFile
+<div class="mName"><a href="#method_IDANBVE" onclick="togg('mdetails_1IDANBVE')">loadCSSFile
 										(url, media)
 									</a></div>
 <div class="mDesc">Loads a specified stylesheet-file</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAO5WQ">Does not work on <em>callback()</em><br><br><div class="param"><span class="paramName"> url</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDANBVE">Does not work on <em>callback()</em><br><br><div class="param"><span class="paramName"> url</span><span>
 														[<span class="type">string</span>]</span><br>url of your stylesheet</div>
 <div class="param"><span class="paramName"> media</span><span>
 														[<span class="type">string</span>]</span><br>what media is this stylesheet for. screen, etc.
@@ -523,11 +523,11 @@ Leave it <em>empty</em> if its for every media</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQ4WQ" onclick="togg('mdetails_1IDAQ4WQ')">loadJSFile
+<div class="mName"><a href="#method_IDAPAVE" onclick="togg('mdetails_1IDAPAVE')">loadJSFile
 										(url)
 									</a></div>
 <div class="mDesc">Loads a specified javscript-file</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAQ4WQ">it will load the file only if it has not been already loaded in the page before.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAPAVE">it will load the file only if it has not been already loaded in the page before.
 so you can load the file (more times) and dont have to worry that it might be loaded more than once.
 Differentiation between the files is the filename (case-sensitive!).
 Does not work on <em>callback()</em><br><br><div class="param"><span class="paramName"> url</span><span>
@@ -537,11 +537,11 @@ Does not work on <em>callback()</em><br><br><div class="param"><span class="para
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAS3WQ" onclick="togg('mdetails_1IDAS3WQ')">QS
+<div class="mName"><a href="#method_IDAO5UE" onclick="togg('mdetails_1IDAO5UE')">QS
 										(name)
 									</a></div>
 <div class="mDesc">just an equivalent for <em>request.querystring</em>. if empty then returns whole querystring.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAS3WQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAO5UE">
 <div class="param"><span class="paramName"> name</span><span>
 														[<span class="type">string</span>]</span><br>name of the value you want to get. leave it <em>empty</em> to get the whole querystring</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -552,11 +552,26 @@ Does not work on <em>callback()</em><br><br><div class="param"><span class="para
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAK1WQ" onclick="togg('mdetails_1IDAK1WQ')">QSP
+<div class="mName"><a href="#method_IDAQ4UE" onclick="togg('mdetails_1IDAQ4UE')">QSHas
+										(name)
+									</a></div>
+<div class="mDesc">returns <em>true</em> if a given value exists in the querystring</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAQ4UE">
+<div class="param"><span class="paramName"> name</span><span>
+														[<span class="type">string</span>]</span><br>name of the value you want to get</div>
+<div class="return"><span class="returnName">Returns </span>
+											[<span class="type">bool</span>]
+											<br><em>false</em> if there is no value otherwise <em>true</em></div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDAK1UE" onclick="togg('mdetails_1IDAK1UE')">QSP
 										(name, alternative)
 									</a></div>
 <div class="mDesc">Combination of <em>QS()</em> and <em>str.parse()</em> which allows you to get & parse a querystring value in one go.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAK1WQ">See <em>StringOperations.parse()</em> for more details about parsing.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAK1UE">See <em>StringOperations.parse()</em> for more details about parsing.
 See <em>RFP()</em> for a code example.<br><br><div class="param"><span class="paramName"> name</span><span>
 														[<span class="type">string</span>]</span><br>name of the querystring value you want to get</div>
 <div class="param"><span class="paramName"> alternative</span><span>
@@ -569,11 +584,26 @@ See <em>RFP()</em> for a code example.<br><br><div class="param"><span class="pa
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDARQWQ" onclick="togg('mdetails_1IDARQWQ')">return
+<div class="mName"><a href="#method_IDAU2UE" onclick="togg('mdetails_1IDAU2UE')">QST
+										(name)
+									</a></div>
+<div class="mDesc">gets the value from the querystrgin and trims it automatically.</div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAU2UE">
+<div class="param"><span class="paramName"> name</span><span>
+														[<span class="type">string</span>]</span><br>name of the querystring parameter you want to get</div>
+<div class="return"><span class="returnName">Returns </span>
+											[<span class="type">string</span>]
+											<br>value from the querystring trimmed.</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="mName"><a href="#method_IDARQUE" onclick="togg('mdetails_1IDARQUE')">return
 										(val)
 									</a></div>
 <div class="mDesc">returns a value on <em>callback()</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDARQWQ">Those values are accessible on the javascript callback function defined in <em>ajaxed.callback()</em>.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDARQUE">Those values are accessible on the javascript callback function defined in <em>ajaxed.callback()</em>.
 See also <em>returnValue()</em> if you consider returning more than one value.<br><br><div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">variant</span>]</span><br>check <em>JSON.toJSON()</em> for more details</div>
 </div>
@@ -581,11 +611,11 @@ See also <em>returnValue()</em> if you consider returning more than one value.<b
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAPRWQ" onclick="togg('mdetails_1IDAPRWQ')">returnValue
+<div class="mName"><a href="#method_IDAPRUE" onclick="togg('mdetails_1IDAPRUE')">returnValue
 										(name, val)
 									</a></div>
 <div class="mDesc">returns a name value pair on <em>callback()</em>.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAPRWQ">this method can be called more than once because the value will be named and therefore more
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAPRUE">this method can be called more than once because the value will be named and therefore more
 values can be returned.<br><br><div class="param"><span class="paramName"> name</span><span>
 														[<span class="type">string</span>]</span><br>name of the value</div>
 <div class="param"><span class="paramName"> val</span><span>
@@ -595,11 +625,11 @@ values can be returned.<br><br><div class="param"><span class="paramName"> name<
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAFWWQ" onclick="togg('mdetails_1IDAFWWQ')">RF
+<div class="mName"><a href="#method_IDAFWUE" onclick="togg('mdetails_1IDAFWUE')">RF
 										(name)
 									</a></div>
 <div class="mDesc">gets the value from a given form field after postback</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAFWWQ">just an equivalent for request.form. Note: if you expecting the value to be an array
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAFWUE">just an equivalent for request.form. Note: if you expecting the value to be an array
 (e.g. more fields with the same name) then use <em>RFA()</em> method.<br><br><div class="param"><span class="paramName"> name</span><span>
 														[<span class="type">string</span>]</span><br>name of the value you want to get</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -610,11 +640,11 @@ values can be returned.<br><br><div class="param"><span class="paramName"> name<
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAEYWQ" onclick="togg('mdetails_1IDAEYWQ')">RFA
+<div class="mName"><a href="#method_IDAEYUE" onclick="togg('mdetails_1IDAEYUE')">RFA
 										(name)
 									</a></div>
 <div class="mDesc">gets the value of a given form field and treats it as an array (useful if you have more form fields with the same name).</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAEYWQ">this is needed when you give more form fields the same name then its being posted as an array.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAEYUE">this is needed when you give more form fields the same name then its being posted as an array.
 Example of two fields with the same name being posted:
 <div class="code"><pre><code>
 &lt;%
@@ -635,12 +665,12 @@ end if
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDADXWQ" onclick="togg('mdetails_1IDADXWQ')">RFE
+<div class="mName"><a href="#method_IDADXUE" onclick="togg('mdetails_1IDADXUE')">RFE
 										(name)
 									</a></div>
 <div class="mDesc">gets the value from a given form field and encodes the string into HTML.
 useful if you want the value be HTML encoded. e.g. inserting into value fields</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDADXWQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDADXUE">
 <div class="param"><span class="paramName"> name</span><span>
 														[<span class="type">string</span>]</span><br>name of the value you want to get</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -651,11 +681,11 @@ useful if you want the value be HTML encoded. e.g. inserting into value fields</
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAU2WQ" onclick="togg('mdetails_1IDAU2WQ')">RFHas
+<div class="mName"><a href="#method_IDAS3UE" onclick="togg('mdetails_1IDAS3UE')">RFHas
 										(name)
 									</a></div>
-<div class="mDesc">returns true if a given value exists in the request.form</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAU2WQ">good usage on submit buttons or checkboxes. Example of how to check a checkbox if it has been
+<div class="mDesc">returns <em>true</em> if a given value exists in the <em>request.form</em></div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAS3UE">good usage on submit buttons or checkboxes. Example of how to check a checkbox if it has been
 checked after posting the form:
 <div class="code"><pre><code>
 &lt;input type=&quot;checkbox&quot; name=&quot;cb&quot; value=&quot;1&quot; &lt;%= lib.iif(page.RFHas(&quot;cb&quot;, &quot;checked&quot;, &quot;&quot;)) %&gt;&gt;
@@ -663,17 +693,17 @@ checked after posting the form:
 														[<span class="type">string</span>]</span><br>name of the value you want to get</div>
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">bool</span>]
-											<br>false if there is not value returned. true if yes</div>
+											<br><em>false</em> if there is no value otherwise <em>true</em></div>
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAA0WQ" onclick="togg('mdetails_1IDAA0WQ')">RFP
+<div class="mName"><a href="#method_IDAA0UE" onclick="togg('mdetails_1IDAA0UE')">RFP
 										(name, alternative)
 									</a></div>
 <div class="mDesc">Combination of <em>RF()</em> and <em>str.parse()</em> which allows you to get & parse a posted value in one go.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAA0WQ">See <em>StringOperations.parse()</em> for more details about parsing:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAA0UE">See <em>StringOperations.parse()</em> for more details about parsing:
 <div class="code"><pre><code>
 &lt;%
 'ensures that a posted value ID always is an integer
@@ -695,11 +725,11 @@ set RS = lib.getRS(&quot;SELECT * FROM table WHERE id = {0}&quot;, ID)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDACZWQ" onclick="togg('mdetails_1IDACZWQ')">RFT
+<div class="mName"><a href="#method_IDACZUE" onclick="togg('mdetails_1IDACZUE')">RFT
 										(name)
 									</a></div>
 <div class="mDesc">gets the value of a given form field and trims it automatically.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDACZWQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDACZUE">
 <div class="param"><span class="paramName"> name</span><span>
 														[<span class="type">string</span>]</span><br>name of the formfield you want to get</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -710,33 +740,33 @@ set RS = lib.getRS(&quot;SELECT * FROM table WHERE id = {0}&quot;, ID)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAZCXQ" onclick="togg('mdetails_1IDAZCXQ')">throwError
+<div class="mName"><a href="#method_IDAVEVE" onclick="togg('mdetails_1IDAVEVE')">throwError
 										(args)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>use <em>lib.throwError</em> instead</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAZCXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAVEVE">
 <div class="param"><span class="paramName"> args</span><br></div>
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDALTWQ" onclick="togg('mdetails_1IDALTWQ')">write
+<div class="mName"><a href="#method_IDALTUE" onclick="togg('mdetails_1IDALTUE')">write
 										(value)
 									</a></div>
 <div class="mDesc">writes a string to the output in the same line</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDALTWQ">just a wrapper to <em>str.write()</em><br><br><div class="param"><span class="paramName"> value</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDALTUE">just a wrapper to <em>str.write()</em><br><br><div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>output string</div>
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAJUWQ" onclick="togg('mdetails_1IDAJUWQ')">writeln
+<div class="mName"><a href="#method_IDAJUUE" onclick="togg('mdetails_1IDAJUUE')">writeln
 										(value)
 									</a></div>
 <div class="mDesc">writes a line to the output</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAJUWQ">just a wrapper to <em>str.writeln()</em><br><br><div class="param"><span class="paramName"> value</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_1IDAJUUE">just a wrapper to <em>str.writeln()</em><br><br><div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>output string</div>
 </div>
 </td>
@@ -838,7 +868,7 @@ automatically if the maximum amount of items is reached</div>
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>06.10.2008 12:27:19</td>
+<td>10/6/2008 12:27:19 PM</td>
 </tr>
 </table>
 <h2><span onclick="togg('props_2')" style="cursor:pointer">Properties</span> <a href="#class_2" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -881,21 +911,21 @@ works only if the items are no objects and no arrays&nbsp;</td>
 <table id="meths_2" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAWJXQ">clear
+<div class="mName"><a href="#method_IDA3LVE">clear
 										()
 									</a></div>
 <div class="mDesc">clears the cache.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDAWJXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDA3LVE">
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAIKXQ" onclick="togg('mdetails_2IDAIKXQ')">getItem
+<div class="mName"><a href="#method_IDAPMVE" onclick="togg('mdetails_2IDAPMVE')">getItem
 										(identifier)
 									</a></div>
 <div class="mDesc">gets an item from the cache.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDAIKXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDAPMVE">
 <div class="param"><span class="paramName"> identifier</span><span>
 														[<span class="type">string</span>]</span><br>identifier of the item within the cache</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -906,11 +936,11 @@ works only if the items are no objects and no arrays&nbsp;</td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAMIXQ" onclick="togg('mdetails_2IDAMIXQ')">store
+<div class="mName"><a href="#method_IDATKVE" onclick="togg('mdetails_2IDATKVE')">store
 										(identifier, item)
 									</a></div>
 <div class="mDesc">stores an item into the cache. if it already exists then it gets overwritten</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDAMIXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_2IDATKVE">
 <div class="param"><span class="paramName"> identifier</span><span>
 														[<span class="type">string</span>]</span><br>the identifier for the item. with this you can get the item afterwards</div>
 <div class="param"><span class="paramName"> item</span><span>
@@ -940,7 +970,7 @@ within a page.
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>23.11.2008 10:30:11</td>
+<td>11/24/2008 6:54:40 PM</td>
 </tr>
 <tr>
 <td class="label">Staticname:</td>
@@ -998,21 +1028,21 @@ Don't forget to set this property back after you have used it.&nbsp;</td>
 <table id="meths_3" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAJRXQ">close
+<div class="mName"><a href="#method_IDAFTVE">close
 										()
 									</a></div>
 <div class="mDesc">Closes the current database connection</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAJRXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAFTVE">
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAKYXQ" onclick="togg('mdetails_3IDAKYXQ')">count
+<div class="mName"><a href="#method_IDAG0VE" onclick="togg('mdetails_3IDAG0VE')">count
 										(tablename, condition)
 									</a></div>
 <div class="mDesc">gets the recordcount for a given table.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAKYXQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAG0VE">
 <div class="param"><span class="paramName"> tablename</span><span>
 														[<span class="type">string</span>]</span><br>name of the table</div>
 <div class="param"><span class="paramName">byVal condition</span><span>
@@ -1025,11 +1055,11 @@ Don't forget to set this property back after you have used it.&nbsp;</td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA1RXQ" onclick="togg('mdetails_3IDA1RXQ')">delete
+<div class="mName"><a href="#method_IDAXTVE" onclick="togg('mdetails_3IDAXTVE')">delete
 										(tablename, condition)
 									</a></div>
 <div class="mDesc">deletes a record from a given database table.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDA1RXQ"><li class="list">its required that the id column is named <em>id</em> if condition is used with an <em>int</em> datatype.</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAXTVE"><li class="list">its required that the id column is named <em>id</em> if condition is used with an <em>int</em> datatype.</li>
 <li class="list"><em>id</em> is parsed into a number and only <em>id</em> greater 0 are recognized</li><br><br><div class="param"><span class="paramName"> tablename</span><span>
 														[<span class="type">string</span>]</span><br>the name of the table you want to delete the record from</div>
 <div class="param"><span class="paramName">byVal condition</span><span>
@@ -1040,11 +1070,11 @@ Don't forget to set this property back after you have used it.&nbsp;</td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAY5XQ" onclick="togg('mdetails_3IDAY5XQ')">getRecordset
+<div class="mName"><a href="#method_IDAXBWE" onclick="togg('mdetails_3IDAXBWE')">getRecordset
 										(sql)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>use <em>getRS()</em> instead.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAY5XQ">Default method which should be always used to get a LOCKED recordset. Example for use:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAXBWE">Default method which should be always used to get a LOCKED recordset. Example for use:
 <div class="code"><pre><code>set RS = db.getRecordset(&quot;SELECT * FROM user&quot;)</code></pre></div><br><br><div class="param"><span class="paramName">byVal sql</span><span>
 														[<span class="type">string</span>]</span><br>Your SQL query</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -1055,11 +1085,11 @@ Don't forget to set this property back after you have used it.&nbsp;</td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQ1XQ" onclick="togg('mdetails_3IDAQ1XQ')">getRS
+<div class="mName"><a href="#method_IDAM3VE" onclick="togg('mdetails_3IDAM3VE')">getRS
 										(sql, params)
 									</a></div>
 <div class="mDesc">Gets a locked recordset</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAQ1XQ">Gets a LOCKED recordset from the currently opened database. Example of usage:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAM3VE">Gets a LOCKED recordset from the currently opened database. Example of usage:
 <div class="code"><pre><code>set RS = lib.getRS(&quot;SELECT * FROM users WHERE name = '{0}'&quot;, &quot;john&quot;)</code></pre></div><br><br><div class="param"><span class="paramName">byVal sql</span><span>
 														[<span class="type">string</span>]</span><br>Your SQL query. placeholder for params are {0}, {1}, ... check <em>str.format()</em> for details</div>
 <div class="param"><span class="paramName"> params</span><span>
@@ -1076,11 +1106,11 @@ Don't forget to set this property back after you have used it.&nbsp;</td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAM4XQ" onclick="togg('mdetails_3IDAM4XQ')">getScalar
+<div class="mName"><a href="#method_IDALAWE" onclick="togg('mdetails_3IDALAWE')">getScalar
 										(sql, alternative)
 									</a></div>
 <div class="mDesc">executes a given sql-query and returns the first value of the first row.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAM4XQ">If there is no record available then the alternative will be returned.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDALAWE">If there is no record available then the alternative will be returned.
 The returned value (if available) will be converted to the type of <em>alternative</em>.
 Example:
 <div class="code"><pre><code>set val = db.getScalar(&quot;SELECT sales FROM table&quot;, 0)</code></pre></div>
@@ -1097,11 +1127,11 @@ or the alternative itself if no records available</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA3AYQ" onclick="togg('mdetails_3IDA3AYQ')">getUnlockedRecordset
+<div class="mName"><a href="#method_IDAZCWE" onclick="togg('mdetails_3IDAZCWE')">getUnlockedRecordset
 										(sql)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>use <em>getUnlockedRS()</em> instead</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDA3AYQ">Default method which should be always used to get an UNLOCKED recordset. Example for use:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAZCWE">Default method which should be always used to get an UNLOCKED recordset. Example for use:
 <div class="code"><pre><code>set RS = db.getUnlockedRecordset(&quot;SELECT * FROM user&quot;)</code></pre></div><br><br><div class="param"><span class="paramName">byVal sql</span><span>
 														[<span class="type">string</span>]</span><br>Your SQL query</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -1112,11 +1142,11 @@ or the alternative itself if no records available</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA42XQ" onclick="togg('mdetails_3IDA42XQ')">getUnlockedRS
+<div class="mName"><a href="#method_IDA04VE" onclick="togg('mdetails_3IDA04VE')">getUnlockedRS
 										(sql, params)
 									</a></div>
 <div class="mDesc"></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDA42XQ">Gets an UNLOCKED recordset from the currently opened database. check <em>getRS()</em> documentation<br><br><div class="param"><span class="paramName">byVal sql</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDA04VE">Gets an UNLOCKED recordset from the currently opened database. check <em>getRS()</em> documentation<br><br><div class="param"><span class="paramName">byVal sql</span><span>
 														[<span class="type">string</span>]</span><br>check <em>getRS()</em> doc</div>
 <div class="param"><span class="paramName"> params</span><span>
 														[<span class="type">array</span>, <span class="type">string</span>]</span><br>check <em>getRS()</em> doc</div>
@@ -1128,11 +1158,11 @@ or the alternative itself if no records available</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAJTXQ" onclick="togg('mdetails_3IDAJTXQ')">insert
+<div class="mName"><a href="#method_IDAFVVE" onclick="togg('mdetails_3IDAFVVE')">insert
 										(tablename, data)
 									</a></div>
 <div class="mDesc">inserts a record into a given database table and returns the record ID</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAJTXQ"><li class="list">primary key column must be named <em>id</em></li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAFVVE"><li class="list">primary key column must be named <em>id</em></li>
 <li class="list">the values are not type converted in any way. you need to do it yourself</li>
 <li class="list">columns with string values are trimmed if they exceed the maximum allowed length. e.g. if column A only accepts 50 chars it will be trimmed to 50 if it exceeds the length of 50</li><br><br><div class="param"><span class="paramName"> tablename</span><span>
 														[<span class="type">string</span>]</span><br>name of the table</div>
@@ -1147,11 +1177,11 @@ or the alternative itself if no records available</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDANWXQ" onclick="togg('mdetails_3IDANWXQ')">insertOrUpdate
+<div class="mName"><a href="#method_IDAMYVE" onclick="togg('mdetails_3IDAMYVE')">insertOrUpdate
 										(tablename, data, condition)
 									</a></div>
 <div class="mDesc">Inserts (<em>insert()</em>) a record if it does not exist otherwise it updates the record(s) (<em>update()</em>).</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDANWXQ">For more details about the functionality refer to the <em>insert()</em> and <em>update()</em> methods. Those are used internally.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAMYVE">For more details about the functionality refer to the <em>insert()</em> and <em>update()</em> methods. Those are used internally.
 <strong>Note:</strong> Table must contain a column named <em>id</em>.<br><br><div class="param"><span class="paramName"> tablename</span><span>
 														[<span class="type">string</span>]</span><br>name of the table</div>
 <div class="param"><span class="paramName"> data</span><span>
@@ -1166,11 +1196,11 @@ or the alternative itself if no records available</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAWPXQ" onclick="togg('mdetails_3IDAWPXQ')">open
+<div class="mName"><a href="#method_IDAVRVE" onclick="togg('mdetails_3IDAVRVE')">open
 										(connectionString)
 									</a></div>
 <div class="mDesc">Opens a database connection with a given connection string</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAWPXQ"><li class="list">The connection is available afterwards in the <em>connection</em> property</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAVRVE"><li class="list">The connection is available afterwards in the <em>connection</em> property</li>
 <li class="list">if the connection is already opened then it gets closed a the new is opened</li><br><br><div class="param"><span class="paramName"> connectionString</span><span>
 														[<span class="type">string</span>]</span><br>a connection string</div>
 </div>
@@ -1178,21 +1208,21 @@ or the alternative itself if no records available</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAXQXQ" onclick="togg('mdetails_3IDAXQXQ')">openDefault
+<div class="mName"><a href="#method_IDATSVE" onclick="togg('mdetails_3IDATSVE')">openDefault
 										()
 									</a></div>
 <div class="mDesc">Opens the connection to the default database</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAXQXQ"><li class="list">uses <em>open()</em> for it</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDATSVE"><li class="list">uses <em>open()</em> for it</li>
 <li class="list">throws an error if default connectionstring is NOT configured</li><br><br></div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAYOXQ" onclick="togg('mdetails_3IDAYOXQ')">SQLSafe
+<div class="mName"><a href="#method_IDAXQVE" onclick="togg('mdetails_3IDAXQVE')">SQLSafe
 										(value)
 									</a></div>
 <div class="mDesc">This function is used to create a legal SQL string that you can use in an SQL statement.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAYOXQ">this is necessary to pass user input directly into a SQL Query
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAXQVE">this is necessary to pass user input directly into a SQL Query
 e.g. on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot;SELECT * FROM user WHERE login = &quot; &amp; db.SQLSafe(username) %&gt;</code></pre></div>
 <li class="list">Note: It may sanitize differently for the different database types.</li>
 <li class="list">Warn: Its highliy recommended to additionally validate user input when using parameters directly within the SQL query</li><br><br><div class="param"><span class="paramName"> value</span><span>
@@ -1205,11 +1235,11 @@ e.g. on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot;SE
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAWZXQ" onclick="togg('mdetails_3IDAWZXQ')">toggle
+<div class="mName"><a href="#method_IDAS1VE" onclick="togg('mdetails_3IDAS1VE')">toggle
 										(tablename, columnName, condition)
 									</a></div>
 <div class="mDesc">toggles the state of a flag column. if the value is 1 its turned into 0 and vicaversa.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAWZXQ">useful if you dont delete records but mark them deleted. e.g. <em>toggle("user", "deleted", 10)</em><br><br><div class="param"><span class="paramName"> tablename</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAS1VE">useful if you dont delete records but mark them deleted. e.g. <em>toggle("user", "deleted", 10)</em><br><br><div class="param"><span class="paramName"> tablename</span><span>
 														[<span class="type">string</span>]</span><br>name of the table</div>
 <div class="param"><span class="paramName"> columnName</span><span>
 														[<span class="type">string</span>]</span><br>name of the flag column. must be a numeric column accepting 1 and 0</div>
@@ -1220,11 +1250,11 @@ e.g. on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot;SE
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDATUXQ" onclick="togg('mdetails_3IDATUXQ')">update
+<div class="mName"><a href="#method_IDAPWVE" onclick="togg('mdetails_3IDAPWVE')">update
 										(tablename, data, condition)
 									</a></div>
 <div class="mDesc">Updates record(s) in a given database table. Return number of updated records.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDATUXQ"><li class="list">Primary key column must be named <em>id</em> if condition is int</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_3IDAPWVE"><li class="list">Primary key column must be named <em>id</em> if condition is int</li>
 <li class="list">The values are not type converted in any way. you need to do it yourself</li>
 <li class="list">Columns with string values are trimmed if they exceed the maximum allowed length. e.g. if column A only accepts 50 chars it will be trimmed to 50 if it exceeds the length of 50</li>
 <li class="list">If the condition matches more records then all are updated (batch updating)</li>
@@ -1309,7 +1339,7 @@ dc.contains(2)
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>25.10.2008 17:39:51</td>
+<td>10/25/2008 5:39:51 PM</td>
 </tr>
 <tr>
 <td class="label">Compatible:</td>
@@ -1353,11 +1383,11 @@ dc.contains(2)
 <table id="meths_4" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDACJYQ" onclick="togg('mdetails_4IDACJYQ')">contains
+<div class="mName"><a href="#method_IDA4KWE" onclick="togg('mdetails_4IDA4KWE')">contains
 										(val)
 									</a></div>
 <div class="mDesc">Checks if it contains a given value</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDACJYQ"><em>dictionary</em> uses the key for comparison.<br><br><div class="param"><span class="paramName"> val</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDA4KWE"><em>dictionary</em> uses the key for comparison.<br><br><div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">variant</span>, <span class="type">array</span>]</span><br>The value which should be contained within the container. If an <em>array</em> is provided
 then all its values must be contained within the <em>DataContainer</em> in order to return <em>true</em>.</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -1368,11 +1398,11 @@ then all its values must be contained within the <em>DataContainer</em> in order
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDABFYQ" onclick="togg('mdetails_4IDABFYQ')" style="font-weight:bold;" title="This is a static method" class="default">newWith
+<div class="mName"><a href="#method_IDA3GWE" onclick="togg('mdetails_4IDA3GWE')" style="font-weight:bold;" title="This is a static method" class="default">newWith
 										(datasrc)
 									</a></div>
 <div class="mDesc">Creates a new <em>DataContainer</em> instance for a given datasource</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDABFYQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDA3GWE">
 <div class="param"><span class="paramName">byRef datasrc</span><span>
 														[<span class="type">array</span>, <a class="type" href="http://www.w3schools.com/ado/ado_ref_recordset.asp" target="_blank">recordset</a>, <a class="type" href="http://www.w3schools.com/asp/asp_ref_dictionary.asp" target="_blank">dictionary</a>]</span><br>datasource used for the container
 <strong>Note:</strong> Only keyset, dynamic or static <em>recordset</em> cursor types are supported. Use <em>db.getUnlockedRS()</em> for it.</div>
@@ -1384,11 +1414,11 @@ then all its values must be contained within the <em>DataContainer</em> in order
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHHYQ" onclick="togg('mdetails_4IDAHHYQ')">paginate
+<div class="mName"><a href="#method_IDAGJWE" onclick="togg('mdetails_4IDAGJWE')">paginate
 										(recsPerPage, currentPage, numberOfPages)
 									</a></div>
 <div class="mDesc">Paginates the data. Useful for e.g. paging bars</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAHHYQ">Pagination is performed in a way so the current page stays always in the middle.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAGJWE">Pagination is performed in a way so the current page stays always in the middle.
 Example: Lets say we have 100 records and want to page them with 10 records on each page. The current selected page is 5
 and we only want to display 3 pages at one time (note: we take the current page from querystring as most pages implement it like this):
 <div class="code"><pre><code>
@@ -1453,11 +1483,11 @@ only one page
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDACKYQ" onclick="togg('mdetails_4IDACKYQ')">toString
+<div class="mName"><a href="#method_IDA4LWE" onclick="togg('mdetails_4IDA4LWE')">toString
 										(delimiter)
 									</a></div>
 <div class="mDesc">Returns a string representation of the data</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDACKYQ"><div class="code"><pre><code>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDA4LWE"><div class="code"><pre><code>
 &lt;%
 set d = (new DataContainer)(array(1, 2, 3))
 '=&gt; 1 - 2 - 3
@@ -1480,11 +1510,11 @@ the second delimiter is a whitespace by default.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAJGYQ" onclick="togg('mdetails_4IDAJGYQ')">unique
+<div class="mName"><a href="#method_IDAIIWE" onclick="togg('mdetails_4IDAIIWE')">unique
 										(caseSensitive)
 									</a></div>
 <div class="mDesc">Removes all duplicates from the data. Changes the underlying <em>data</em>. Only for <em>array</em> yet.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAJGYQ"><li class="list">If not case sensitive then duplicate values will be represented by the first match</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_4IDAIIWE"><li class="list">If not case sensitive then duplicate values will be represented by the first match</li>
 <li class="list">Order of data items stays the same</li><br><br><div class="param"><span class="paramName"> caseSensitive</span><span>
 														[<span class="type">bool</span>]</span><br>should the uniquness be case sensitive.</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -1549,7 +1579,7 @@ In most cases its necessary to decide which columns should be used. Therefore co
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>27.10.2008 17:39:56</td>
+<td>12/29/2008 3:43:13 PM</td>
 </tr>
 <tr>
 <td class="label">Requires:</td>
@@ -1661,6 +1691,20 @@ end sub
 <td>name (or index) of the column which holds the primary key (uniquely identifies each record). Must be a numeric column! by default its the first column. Used for e.g. selection of records&nbsp;</td>
 </tr>
 <tr valign="top" style="background-color:#EEEEEE">
+<td class="property">recordLink</td>
+<td class="type"><span class="type">string</span></td>
+<td>if given then each cells content will be surrounded by an a href tag whose href attribute will contain this link. Perfect if you want to make whole rows clickable quickly.
+<em>{field_name}</em> represents a placeholder for a data column value within your link where <em>field_name</em> must be replaced with the actual field name which has been selected.
+Example of a link: <em>user.asp?i={id}</em> (which means that the ID columns value will be passed into the user.asp file as a parameter called i).
+The link can be deactivated for specified columns by setting the <em>enableLink</em> property to <em>false</em>.
+Note: Only letters, numbers and underscores are allowed for the placeholders.&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">recordLinkF</td>
+<td class="type"><span class="type">string</span></td>
+<td>GET:  gets the link (if any specified with <em>recordLink</em>) for the current record (placeholders replaced). only available during runtime.&nbsp;</td>
+</tr>
+<tr valign="top" style="background-color:#EEEEEE">
 <td class="property">recsPerPage</td>
 <td class="type"><span class="type">int</span></td>
 <td>how many records should be displayed per page. default = 100 (0 = no paging)&nbsp;</td>
@@ -1698,11 +1742,11 @@ provide only the query which returns all records. Note: no <em>ORDER BY</em> cla
 <table id="meths_7" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQ1YQ" onclick="togg('mdetails_7IDAQ1YQ')">draw
+<div class="mName"><a href="#method_IDAC5WE" onclick="togg('mdetails_7IDAC5WE')">draw
 										()
 									</a></div>
 <div class="mDesc">draws the control. Must be called within <strong>main()</strong> and <strong>callback()</strong></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_7IDAQ1YQ">draws the datatable with all its previosuly defined columns/filters.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_7IDAC5WE">draws the datatable with all its previosuly defined columns/filters.
 If no columns are defined then the control automatically grabs all columns which are defined within the sql.
 It must be called within the <em>main()</em> sub and the <em>callback()</em> sub of the AjaxedPage. All initializations
 (setting properties) must be done in the <em>init()</em>.<br><br></div>
@@ -1710,11 +1754,11 @@ It must be called within the <em>main()</em> sub and the <em>callback()</em> sub
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAA3YQ" onclick="togg('mdetails_7IDAA3YQ')">newColumn
+<div class="mName"><a href="#method_IDAVAXE" onclick="togg('mdetails_7IDAVAXE')">newColumn
 										(cname, caption)
 									</a></div>
 <div class="mDesc">adds a new column with name and caption and returns it</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_7IDAA3YQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_7IDAVAXE">
 <div class="param"><span class="paramName"> cname</span><span>
 														[<span class="type">string</span>, <span class="type">int</span>]</span><br>name/index of the column (should exist within the <em>sql</em>)</div>
 <div class="param"><span class="paramName"> caption</span><span>
@@ -1727,11 +1771,11 @@ It must be called within the <em>main()</em> sub and the <em>callback()</em> sub
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAC2YQ" onclick="togg('mdetails_7IDAC2YQ')">sortedBy
+<div class="mName"><a href="#method_IDAU5WE" onclick="togg('mdetails_7IDAU5WE')">sortedBy
 										(columnName)
 									</a></div>
 <div class="mDesc">indicates if the datatable is sorted by a given column name</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_7IDAC2YQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_7IDAU5WE">
 <div class="param"><span class="paramName"> columnName</span><span>
 														[<span class="type">string</span>]</span><br>name of column you want to check if its sorted</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -1766,7 +1810,7 @@ c.cssClass = &quot;colFirstname&quot;
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>13.10.2008 14:23:07</td>
+<td>12/29/2008 2:58:10 PM</td>
 </tr>
 <tr>
 <td class="label">Friend of:</td>
@@ -1821,16 +1865,21 @@ td.colID {
 <td>gets the index of the column. starting with 0 (first column)&nbsp;</td>
 </tr>
 <tr valign="top" style="background-color:#EEEEEE">
+<td class="property">link</td>
+<td class="type"><span class="type">bool</span></td>
+<td>should the record link be enabled (if any). default = <em>true</em>&nbsp;</td>
+</tr>
+<tr valign="top">
 <td class="property">name</td>
 <td class="type"><span class="type">string</span>, <span class="type">int</span></td>
 <td>name/index of the column. must exist in datatables SQL query.&nbsp;</td>
 </tr>
-<tr valign="top">
+<tr valign="top" style="background-color:#EEEEEE">
 <td class="property">nullValue</td>
 <td class="type"><span class="type">bool</span></td>
 <td>GET:  indicates if the value is actually a NULL value in the database.&nbsp;</td>
 </tr>
-<tr valign="top" style="background-color:#EEEEEE">
+<tr valign="top">
 <td class="property">onCellCreated</td>
 <td class="type"><span class="type">string</span></td>
 <td>name of the <strong>function</strong> which should be executed just before a data cell of this column will be drawn.
@@ -1842,15 +1891,20 @@ Example of how to change the data cell value using other data columns from the c
 &lt;%
 function onFirstname(dt)
     color = lib.iif(dt.data(&quot;deleted&quot;) = 1, &quot;#f00&quot;, &quot;#000&quot;)
-    onFirstname = &quot;&lt;span style=&quot;&quot;color:&quot; &amp; color &amp; &quot;&quot;&quot;&gt;&quot; &amp; dt.col &amp; &quot;&lt;/span&gt;&quot;
+    onFirstname = &quot;&lt;span style=&quot;&quot;color:&quot; &amp; color &amp; &quot;&quot;&quot;&gt;&quot; &amp; dt.col.valueF &amp; &quot;&lt;/span&gt;&quot;
 end function
 %&gt;
 </code></pre></div>&nbsp;</td>
 </tr>
-<tr valign="top">
+<tr valign="top" style="background-color:#EEEEEE">
 <td class="property" style="font-weight:bold;" title="The default property">value</td>
 <td class="type"><span class="type">string</span></td>
-<td>GET:  gets the data value of the column when a cell is created. Its always a string. If its a null its converted into an empty string. Use <em>nullValue</em> property to check if it was NULL&nbsp;</td>
+<td>GET:  gets the RAW data value of the column when a cell is created. Its always a string. If its a NULL then its been converted into an empty string. Use <em>nullValue</em> property to check if it was NULL. Use this always if you do conditional checks on the data value.&nbsp;</td>
+</tr>
+<tr valign="top">
+<td class="property">valueF</td>
+<td class="type"><span class="type">string</span></td>
+<td>GET:  gets the FORMATTED data value of the column when a cell is created. This should be used when you render the value on the page (it can contain markup which marks the searches, etc).&nbsp;</td>
 </tr>
 </table>
 <h2><span onclick="togg('meths_5')" style="cursor:pointer">Methods</span> <a href="#class_5" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -1883,7 +1937,7 @@ end sub
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>17.07.2008 11:47:37</td>
+<td>12/26/2008 2:18:38 PM</td>
 </tr>
 <tr>
 <td class="label">Friend of:</td>
@@ -1898,36 +1952,41 @@ end sub
 <th>Description</th>
 </tr>
 <tr valign="top" style="background-color:#EEEEEE">
+<td class="property">attributes</td>
+<td class="type"><span class="type">string</span></td>
+<td>attributes of the &lt;tr&gt;-tag. You can make e.g. whole rows clickable: onclick="window.location.href='someurl.asp'"&nbsp;</td>
+</tr>
+<tr valign="top">
 <td class="property">cssClass</td>
 <td class="type"><span class="type">string</span></td>
 <td>css class which will be placed within the <em>&lt;tr&gt;</em> tag&nbsp;</td>
 </tr>
-<tr valign="top">
+<tr valign="top" style="background-color:#EEEEEE">
 <td class="property">disabled</td>
 <td class="type"><span class="type">bool</span></td>
 <td>indicates if the row is disabled or not. disabled does not allow to select the row and it wont be clickable&nbsp;</td>
 </tr>
-<tr valign="top" style="background-color:#EEEEEE">
+<tr valign="top">
 <td class="property">dt</td>
 <td class="type"><a class="type" href="#class_7">Datatable</a></td>
 <td>the datatable which contains the row&nbsp;</td>
 </tr>
-<tr valign="top">
+<tr valign="top" style="background-color:#EEEEEE">
 <td class="property">ID</td>
 <td class="type"><span class="type">int</span></td>
 <td>GET:  gets a unique ID of the row. the <em>&lt;tr&gt;</em> tag contains this ID&nbsp;</td>
 </tr>
-<tr valign="top" style="background-color:#EEEEEE">
+<tr valign="top">
 <td class="property" style="font-weight:bold;" title="The default property">number</td>
 <td class="type"><span class="type">int</span></td>
 <td>GET:  gets the number of the row within the datatable. on paging the number is continously. Good for numbering your records&nbsp;</td>
 </tr>
-<tr valign="top">
+<tr valign="top" style="background-color:#EEEEEE">
 <td class="property">PK</td>
 <td class="type"><span class="type">int</span></td>
 <td>GET:  gets the primary key value of the rows record&nbsp;</td>
 </tr>
-<tr valign="top" style="background-color:#EEEEEE">
+<tr valign="top">
 <td class="property">selected</td>
 <td class="type"><span class="type">bool</span></td>
 <td>GET:  indicates if the row is selected or not. keeps state after postback as well. So when user changes the selection it will remember the selection after postback.
@@ -1958,7 +2017,7 @@ SET:&nbsp;</td>
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>22.07.2008 10:34:23</td>
+<td>7/22/2008 10:34:23 AM</td>
 </tr>
 <tr>
 <td class="label">Postfix:</td>
@@ -2093,21 +2152,21 @@ then the size is used as pixels for the height of the dropdown.&nbsp;</td>
 <table id="meths_9" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA4KZQ">draw
+<div class="mName"><a href="#method_IDAQOXE">draw
 										()
 									</a></div>
 <div class="mDesc">draws the dropdown on the page</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_9IDA4KZQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_9IDAQOXE">
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQLZQ" onclick="togg('mdetails_9IDAQLZQ')" style="font-weight:bold;" title="This is a static method" class="default">getNew
+<div class="mName"><a href="#method_IDACPXE" onclick="togg('mdetails_9IDACPXE')" style="font-weight:bold;" title="This is a static method" class="default">getNew
 										(datasrc, dropdownName, selectedVal)
 									</a></div>
 <div class="mDesc">helper method which quickly creates a dropdown using a SQL-query</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_9IDAQLZQ">first column is used as value for the items and second as the caption<br><br><div class="param"><span class="paramName"> datasrc</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_9IDACPXE">first column is used as value for the items and second as the caption<br><br><div class="param"><span class="paramName"> datasrc</span><span>
 														[<a class="type" href="http://www.w3schools.com/asp/asp_ref_dictionary.asp" target="_blank">dictionary</a>, <a class="type" href="http://www.w3schools.com/ado/ado_ref_recordset.asp" target="_blank">recordset</a>, <span class="type">string</span>, <span class="type">array</span>]</span><br>datasource for the dropdown</div>
 <div class="param"><span class="paramName"> dropdownName</span><span>
 														[<span class="type">string</span>]</span><br>name of the dropdown</div>
@@ -2121,11 +2180,11 @@ then the size is used as pixels for the height of the dropdown.&nbsp;</td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQNZQ" onclick="togg('mdetails_9IDAQNZQ')">getNewItem
+<div class="mName"><a href="#method_IDAFRXE" onclick="togg('mdetails_9IDAFRXE')">getNewItem
 										(itemValue, itemText)
 									</a></div>
 <div class="mDesc"></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_9IDAQNZQ">gets you a new dropdown-item which can be drawn after that.<br><br><div class="param"><span class="paramName"> itemValue</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_9IDAFRXE">gets you a new dropdown-item which can be drawn after that.<br><br><div class="param"><span class="paramName"> itemValue</span><span>
 														[<span class="type">string</span>]</span><br>value of the item</div>
 <div class="param"><span class="paramName"> itemText</span><span>
 														[<span class="type">string</span>]</span><br>text of the item</div>
@@ -2137,11 +2196,11 @@ then the size is used as pixels for the height of the dropdown.&nbsp;</td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA0OZQ" onclick="togg('mdetails_9IDA0OZQ')">toString
+<div class="mName"><a href="#method_IDAPSXE" onclick="togg('mdetails_9IDAPSXE')">toString
 										()
 									</a></div>
 <div class="mDesc">returns the dropdown as a string</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_9IDA0OZQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_9IDAPSXE">
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">string</span>]
 											<br>returns a string representation of this dropdown</div>
@@ -2164,7 +2223,7 @@ then the size is used as pixels for the height of the dropdown.&nbsp;</td>
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>14.07.2008 04:07:14</td>
+<td>7/14/2008 4:07:14 AM</td>
 </tr>
 <tr>
 <td class="label">Friend of:</td>
@@ -2228,11 +2287,11 @@ then the size is used as pixels for the height of the dropdown.&nbsp;</td>
 <table id="meths_8" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDABCZQ">draw
+<div class="mName"><a href="#method_IDA4FXE">draw
 										()
 									</a></div>
 <div class="mDesc">draws the item using the output of the dropdown</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_8IDABCZQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_8IDA4FXE">
 </div>
 </td>
 </tr>
@@ -2255,7 +2314,7 @@ a third party component (automatically detected).
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>23.11.2008 11:05:36</td>
+<td>11/23/2008 11:05:36 AM</td>
 </tr>
 <tr>
 <td class="label">Compatible:</td>
@@ -2366,11 +2425,11 @@ SET:  sets the subject&nbsp;</td>
 <table id="meths_10" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAPAS2H" onclick="togg('mdetails_10IDAPAS2H')">addAttachment
+<div class="mName"><a href="#method_IDABEUP" onclick="togg('mdetails_10IDABEUP')">addAttachment
 										(fileName, inline, contentType)
 									</a></div>
 <div class="mDesc">Adds an attachment. Can be used mutliple times</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAPAS2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDABEUP">
 <div class="param"><span class="paramName"> fileName</span><span>
 														[<span class="type">string</span>]</span><br>the name and path of your file on the server (absolute). e.g. <em>c:\www\images\logo.gif</em></div>
 <div class="param"><span class="paramName"> inline</span><span>
@@ -2386,11 +2445,11 @@ embedding images in the email's body. Then you need to refer to it with <em>&lt;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA43ZQ" onclick="togg('mdetails_10IDA43ZQ')">addRecipient
+<div class="mName"><a href="#method_IDA3AUP" onclick="togg('mdetails_10IDA3AUP')">addRecipient
 										(recipientsType, email, name)
 									</a></div>
 <div class="mDesc">Adds a recipient. Can be used multiple times</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDA43ZQ">recipients property holds all added recipients<br><br><div class="param"><span class="paramName"> recipientsType</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDA3AUP">recipients property holds all added recipients<br><br><div class="param"><span class="paramName"> recipientsType</span><span>
 														[<span class="type">string</span>]</span><br>Define the type of recipient: <em>TO</em>, <em>CC</em> or <em>BCC</em></div>
 <div class="param"><span class="paramName">byVal email</span><span>
 														[<span class="type">string</span>]</span><br>Recipients email. Required! if <em>onlyValidEmails</em> is true then
@@ -2406,11 +2465,11 @@ Its not added if only valid emails are required and the email was not valid.</di
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAY5ZQ" onclick="togg('mdetails_10IDAY5ZQ')">addRecipients
+<div class="mName"><a href="#method_IDAXCUP" onclick="togg('mdetails_10IDAXCUP')">addRecipients
 										(recipientType, emails)
 									</a></div>
 <div class="mDesc">helper which adds more than one recipient seperated by <em>";"</em>. Only email values. Name will be the email</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAY5ZQ">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAXCUP">
 <div class="param"><span class="paramName"> recipientType</span><span>
 														[<span class="type">string</span>]</span><br>type of the recipient. <em>TO, CC</em> or <em>BCC</em></div>
 <div class="param"><span class="paramName"> emails</span><span>
@@ -2420,11 +2479,11 @@ Its not added if only valid emails are required and the email was not valid.</di
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQ2ZQ" onclick="togg('mdetails_10IDAQ2ZQ')">emailName
+<div class="mName"><a href="#method_IDAHYXE" onclick="togg('mdetails_10IDAHYXE')">emailName
 										(aName, anEmail)
 									</a></div>
 <div class="mDesc">returns a formatted string for a given name and its email address</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAQ2ZQ">useful for displaying sender or recipient nicely.<br><br><div class="param"><span class="paramName">byVal aName</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAHYXE">useful for displaying sender or recipient nicely.<br><br><div class="param"><span class="paramName">byVal aName</span><span>
 														[<span class="type">string</span>]</span><br>name to be used</div>
 <div class="param"><span class="paramName">byVal anEmail</span><span>
 														[<span class="type">string</span>]</span><br>email to be used</div>
@@ -2436,11 +2495,11 @@ Its not added if only valid emails are required and the email was not valid.</di
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAOZZQ" onclick="togg('mdetails_10IDAOZZQ')" style="font-weight:bold;" title="This is a static method">newWith
+<div class="mName"><a href="#method_IDAM4XE" onclick="togg('mdetails_10IDAM4XE')" style="font-weight:bold;" title="This is a static method">newWith
 										(template)
 									</a></div>
 <div class="mDesc">creates a new email instance with the content of a given <em>TextTemplate</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAOZZQ">first line of the template is treated as the emails subject and the rest as the body.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAM4XE">first line of the template is treated as the emails subject and the rest as the body.
 Dont forget to load the <em>TextTemplate</em> class for this.<br><br><div class="param"><span class="paramName"> template</span><span>
 														[<a class="type" href="#class_22">TextTemplate</a>]</span><br>template which is used within the email.</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -2451,11 +2510,11 @@ Dont forget to load the <em>TextTemplate</em> class for this.<br><br><div class=
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAO0ZQ" onclick="togg('mdetails_10IDAO0ZQ')" style="font-weight:bold;" title="This is a static method" class="default">quickSend
+<div class="mName"><a href="#method_IDAM5XE" onclick="togg('mdetails_10IDAM5XE')" style="font-weight:bold;" title="This is a static method" class="default">quickSend
 										(template, recipient)
 									</a></div>
 <div class="mDesc">sends an email with a given <em>TextTemplate</em> to a given recipient.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAO0ZQ">a helper to quickly send an email. sender is the default one<br><br><div class="param"><span class="paramName"> template</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDAM5XE">a helper to quickly send an email. sender is the default one<br><br><div class="param"><span class="paramName"> template</span><span>
 														[<a class="type" href="#class_22">TextTemplate</a>]</span><br>template which is used within the email. Refer to <em>newWith()</em> for the details.</div>
 <div class="param"><span class="paramName"> recipient</span><span>
 														[<span class="type">string</span>, <span class="type">array</span>]</span><br>if string then treated as email otherwise first
@@ -2468,11 +2527,11 @@ value email and second the name</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA41ZQ" onclick="togg('mdetails_10IDA41ZQ')">send
+<div class="mName"><a href="#method_IDA0ZXE" onclick="togg('mdetails_10IDA0ZXE')">send
 										()
 									</a></div>
 <div class="mDesc">sends the email message</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDA41ZQ">If sending failed then check <em>errorMsg</em> property for a detailed error<br><br><div class="return"><span class="returnName">Returns </span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_10IDA0ZXE">If sending failed then check <em>errorMsg</em> property for a detailed error<br><br><div class="return"><span class="returnName">Returns </span>
 											[<span class="type">bool</span>]
 											<br>true if could be sent otherwise false</div>
 </div>
@@ -2604,7 +2663,7 @@ output = (new JSON)(&quot;anArray&quot;, array(2, &quot;x&quot;, null), true)
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>21.07.2008 03:03:05</td>
+<td>7/21/2008 3:03:05 AM</td>
 </tr>
 </table>
 <h2><span onclick="togg('props_11')" style="cursor:pointer">Properties</span> <a href="#class_11" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -2630,11 +2689,11 @@ e.g. would return only 10 records if <em>RS.pagesize</em> is set to 10. default 
 <table id="meths_11" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAUDS2H" onclick="togg('mdetails_11IDAUDS2H')" style="font-weight:bold;" title="This is a static method">escape
+<div class="mName"><a href="#method_IDAGHUP" onclick="togg('mdetails_11IDAGHUP')" style="font-weight:bold;" title="This is a static method">escape
 										(val)
 									</a></div>
 <div class="mDesc">takes a given string and makes it JSON valid</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_11IDAUDS2H">all characters which needs to be escaped are beeing replaced by their
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_11IDAGHUP">all characters which needs to be escaped are beeing replaced by their
 unicode representation according to the
 RFC4627#2.5 - http://www.ietf.org/rfc/rfc4627.txt?number=4627<br><br><div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">string</span>]</span><br>value which should be escaped</div>
@@ -2646,11 +2705,11 @@ RFC4627#2.5 - http://www.ietf.org/rfc/rfc4627.txt?number=4627<br><br><div class=
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAUES2H" onclick="togg('mdetails_11IDAUES2H')" class="default">toJSON
+<div class="mName"><a href="#method_IDA13XE" onclick="togg('mdetails_11IDA13XE')" class="default">toJSON
 										(name, val, nested)
 									</a></div>
 <div class="mDesc">generates a representation of a name value pair in JSON grammer</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_11IDAUES2H">It generates a name value pair which is represented as <em>{"name": value}</em> in JSON.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_11IDA13XE">It generates a name value pair which is represented as <em>{"name": value}</em> in JSON.
 the generation is fully recursive. Thus the value can also be a complex datatype (array in dictionary, etc.) e.g.
 <div class="code"><pre><code>
 &lt;%
@@ -2727,7 +2786,7 @@ end sub
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>15.11.2008 08:23:15</td>
+<td>12/29/2008 4:04:09 PM</td>
 </tr>
 <tr>
 <td class="label">Staticname:</td>
@@ -2786,12 +2845,12 @@ end sub
 <table id="meths_12" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQNS2H" onclick="togg('mdetails_12IDAQNS2H')">arrayize
+<div class="mName"><a href="#method_IDAFRUP" onclick="togg('mdetails_12IDAFRUP')">arrayize
 										(value)
 									</a></div>
 <div class="mDesc">Ensures that a given value will be returned as an <em>array</em>.<div class="alias">alias: <em>[]()</em></div>
 </div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAQNS2H">If the <em>value</em> is already
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAFRUP">If the <em>value</em> is already
 an <em>array</em> then its just passed through otherwise an <em>array</em> is created and the first field contains the <em>value</em>.
 Unless: If the <em>value</em> is <em>empty</em> then an empty <em>array</em> is returned.
 <div class="code"><pre><code>
@@ -2813,11 +2872,11 @@ arr = [&quot;O&quot;](array(1, 2, 3))
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA3US2H" onclick="togg('mdetails_12IDA3US2H')">contains
+<div class="mName"><a href="#method_IDASYUP" onclick="togg('mdetails_12IDASYUP')">contains
 										(data, val)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>Checks if a given datastructure contains a given value. Use <em>DataContainer.contains()</em> instead.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDA3US2H">returns <em>false</em> if the datastructure cannot be determined<br><br><div class="param"><span class="paramName">byRef data</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDASYUP">returns <em>false</em> if the datastructure cannot be determined<br><br><div class="param"><span class="paramName">byRef data</span><span>
 														[<span class="type">array</span>, <a class="type" href="http://www.w3schools.com/asp/asp_ref_dictionary.asp" target="_blank">dictionary</a>]</span><br>the data structure which should be checked against.
 if its a dictionary then the key is used for comparison.</div>
 <div class="param"><span class="paramName">byVal val</span><br></div>
@@ -2829,11 +2888,11 @@ if its a dictionary then the key is used for comparison.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA5TS2H" onclick="togg('mdetails_12IDA5TS2H')">detectComponent
+<div class="mName"><a href="#method_IDARXUP" onclick="togg('mdetails_12IDARXUP')">detectComponent
 										(components)
 									</a></div>
 <div class="mDesc">Detects the first loadable server component from a given list.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDA5TS2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDARXUP">
 <div class="param"><span class="paramName"> components</span><span>
 														[<span class="type">array</span>]</span><br>names of the components you want to try to detect</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -2844,11 +2903,11 @@ if its a dictionary then the key is used for comparison.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAK2S2H" onclick="togg('mdetails_12IDAK2S2H')">error
+<div class="mName"><a href="#method_IDA25UP" onclick="togg('mdetails_12IDA25UP')">error
 										(msg)
 									</a></div>
 <div class="mDesc">writes an error and ends the response. for unexpected errors</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAK2S2H">this error should be used for any unexpected errors. In comparison to <em>throwError</em>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDA25UP">this error should be used for any unexpected errors. In comparison to <em>throwError</em>
 it should only be used if a common error message should be displayed to the user instead of
 raising a real ASP error (<em>throwError</em>).
 <li class="list">if buffering is turned off then the already written response won't be cleared.</li>
@@ -2859,11 +2918,11 @@ raising a real ASP error (<em>throwError</em>).
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAIYS2H" onclick="togg('mdetails_12IDAIYS2H')">exec
+<div class="mName"><a href="#method_IDA01UP" onclick="togg('mdetails_12IDA01UP')">exec
 										(functionName, params)
 									</a></div>
 <div class="mDesc">calls a given function/sub if it exists</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAIYS2H">tries to call a given function/sub with the given parameters.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDA01UP">tries to call a given function/sub with the given parameters.
 the scope is the scope where exec is called.<br><br><div class="param"><span class="paramName"> functionName</span><br></div>
 <div class="param"><span class="paramName"> params</span><span>
 														[<span class="type">variant</span>]</span><br>you choose how you provide your params. provide <em>empty</em> to call a procedure without parameters</div>
@@ -2875,11 +2934,11 @@ the scope is the scope where exec is called.<br><br><div class="param"><span cla
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQZS2H" onclick="togg('mdetails_12IDAQZS2H')">getFunction
+<div class="mName"><a href="#method_IDAC3UP" onclick="togg('mdetails_12IDAC3UP')">getFunction
 										(functionName)
 									</a></div>
 <div class="mDesc">gets a reference to a function/sub by a given name.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAQZS2H">if function was found it can be executed afterwards. e.g.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAC3UP">if function was found it can be executed afterwards. e.g.
 <div class="code"><pre><code>&lt;% set f = getFunction(&quot;test&quot;) : f %&gt;</code></pre></div><br><br><div class="param"><span class="paramName"> functionName</span><br></div>
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">object</span>]
@@ -2889,11 +2948,11 @@ the scope is the scope where exec is called.<br><br><div class="param"><span cla
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAI3S2H" onclick="togg('mdetails_12IDAI3S2H')">getGUID
+<div class="mName"><a href="#method_IDA3AVP" onclick="togg('mdetails_12IDA3AVP')">getGUID
 										()
 									</a></div>
 <div class="mDesc">gets a new globally unique Identifier.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAI3S2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDA3AVP">
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">string</span>]
 											<br>new guid without hyphens. (hexa-decimal)</div>
@@ -2902,11 +2961,11 @@ the scope is the scope where exec is called.<br><br><div class="param"><span cla
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAFAT2H" onclick="togg('mdetails_12IDAFAT2H')">getUniqueID
+<div class="mName"><a href="#method_IDAXDVP" onclick="togg('mdetails_12IDAXDVP')">getUniqueID
 										()
 									</a></div>
 <div class="mDesc">Returns an unique ID for each pagerequest, starting with 1</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAFAT2H">It is not assured that the returned id is always the same. But it is assured that it is unique on the current page request.<br><br><div class="return"><span class="returnName">Returns </span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAXDVP">It is not assured that the returned id is always the same. But it is assured that it is unique on the current page request.<br><br><div class="return"><span class="returnName">Returns </span>
 											[<span class="type">int</span>]
 											<br>uniqueID : the unique id</div>
 </div>
@@ -2914,11 +2973,11 @@ the scope is the scope where exec is called.<br><br><div class="param"><span cla
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAVBT2H" onclick="togg('mdetails_12IDAVBT2H')">iif
+<div class="mName"><a href="#method_IDAHFVP" onclick="togg('mdetails_12IDAHFVP')">iif
 										(condition, expression1, expression2)
 									</a></div>
 <div class="mDesc">This will replace the <em>IIf</em> function that is missing from the intrinsic functions of VBScript</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAVBT2H">Makes code more readable by placing a conditional in one line:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAHFVP">Makes code more readable by placing a conditional in one line:
 <div class="code"><pre><code>&lt;% cssClass = lib.iif(i mod 2 = 0, &quot;even&quot;, &quot;odd&quot;) %&gt;</code></pre></div><br><br><div class="param"><span class="paramName"> condition</span><span>
 														[<span class="type">variant</span>]</span><br>condition (must return <em>true</em> or <em>false</em>)</div>
 <div class="param"><span class="paramName"> expression1</span><span>
@@ -2933,11 +2992,11 @@ the scope is the scope where exec is called.<br><br><div class="param"><span cla
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA03S2H" onclick="togg('mdetails_12IDA03S2H')">init
+<div class="mName"><a href="#method_IDAPBVP" onclick="togg('mdetails_12IDAPBVP')">init
 										(var, default)
 									</a></div>
 <div class="mDesc">initializes a variable with a default value if the variable is not set set (<em>isEmpty</em>)</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDA03S2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAPBVP">
 <div class="param"><span class="paramName"> var</span><span>
 														[<span class="type">variant</span>]</span><br>some variable</div>
 <div class="param"><span class="paramName"> default</span><span>
@@ -2950,12 +3009,12 @@ the scope is the scope where exec is called.<br><br><div class="param"><span cla
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAM0S2H" onclick="togg('mdetails_12IDAM0S2H')">newDict
+<div class="mName"><a href="#method_IDA43UP" onclick="togg('mdetails_12IDA43UP')">newDict
 										(values)
 									</a></div>
 <div class="mDesc">Gets a new dictionary filled with a list of values<div class="alias">alias: <em>["D"]()</em></div>
 </div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAM0S2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDA43UP">
 <div class="param"><span class="paramName"> values</span><span>
 														[<span class="type">array</span>]</span><br>values to fill into the dictionary. <em>array( array(key, value), arrray(key, value) )</em>.
 if the fields are not arrays (name value pairs) then the key is generated automatically. if no array
@@ -2968,12 +3027,12 @@ provided then an empty dictionary is returned</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQLS2H" onclick="togg('mdetails_12IDAQLS2H')">options
+<div class="mName"><a href="#method_IDACPUP" onclick="togg('mdetails_12IDACPUP')">options
 										(optionNames, actualOptions, defaultValues)
 									</a></div>
 <div class="mDesc">Creates an <em>optionshash</em> out of an <em>array</em>.<div class="alias">alias: <em>["O"]()</em></div>
 </div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAQLS2H"><em>optionshash</em> is the term for a hash with name value pairs. Its main idea is to simulate optional parameters
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDACPUP"><em>optionshash</em> is the term for a hash with name value pairs. Its main idea is to simulate optional parameters
 for VBScript methods and transform an <em>array</em> into an associative <em>array</em> (collection of unique keys and a collection of values, where each key is associated with one value).
 With this its possible to extend a methods input without changing the methods signature.
 The <em>optionshash</em> is represented with a <em>dictionary</em> (The idea of options has been taken from Ruby on Rails as those guys
@@ -3040,11 +3099,11 @@ defaut value is used. Example with more default values:
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAXRS2H" onclick="togg('mdetails_12IDAXRS2H')">path
+<div class="mName"><a href="#method_IDAJVUP" onclick="togg('mdetails_12IDAJVUP')">path
 										(filename)
 									</a></div>
 <div class="mDesc">gets the virtual path of the ajaxed library root folder.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAXRS2H">useful for static files like e.g. javascript, css which are used internally by the library<br><br><div class="param"><span class="paramName"> filename</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAJVUP">useful for static files like e.g. javascript, css which are used internally by the library<br><br><div class="param"><span class="paramName"> filename</span><span>
 														[<span class="type">string</span>]</span><br>some file which should be appended to the root path. e.g. <em>class_rss/rss.asp</em> would return <em>/ajaxed/class_rss/rss.asp</em> leave <em>empty</em> if not required</div>
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">string</span>]
@@ -3054,11 +3113,11 @@ defaut value is used. Example with more default values:
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAGKS2H" onclick="togg('mdetails_12IDAGKS2H')">random
+<div class="mName"><a href="#method_IDAYNUP" onclick="togg('mdetails_12IDAYNUP')">random
 										(min, max)
 									</a></div>
 <div class="mDesc">Returns a random number within a given range</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAGKS2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAYNUP">
 <div class="param"><span class="paramName"> min</span><span>
 														[<span class="type">int</span>]</span><br>The minimum possible number (inclusive)</div>
 <div class="param"><span class="paramName"> max</span><span>
@@ -3071,11 +3130,11 @@ defaut value is used. Example with more default values:
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDANWS2H" onclick="togg('mdetails_12IDANWS2H')">range
+<div class="mName"><a href="#method_IDAC0UP" onclick="togg('mdetails_12IDAC0UP')">range
 										(startsWith, endsWith, interval)
 									</a></div>
 <div class="mDesc">generates an array for a range of values which are defined by its start and end.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDANWS2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAC0UP">
 <div class="param"><span class="paramName"> startsWith</span><br></div>
 <div class="param"><span class="paramName"> endsWith</span><span>
 														[<span class="type">float</span>, <span class="type">int</span>]</span><br>the end of the range (incl)</div>
@@ -3089,11 +3148,11 @@ defaut value is used. Example with more default values:
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAOOS2H" onclick="togg('mdetails_12IDAOOS2H')">requestURL
+<div class="mName"><a href="#method_IDADSUP" onclick="togg('mdetails_12IDADSUP')">requestURL
 										(method, url, params, options)
 									</a></div>
 <div class="mDesc">Requests an URL and returns an <em>IXMLDOMDocument</em>.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAOOS2H">Post parameters are always encoded with UTF-8.<br><br><div class="param"><span class="paramName"> method</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDADSUP">Post parameters are always encoded with UTF-8.<br><br><div class="param"><span class="paramName"> method</span><span>
 														[<span class="type">string</span>]</span><br><em>GET</em> or <em>POST</em></div>
 <div class="param"><span class="paramName"> url</span><span>
 														[<span class="type">int</span>]</span><br>URL for the request. Only full URLs are supported (starting with <em>http://</em>, <em>https://</em>, etc.)
@@ -3126,11 +3185,11 @@ e.g. array("Accept-Language", "en")</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAVSS2H" onclick="togg('mdetails_12IDAVSS2H')">require
+<div class="mName"><a href="#method_IDAHWUP" onclick="togg('mdetails_12IDAHWUP')">require
 										(classname, caller)
 									</a></div>
 <div class="mDesc">Requires a given class to be existing. error is raised if it does not exist</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAVSS2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAHWUP">
 <div class="param"><span class="paramName"> classname</span><span>
 														[<span class="type">string</span>]</span><br>name of the class you want to be required</div>
 <div class="param"><span class="paramName"> caller</span><span>
@@ -3140,11 +3199,11 @@ e.g. array("Accept-Language", "en")</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAE5S2H" onclick="togg('mdetails_12IDAE5S2H')">sleep
+<div class="mName"><a href="#method_IDAZCVP" onclick="togg('mdetails_12IDAZCVP')">sleep
 										(seconds)
 									</a></div>
 <div class="mDesc">Sleeps for a specified time. for a while :)</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAE5S2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAZCVP">
 <div class="param"><span class="paramName"> seconds</span><span>
 														[<span class="type">int</span>]</span><br>how many seconds. Minmum 1, Maximum 20. Value will be autochanged if value
 is incorrect.</div>
@@ -3153,11 +3212,11 @@ is incorrect.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAK1S2H" onclick="togg('mdetails_12IDAK1S2H')">throwError
+<div class="mName"><a href="#method_IDA24UP" onclick="togg('mdetails_12IDA24UP')">throwError
 										(args)
 									</a></div>
 <div class="mDesc">throws an ASP runtime Error which can be handled with on error resume next</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAK1S2H">if you want to throw an error where just the user should be notified use <em>lib.error</em> instead<br><br><div class="param"><span class="paramName"> args</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDA24UP">if you want to throw an error where just the user should be notified use <em>lib.error</em> instead<br><br><div class="param"><span class="paramName"> args</span><span>
 														[<span class="type">array</span>, <span class="type">string</span>]</span><br>
 <li class="list">if <em>array</em> then fields => number, source, description</li>
 <li class="list">The number range for user errors is 512 (exclusive) - 1024 (exclusive)</li>
@@ -3169,11 +3228,11 @@ number 1024 (highest possible number for user defined VBScript errors)</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAXAT2H" onclick="togg('mdetails_12IDAXAT2H')">URLDecode
+<div class="mName"><a href="#method_IDAJEVP" onclick="togg('mdetails_12IDAJEVP')">URLDecode
 										(endcodedText)
 									</a></div>
 <div class="mDesc">Opposite of <em>server.URLEncode</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAXAT2H">If you store a variable in the queryString then the variables input will be automatically
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_12IDAJEVP">If you store a variable in the queryString then the variables input will be automatically
 encoded. Sometimes you need a function to decode this <em>%20%2H</em>, etc.<br><br><div class="param"><span class="paramName"> endcodedText</span><span>
 														[<span class="type">string</span>]</span><br>your string which should be decoded. e.g: <em>Haxn%20Text</em> (%20 = Space)</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -3200,7 +3259,7 @@ Also stuff about the client can be found in this class e.g. clients IP address (
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>19.10.2008 21:55:59</td>
+<td>10/19/2008 9:55:59 PM</td>
 </tr>
 <tr>
 <td class="label">Staticname:</td>
@@ -3229,11 +3288,11 @@ Also stuff about the client can be found in this class e.g. clients IP address (
 <table id="meths_13" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA5ET2H" onclick="togg('mdetails_13IDA5ET2H')">locateClient
+<div class="mName"><a href="#method_IDAUIVP" onclick="togg('mdetails_13IDAUIVP')">locateClient
 										(timeout, clientIP)
 									</a></div>
 <div class="mDesc">Locates the country of a given clients IP address.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_13IDA5ET2H">Currently Information is gathered from the free service at http://www.hostip.info and the clients IP is
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_13IDAUIVP">Currently Information is gathered from the free service at http://www.hostip.info and the clients IP is
 taken from the <em>serverVariables</em>. Note: As the location is the ISPs location its not sure that the
 client is located in the same location.
 <li class="list">The location is cached within the users session. Therefore only the first call will access the service (unless its a failure).</li>
@@ -3300,7 +3359,7 @@ lib.logger.error(&quot;some error happend&quot;)
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>23.11.2008 10:05:02</td>
+<td>12/26/2008 3:20:56 PM</td>
 </tr>
 </table>
 <h2><span onclick="togg('props_14')" style="cursor:pointer">Properties</span> <a href="#class_14" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -3352,21 +3411,21 @@ lib.logger.error(&quot;some error happend&quot;)
 <table id="meths_14" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAZRU2H">clearLogs
+<div class="mName"><a href="#method_IDALVVP">clearLogs
 										()
 									</a></div>
 <div class="mDesc">Deletes all logfiles</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDAZRU2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDALVVP">
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAWNT2H" onclick="togg('mdetails_14IDAWNT2H')">debug
+<div class="mName"><a href="#method_IDALRVP" onclick="togg('mdetails_14IDALRVP')">debug
 										(msg)
 									</a></div>
 <div class="mDesc">helper to log a message as a debug message</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDAWNT2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDALRVP">
 <div class="param"><span class="paramName"> msg</span><span>
 														[<span class="type">string</span>, <span class="type">array</span>]</span><br>message(s) to debug. (if <em>array</em> then treated as lines)</div>
 </div>
@@ -3374,11 +3433,11 @@ lib.logger.error(&quot;some error happend&quot;)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAWOT2H" onclick="togg('mdetails_14IDAWOT2H')">error
+<div class="mName"><a href="#method_IDALSVP" onclick="togg('mdetails_14IDALSVP')">error
 										(msg)
 									</a></div>
 <div class="mDesc">helper to log a message as an error.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDAWOT2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDALSVP">
 <div class="param"><span class="paramName"> msg</span><span>
 														[<span class="type">string</span>, <span class="type">array</span>]</span><br>message(s) to log</div>
 </div>
@@ -3386,11 +3445,11 @@ lib.logger.error(&quot;some error happend&quot;)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAZQU2H" onclick="togg('mdetails_14IDAZQU2H')">info
+<div class="mName"><a href="#method_IDALUVP" onclick="togg('mdetails_14IDALUVP')">info
 										(msg)
 									</a></div>
 <div class="mDesc">helper to log a message as an information</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDAZQU2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDALUVP">
 <div class="param"><span class="paramName"> msg</span><span>
 														[<span class="type">string</span>, <span class="type">array</span>]</span><br>message(s) to log</div>
 </div>
@@ -3398,11 +3457,11 @@ lib.logger.error(&quot;some error happend&quot;)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA2KT2H" onclick="togg('mdetails_14IDA2KT2H')">log
+<div class="mName"><a href="#method_IDAOOVP" onclick="togg('mdetails_14IDAOOVP')">log
 										(level, msg, style)
 									</a></div>
 <div class="mDesc">logs a message</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDA2KT2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDAOOVP">
 <div class="param"><span class="paramName"> level</span><span>
 														[<span class="type">int</span>]</span><br>level of logging. possible: <em>0</em> (disabled), <em>1</em> (debug), <em>2</em> (info), <em>4</em> (warn), <em>8</em> (error)
 <li class="list">its depending on the loggerLevel setting which level will be logged</li></div>
@@ -3417,11 +3476,11 @@ some values: 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAYMT2H" onclick="togg('mdetails_14IDAYMT2H')">logsOnLevel
+<div class="mName"><a href="#method_IDANQVP" onclick="togg('mdetails_14IDANQVP')">logsOnLevel
 										(level)
 									</a></div>
 <div class="mDesc">indicates if a given level would be logged by the logger or not</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDAYMT2H">useful if your log message uses some resources which could be saved if the desired loglevel isnt even supported<br><br><div class="param"><span class="paramName"> level</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDANQVP">useful if your log message uses some resources which could be saved if the desired loglevel isnt even supported<br><br><div class="param"><span class="paramName"> level</span><span>
 														[<span class="type">int</span>]</span><br>the level which should be checked.</div>
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">bool</span>]
@@ -3431,11 +3490,11 @@ some values: 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAWPT2H" onclick="togg('mdetails_14IDAWPT2H')">warn
+<div class="mName"><a href="#method_IDALTVP" onclick="togg('mdetails_14IDALTVP')">warn
 										(msg)
 									</a></div>
 <div class="mDesc">helper to log a message as a warning</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDAWPT2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_14IDALTVP">
 <div class="param"><span class="paramName"> msg</span><span>
 														[<span class="type">string</span>, <span class="type">array</span>]</span><br>message(s) to log</div>
 </div>
@@ -3523,7 +3582,7 @@ Encryption-code taken from Web Site: http://www.frez.co.uk and modified to a cla
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>22.07.2008 10:54:25</td>
+<td>7/22/2008 10:54:25 AM</td>
 </tr>
 </table>
 <h2><span onclick="togg('props_15')" style="cursor:pointer">Properties</span> <a href="#class_15" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -3538,11 +3597,11 @@ Encryption-code taken from Web Site: http://www.frez.co.uk and modified to a cla
 <table id="meths_15" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHTU2H" onclick="togg('mdetails_15IDAHTU2H')" class="default">hash
+<div class="mName"><a href="#method_IDAZWVP" onclick="togg('mdetails_15IDAZWVP')" class="default">hash
 										(val)
 									</a></div>
 <div class="mDesc">returns a MD5 hash for the given value</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_15IDAHTU2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_15IDAZWVP">
 <div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">string</span>]</span><br>the string for hashing</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -3585,7 +3644,7 @@ next
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>22.11.2008 19:16:28</td>
+<td>11/22/2008 7:16:28 PM</td>
 </tr>
 <tr>
 <td class="label">Postfix:</td>
@@ -3667,11 +3726,11 @@ should only be set by <em>setCache()</em>. afterwards this property can be used.
 <table id="meths_17" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA3AV2H" onclick="togg('mdetails_17IDA3AV2H')">addItem
+<div class="mName"><a href="#method_IDAPEWP" onclick="togg('mdetails_17IDAPEWP')">addItem
 										(rItem)
 									</a></div>
 <div class="mDesc">adds an item to the items collection</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDA3AV2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDAPEWP">
 <div class="param"><span class="paramName"> rItem</span><span>
 														[<a class="type" href="#class_16">RSSItem</a>]</span><br>the item you want to add</div>
 </div>
@@ -3679,11 +3738,11 @@ should only be set by <em>setCache()</em>. afterwards this property can be used.
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA42U2H" onclick="togg('mdetails_17IDA42U2H')">draw
+<div class="mName"><a href="#method_IDATAWP" onclick="togg('mdetails_17IDATAWP')">draw
 										(xslPath)
 									</a></div>
 <div class="mDesc">draws the RSS feed with a given XSL. if cached then it will be taken from the cache</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDA42U2H">The whole HTML is taken from the cache and not just the data. so tranformation
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDATAWP">The whole HTML is taken from the cache and not just the data. so tranformation
 is performed just once.
 <li class="list">supported formats: all because the XSL needs to be provided by the client manually</li>
 <li class="list">check failed property after execution</li><br><br><div class="param"><span class="paramName"> xslPath</span><span>
@@ -3693,12 +3752,12 @@ is performed just once.
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQ5U2H" onclick="togg('mdetails_17IDAQ5U2H')">generate
+<div class="mName"><a href="#method_IDAFDWP" onclick="togg('mdetails_17IDAFDWP')">generate
 										(format, target)
 									</a></div>
 <div class="mDesc">generates a feed with the given items and the metadata (title, etc.). Returns the
 generated XMLDOM and provides the possibility to save it into a file immediately</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDAQ5U2H">Feed is generated with UTF-8 (Note: your file must be saved as UTF-8 in order to support this).
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDAFDWP">Feed is generated with UTF-8 (Note: your file must be saved as UTF-8 in order to support this).
 there are two ways to generate the feed:<br><br>
 <strong>1.</strong> Using a file which will be stored on your server (by providing a target param)
 (normally used if you have an action in your application which invokes the feed
@@ -3747,11 +3806,11 @@ leave <em>empty</em> if you want to get the XML returned</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA23U2H" onclick="togg('mdetails_17IDA23U2H')">load
+<div class="mName"><a href="#method_IDARBWP" onclick="togg('mdetails_17IDARBWP')">load
 										()
 									</a></div>
 <div class="mDesc">loads the feed. so the items, title, link, etc. will be set</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDA23U2H">use this if you want to access e.g. the items of the feed and dont want to use
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDARBWP">use this if you want to access e.g. the items of the feed and dont want to use
 the <em>draw()</em> method using the XSL. Note: using this method wont use the caching!
 <li class="list">supported formats: RSS1.0 (RDF), RSS2.0, RSS0.92, RSS0.94 and ATOM</li>
 <li class="list">check failed property after execution</li><br><br></div>
@@ -3759,11 +3818,11 @@ the <em>draw()</em> method using the XSL. Note: using this method wont use the c
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAO4U2H" onclick="togg('mdetails_17IDAO4U2H')" style="font-weight:bold;" title="This is a static method" class="default">loadNew
+<div class="mName"><a href="#method_IDADCWP" onclick="togg('mdetails_17IDADCWP')" style="font-weight:bold;" title="This is a static method" class="default">loadNew
 										(anUrl)
 									</a></div>
 <div class="mDesc">Creates a new RSS instance and loads it immediately afterwards. Useful for quick reading of a feed</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDAO4U2H"><div class="code"><pre><code>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDADCWP"><div class="code"><pre><code>
 set r = (new RSS)(&quot;http://feed.someurl.com&quot;)
 if r.failed then lib.error(&quot;could not get.&quot;)
 </code></pre></div><br><br><div class="param"><span class="paramName"> anUrl</span><span>
@@ -3776,11 +3835,11 @@ if r.failed then lib.error(&quot;could not get.&quot;)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA1BV2H" onclick="togg('mdetails_17IDA1BV2H')">reflect
+<div class="mName"><a href="#method_IDANFWP" onclick="togg('mdetails_17IDANFWP')">reflect
 										()
 									</a></div>
 <div class="mDesc">reflection of the properties and its values</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDA1BV2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDANFWP">
 <div class="return"><span class="returnName">Returns </span>
 											[<a class="type" href="http://www.w3schools.com/asp/asp_ref_dictionary.asp" target="_blank">dictionary</a>]
 											<br><em>key</em> = property-name, <em>value</em> = property value</div>
@@ -3789,11 +3848,11 @@ if r.failed then lib.error(&quot;could not get.&quot;)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDANCV2H" onclick="togg('mdetails_17IDANCV2H')">setCache
+<div class="mName"><a href="#method_IDA5FWP" onclick="togg('mdetails_17IDA5FWP')">setCache
 										(interval, value)
 									</a></div>
 <div class="mDesc">sets the caching of the RSS. the Cache class needs to be loaded for this</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDANCV2H">Specify how long the feed should be cashed till it will be requested again. For more
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_17IDA5FWP">Specify how long the feed should be cashed till it will be requested again. For more
 information about the caching look up the <em>Cache</em> class<br><br><div class="param"><span class="paramName"> interval</span><span>
 														[<span class="type">string</span>]</span><br><em>m</em> = months, <em>y</em> = year, <em>d</em> = day, etc. everything accepted which is supported by <em>dateadd</em> function</div>
 <div class="param"><span class="paramName"> value</span><span>
@@ -3817,7 +3876,7 @@ information about the caching look up the <em>Cache</em> class<br><br><div class
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>22.11.2008 19:12:02</td>
+<td>11/22/2008 7:12:02 PM</td>
 </tr>
 <tr>
 <td class="label">Friend of:</td>
@@ -3876,11 +3935,11 @@ information about the caching look up the <em>Cache</em> class<br><br><div class
 <table id="meths_16" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAZXU2H" onclick="togg('mdetails_16IDAZXU2H')">reflect
+<div class="mName"><a href="#method_IDAO1VP" onclick="togg('mdetails_16IDAO1VP')">reflect
 										()
 									</a></div>
 <div class="mDesc">reflection of the properties and its values</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_16IDAZXU2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_16IDAO1VP">
 <div class="return"><span class="returnName">Returns </span>
 											[<a class="type" href="http://www.w3schools.com/asp/asp_ref_dictionary.asp" target="_blank">dictionary</a>]
 											<br><em>key</em> = property-name, <em>value</em> = property value</div>
@@ -3918,7 +3977,7 @@ output(&quot;some other text&quot;)
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>14.10.2008 16:03:51</td>
+<td>10/14/2008 4:03:51 PM</td>
 </tr>
 </table>
 <h2><span onclick="togg('props_18')" style="cursor:pointer">Properties</span> <a href="#class_18" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -3943,11 +4002,11 @@ output(&quot;some other text&quot;)
 <table id="meths_18" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAJGV2H" onclick="togg('mdetails_18IDAJGV2H')">append
+<div class="mName"><a href="#method_IDA4JWP" onclick="togg('mdetails_18IDA4JWP')">append
 										(val)
 									</a></div>
 <div class="mDesc">appends a string to the builder</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_18IDAJGV2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_18IDA4JWP">
 <div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">string</span>]</span><br>the string you want to append</div>
 </div>
@@ -3955,11 +4014,11 @@ output(&quot;some other text&quot;)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHHV2H" onclick="togg('mdetails_18IDAHHV2H')">toString
+<div class="mName"><a href="#method_IDA2KWP" onclick="togg('mdetails_18IDA2KWP')">toString
 										()
 									</a></div>
 <div class="mDesc">returns the concatenated string</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_18IDAHHV2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_18IDA2KWP">
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">string</span>]
 											<br>concatenated string</div>
@@ -3968,12 +4027,12 @@ output(&quot;some other text&quot;)
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAJFV2H" onclick="togg('mdetails_18IDAJFV2H')" class="default">write
+<div class="mName"><a href="#method_IDA4IWP" onclick="togg('mdetails_18IDA4IWP')" class="default">write
 										(val)
 									</a></div>
 <div class="mDesc">writes a string with the string builder. the difference to append is that it will
 output to the response if there is no component found</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_18IDAJFV2H"><li class="list">its recommended to use this instead of <em>append()</em> when rendering html markup. it wil allways use this fastest method. if stringbuilder available then using stringbuilder otherwise direct output to response.</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_18IDA4IWP"><li class="list">its recommended to use this instead of <em>append()</em> when rendering html markup. it wil allways use this fastest method. if stringbuilder available then using stringbuilder otherwise direct output to response.</li>
 <li class="list">note: be sure that on the place you use <em>write()</em> it can output directly to the response if needed</li><br><br><div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">string</span>]</span><br>the string you want to write</div>
 </div>
@@ -3997,7 +4056,7 @@ accessed using <em>str.methodName</em></div>
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>20.10.2008 22:56:40</td>
+<td>10/20/2008 10:56:40 PM</td>
 </tr>
 <tr>
 <td class="label">Staticname:</td>
@@ -4016,11 +4075,11 @@ accessed using <em>str.methodName</em></div>
 <table id="meths_19" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDASNCP" onclick="togg('mdetails_19IDASNCP')">arrayToString
+<div class="mName"><a href="#method_IDAHRXP" onclick="togg('mdetails_19IDAHRXP')">arrayToString
 										(arr, seperator)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>Converts an <em>array</em> to a <em>string</em>. Use native <em>join()</em> function instead</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDASNCP"><div class="code"><pre><code>&lt;% str.arrayToString(array(1, 2, 3), &quot;,&quot;) '=&gt; 1,2,3 %&gt;</code></pre></div><br><br><div class="param"><span class="paramName">byVal arr</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAHRXP"><div class="code"><pre><code>&lt;% str.arrayToString(array(1, 2, 3), &quot;,&quot;) '=&gt; 1,2,3 %&gt;</code></pre></div><br><br><div class="param"><span class="paramName">byVal arr</span><span>
 														[<span class="type">Array</span>]</span><br>the array you want to concat</div>
 <div class="param"><span class="paramName"> seperator</span><span>
 														[<span class="type">string</span>]</span><br>seperator between the array fields e.g. <em>,</em></div>
@@ -4032,11 +4091,11 @@ accessed using <em>str.methodName</em></div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAA5CP" onclick="togg('mdetails_19IDAA5CP')">ASCIICode
+<div class="mName"><a href="#method_IDAVCYY" onclick="togg('mdetails_19IDAVCYY')">ASCIICode
 										(str)
 									</a></div>
 <div class="mDesc">Encodes a string into ASCII Characters</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAA5CP">This function takes a string (for example an email-address) and converts it to
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAVCYY">This function takes a string (for example an email-address) and converts it to
 standardized ASCII Character codes, thus blocking bots/spiders from reading your
 email address, while yet allowing visitors to continue to read and use your proper
 address via mailto links, etc.<br><br><div class="param"><span class="paramName">byVal str</span><span>
@@ -4049,11 +4108,11 @@ address via mailto links, etc.<br><br><div class="param"><span class="paramName"
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAE1CP" onclick="togg('mdetails_19IDAE1CP')">capitalize
+<div class="mName"><a href="#method_IDAW4XP" onclick="togg('mdetails_19IDAW4XP')">capitalize
 										(inputStr)
 									</a></div>
 <div class="mDesc">Converts every first letter of every word into uppercase.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAE1CP">Good for Names or cities. Example: <em>jack johnson</em> will result in <em>Jack Johnson</em><br><br><div class="param"><span class="paramName"> inputStr</span><br></div>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAW4XP">Good for Names or cities. Example: <em>jack johnson</em> will result in <em>Jack Johnson</em><br><br><div class="param"><span class="paramName"> inputStr</span><br></div>
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">string</span>]
 											<br>changed string</div>
@@ -4062,12 +4121,12 @@ address via mailto links, etc.<br><br><div class="param"><span class="paramName"
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAGPV2H" onclick="togg('mdetails_19IDAGPV2H')">change
+<div class="mName"><a href="#method_IDA1SWP" onclick="togg('mdetails_19IDA1SWP')">change
 										(source, find, replaceWith)
 									</a></div>
 <div class="mDesc">an extension of the common <em>replace()</em> function. basically the same
 but you can replace more parts in one go.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAGPV2H"><li class="list"><em>find (array)</em> -> <em>replaceWith (string)</em>: every match of 'find' will be replaced with the string</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA1SWP"><li class="list"><em>find (array)</em> -> <em>replaceWith (string)</em>: every match of 'find' will be replaced with the string</li>
 <li class="list"><em>find (array[n])</em> -> <em>replaceWith (array[n])</em>: must be same size! every field will be replaced by the field of replaceWith with the same index.</li>
 <li class="list"><em>find (array[n])</em> -> <em>replaceWith (array[m])</em>: n > m! for the missing fields the last one will be taken for replacement. e.g.<div class="code"><pre><code>&lt;% str.change(&quot;somestring&quot;, array(1, 2), array(3)) %&gt;</code></pre></div> means that the 1 will be replaced with 3 and the 2 will also be replaced with 3 because there is no equivalent for the 2</li><br><br><div class="param"><span class="paramName">byVal source</span><span>
 														[<span class="type">string</span>]</span><br>the source string in which we search</div>
@@ -4083,11 +4142,11 @@ but you can replace more parts in one go.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDATTCP" onclick="togg('mdetails_19IDATTCP')">clone
+<div class="mName"><a href="#method_IDAFXXP" onclick="togg('mdetails_19IDAFXXP')">clone
 										(str, n)
 									</a></div>
 <div class="mDesc">Concats a string <em>n</em> times</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDATTCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAFXXP">
 <div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>the source string</div>
 <div class="param"><span class="paramName"> n</span><span>
@@ -4100,11 +4159,11 @@ but you can replace more parts in one go.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAI0V2H" onclick="togg('mdetails_19IDAI0V2H')">defuseHTML
+<div class="mName"><a href="#method_IDA03WP" onclick="togg('mdetails_19IDA03WP')">defuseHTML
 										(value)
 									</a></div>
 <div class="mDesc">defuses the HTML of given string. so html code wont be recognized as HTML code by browser</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAI0V2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA03WP">
 <div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>the value which should be defused</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -4115,11 +4174,11 @@ but you can replace more parts in one go.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAJECP" onclick="togg('mdetails_19IDAJECP')">divide
+<div class="mName"><a href="#method_IDA1HXP" onclick="togg('mdetails_19IDA1HXP')">divide
 										(inputStr, partitionLength)
 									</a></div>
 <div class="mDesc">divides a string into several string-paritions of a given length</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAJECP">string <em>HAXN</em> will result (<em>partitionlength = 2</em>) in the following array:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA1HXP">string <em>HAXN</em> will result (<em>partitionlength = 2</em>) in the following array:
 <em>array("HA", "XN")</em><br><br><div class="param"><span class="paramName"> inputStr</span><span>
 														[<span class="type">string</span>]</span><br>string which should be divided</div>
 <div class="param"><span class="paramName">byVal partitionLength</span><span>
@@ -4132,21 +4191,21 @@ but you can replace more parts in one go.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAVFCP">end
+<div class="mName"><a href="#method_IDAKJXP">end
 										()
 									</a></div>
 <div class="mDesc">stops to response</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAVFCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAKJXP">
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHSCP" onclick="togg('mdetails_19IDAHSCP')">endsWith
+<div class="mName"><a href="#method_IDAZVXP" onclick="togg('mdetails_19IDAZVXP')">endsWith
 										(str, chars)
 									</a></div>
 <div class="mDesc">Checks if the string ends with a given string. Case sensitive.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAHSCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAZVXP">
 <div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>the source string</div>
 <div class="param"><span class="paramName"> chars</span><span>
@@ -4159,11 +4218,11 @@ but you can replace more parts in one go.</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAYJCP" onclick="togg('mdetails_19IDAYJCP')">ensureSlash
+<div class="mName"><a href="#method_IDAKNXP" onclick="togg('mdetails_19IDAKNXP')">ensureSlash
 										(pathString)
 									</a></div>
 <div class="mDesc">adds a slash <em>/</em> at the end of the string if there isnt one.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAYJCP">Good use for urls or paths if you want to be sure that there is a slash at the end
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAKNXP">Good use for urls or paths if you want to be sure that there is a slash at the end
 of an url or a path.<br><br><div class="param"><span class="paramName"> pathString</span><span>
 														[<span class="type">string</span>]</span><br>The string (url, path) you want to check</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -4174,11 +4233,11 @@ of an url or a path.<br><br><div class="param"><span class="paramName"> pathStri
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAFRV2H" onclick="togg('mdetails_19IDAFRV2H')">existsIn
+<div class="mName"><a href="#method_IDAXUWP" onclick="togg('mdetails_19IDAXUWP')">existsIn
 										(aString, anArray, caseSensitive)
 									</a></div>
 <div class="mDesc">checks if a given string can be found in a given <em>array</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAFRV2H">all values in the <em>array</em> are treated as strings when comparing<br><br><div class="param"><span class="paramName">byVal aString</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAXUWP">all values in the <em>array</em> are treated as strings when comparing<br><br><div class="param"><span class="paramName">byVal aString</span><span>
 														[<span class="type">string</span>]</span><br>the string which should be checked against</div>
 <div class="param"><span class="paramName">byVal anArray</span><span>
 														[<span class="type">array</span>]</span><br>the array with values where the function will walk through</div>
@@ -4192,11 +4251,11 @@ of an url or a path.<br><br><div class="param"><span class="paramName"> pathStri
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAA2CP" onclick="togg('mdetails_19IDAA2CP')">format
+<div class="mName"><a href="#method_IDAS5XP" onclick="togg('mdetails_19IDAS5XP')">format
 										(str, values)
 									</a></div>
 <div class="mDesc">Replaces all <em>{n}</em> placeholders in a given string through the n-index field of a given array.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAA2CP">Its just like the <em>string.format</em> method in .NET. So if you have a string <em>my Name is {0}</em> as
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAS5XP">Its just like the <em>string.format</em> method in .NET. So if you have a string <em>my Name is {0}</em> as
 your input then the <em>{0}</em> will be replaced by the first field of your array. And so on and so forth.
 <li class="list">Placeholders can be used multiple times within the source string</li>
 <li class="list">In case you get an error about unsupported character sequence, then your string contains a special character sequence which is used internally for escaping (the sequence consists of non printable characters). Thus it cannot be used as input.</li><br><br><div class="param"><span class="paramName">byVal str</span><span>
@@ -4211,11 +4270,11 @@ your input then the <em>{0}</em> will be replaced by the first field of your arr
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAG3V2H" onclick="togg('mdetails_19IDAG3V2H')">getHiddenInput
+<div class="mName"><a href="#method_IDA1AXP" onclick="togg('mdetails_19IDA1AXP')">getHiddenInput
 										(name, value)
 									</a></div>
 <div class="mDesc">generates a hidden input field and returns the HTML for it</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAG3V2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA1AXP">
 <div class="param"><span class="paramName"> name</span><span>
 														[<span class="type">string</span>]</span><br>the name of the value</div>
 <div class="param"><span class="paramName"> value</span><span>
@@ -4225,12 +4284,12 @@ your input then the <em>{0}</em> will be replaced by the first field of your arr
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAO5V2H" onclick="togg('mdetails_19IDAO5V2H')" class="default">HTMLEncode
+<div class="mName"><a href="#method_IDADDXP" onclick="togg('mdetails_19IDADDXP')" class="default">HTMLEncode
 										(value)
 									</a></div>
 <div class="mDesc">encodes a value so that any special chars will be transformed into html entities.
 e.g. <em>"</em> will converted to <em>&quot;</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAO5V2H">should be used in all views to prevent XSS. for that reason its also the default function so its
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDADDXP">should be used in all views to prevent XSS. for that reason its also the default function so its
 easier to use. example of usage in your views (as its the default function it can be used directly on the instance):<div class="code"><pre><code>str(&quot;some value &lt;&gt;&quot;)</code></pre></div><br><br><div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>the value you want to encode</div>
 </div>
@@ -4238,11 +4297,11 @@ easier to use. example of usage in your views (as its the default function it ca
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAYIV2H" onclick="togg('mdetails_19IDAYIV2H')">humanize
+<div class="mName"><a href="#method_IDAKMWP" onclick="togg('mdetails_19IDAKMWP')">humanize
 										(val)
 									</a></div>
 <div class="mDesc">Takes a string and tries to make it look more humanreadable. Its for creating pretty output</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAYIV2H"><li class="list"><em>_</em> (underscores) are replaced by a space character (also more underscores e.g. <em>___</em> are replaced by only one space)</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAKMWP"><li class="list"><em>_</em> (underscores) are replaced by a space character (also more underscores e.g. <em>___</em> are replaced by only one space)</li>
 <li class="list"><em>_id</em> and <em>_fk</em> in the back are stripped as well as <em>id_</em> and <em>fk_</em> in the beginning</li>
 <li class="list">everything is lower cased unless the first letter</li><br><br><div class="param"><span class="paramName">byVal val</span><span>
 														[<span class="type">string</span>]</span><br>the value which should be humanized</div>
@@ -4254,11 +4313,11 @@ easier to use. example of usage in your views (as its the default function it ca
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAGZCP" onclick="togg('mdetails_19IDAGZCP')">isAlphabetic
+<div class="mName"><a href="#method_IDAY2XP" onclick="togg('mdetails_19IDAY2XP')">isAlphabetic
 										(character)
 									</a></div>
 <div class="mDesc">Checks if given a char is an alphabetic character (<em>A-Z</em> or <em>a-z</em>) or not.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAGZCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAY2XP">
 <div class="param"><span class="paramName">byVal character</span><span>
 														[<span class="type">char</span>]</span><br>The char to check</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -4269,11 +4328,11 @@ easier to use. example of usage in your views (as its the default function it ca
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDARACP" onclick="togg('mdetails_19IDARACP')">isValidEmail
+<div class="mName"><a href="#method_IDADEXP" onclick="togg('mdetails_19IDADEXP')">isValidEmail
 										(val)
 									</a></div>
 <div class="mDesc">checks if a given string is a syntactically correct email address</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDARACP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDADEXP">
 <div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">string</span>]</span><br>the value to check</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -4284,11 +4343,11 @@ easier to use. example of usage in your views (as its the default function it ca
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAG2V2H" onclick="togg('mdetails_19IDAG2V2H')">JSEncode
+<div class="mName"><a href="#method_IDAY5WP" onclick="togg('mdetails_19IDAY5WP')">JSEncode
 										(val)
 									</a></div>
 <div class="mDesc"></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAG2V2H">Makes a string javascript persistent. Changes special characters, etc.<br><br><div class="param"><span class="paramName">byVal val</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAY5WP">Makes a string javascript persistent. Changes special characters, etc.<br><br><div class="param"><span class="paramName">byVal val</span><span>
 														[<span class="type">string</span>]</span><br>the value which needs to be encoded</div>
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">string</span>]
@@ -4298,11 +4357,11 @@ easier to use. example of usage in your views (as its the default function it ca
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA0LV2H" onclick="togg('mdetails_19IDA0LV2H')">matching
+<div class="mName"><a href="#method_IDAMPWP" onclick="togg('mdetails_19IDAMPWP')">matching
 										(val, pattern, ignoreCase)
 									</a></div>
 <div class="mDesc">checks if a given string is matching a given regular expression pattern</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA0LV2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAMPWP">
 <div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">string</span>]</span><br>the value which needs to be checked against the pattern</div>
 <div class="param"><span class="paramName"> pattern</span><span>
@@ -4317,11 +4376,11 @@ easier to use. example of usage in your views (as its the default function it ca
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAAPCP" onclick="togg('mdetails_19IDAAPCP')">multiArrayToString
+<div class="mName"><a href="#method_IDAVSXP" onclick="togg('mdetails_19IDAVSXP')">multiArrayToString
 										(arr, seperator, dimension)
 									</a></div>
 <div class="mDesc">Converts a part of a multidimensional <em>array</em> to a <em>string</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAAPCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAVSXP">
 <div class="param"><span class="paramName">byVal arr</span><span>
 														[<span class="type">Array</span>]</span><br>the array you want to concat</div>
 <div class="param"><span class="paramName"> seperator</span><span>
@@ -4338,11 +4397,11 @@ array of the size <em>(5, 2)</em> -> with <em>dimension</em> <em>2</em> you get 
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAPBCP" onclick="togg('mdetails_19IDAPBCP')">nullIfEmpty
+<div class="mName"><a href="#method_IDABFXP" onclick="togg('mdetails_19IDABFXP')">nullIfEmpty
 										(value)
 									</a></div>
 <div class="mDesc">returns null if the input is empty.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAPBCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDABFXP">
 <div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">variant</span>]</span><br>the value you are dealing with</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -4353,11 +4412,11 @@ array of the size <em>(5, 2)</em> -> with <em>dimension</em> <em>2</em> you get 
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAZWV2H" onclick="togg('mdetails_19IDAZWV2H')">padLeft
+<div class="mName"><a href="#method_IDAO0WP" onclick="togg('mdetails_19IDAO0WP')">padLeft
 										(value, totalLength, paddingChar)
 									</a></div>
 <div class="mDesc">right-aligns a given value by padding left a given character to a totalsize</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAZWV2H">example: input: <em>22</em> -> output: <em>00022</em> (padded to total length of 5 with the paddingchar 0)<br><br><div class="param"><span class="paramName"> value</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAO0WP">example: input: <em>22</em> -> output: <em>00022</em> (padded to total length of 5 with the paddingchar 0)<br><br><div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>the value which should be aligned right</div>
 <div class="param"><span class="paramName"> totalLength</span><span>
 														[<span class="type">string</span>]</span><br>whats the total Length of the result string</div>
@@ -4371,11 +4430,11 @@ array of the size <em>(5, 2)</em> -> with <em>dimension</em> <em>2</em> you get 
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDASYV2H" onclick="togg('mdetails_19IDASYV2H')">padRight
+<div class="mName"><a href="#method_IDAE2WP" onclick="togg('mdetails_19IDAE2WP')">padRight
 										(value, totalLength, paddingChar)
 									</a></div>
 <div class="mDesc">left-aligns a given value by padding right a given character to a totalsize</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDASYV2H">example: input: <em>22</em> -> output: <em>22000</em> (padded to total length of 5 with the paddingchar 0)<br><br><div class="param"><span class="paramName"> value</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAE2WP">example: input: <em>22</em> -> output: <em>22000</em> (padded to total length of 5 with the paddingchar 0)<br><br><div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>the value which should be aligned left</div>
 <div class="param"><span class="paramName"> totalLength</span><span>
 														[<span class="type">string</span>]</span><br>whats the total Length of the result string</div>
@@ -4389,12 +4448,12 @@ array of the size <em>(5, 2)</em> -> with <em>dimension</em> <em>2</em> you get 
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA5SV2H" onclick="togg('mdetails_19IDA5SV2H')">parse
+<div class="mName"><a href="#method_IDARWWP" onclick="togg('mdetails_19IDARWWP')">parse
 										(value, alternative)
 									</a></div>
 <div class="mDesc">Tries to parse a given value into the datatype of the given <em>alternative</em>. If it cannot be parsed
 then the <em>alternative</em> is passed through. In other words: It ensures that a given variable contains only one datatype.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA5SV2H">It ALWAYS returns the type of the alternative. Recommended usage when getting values from querystring or form:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDARWWP">It ALWAYS returns the type of the alternative. Recommended usage when getting values from querystring or form:
 <div class="code"><pre><code>
 'gets the ID value from querystring and ensures its an integer.
 'if it cannot be parsed then always 0 is returned
@@ -4427,11 +4486,11 @@ str.parse(&quot;12,3&quot;, 0.0) ' =&gt; 12.3
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAYJV2H" onclick="togg('mdetails_19IDAYJV2H')">rReplace
+<div class="mName"><a href="#method_IDAKNWP" onclick="togg('mdetails_19IDAKNWP')">rReplace
 										(val, pattern, replaceWith, ignoreCase)
 									</a></div>
 <div class="mDesc">performs a replace with a regular expression pattern</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAYJV2H">e.g. surrounding all numbers of a string with brackets:<div class="code"><pre><code>&lt;% str.rReplace(&quot;i am 20 and he is 10&quot;, &quot;(\d)&quot;, &quot;($1)&quot;, true) %&gt;</code></pre></div><br><br><div class="param"><span class="paramName"> val</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAKNWP">e.g. surrounding all numbers of a string with brackets:<div class="code"><pre><code>&lt;% str.rReplace(&quot;i am 20 and he is 10&quot;, &quot;(\d)&quot;, &quot;($1)&quot;, true) %&gt;</code></pre></div><br><br><div class="param"><span class="paramName"> val</span><span>
 														[<span class="type">string</span>]</span><br>the value you want to replace the matches</div>
 <div class="param"><span class="paramName"> pattern</span><span>
 														[<span class="type">string</span>]</span><br>regular expression pattern</div>
@@ -4448,11 +4507,11 @@ str.parse(&quot;12,3&quot;, 0.0) ' =&gt; 12.3
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHGCP" onclick="togg('mdetails_19IDAHGCP')">shorten
+<div class="mName"><a href="#method_IDA2JXP" onclick="togg('mdetails_19IDA2JXP')">shorten
 										(str, maxChars, overflowString)
 									</a></div>
 <div class="mDesc">Shortens a string and adds a custom string at the end if string is longer than a given value.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAHGCP">Useful if you want to display excerpts:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA2JXP">Useful if you want to display excerpts:
 <div class="code"><pre><code>&lt;%= str.shorten(&quot;some value&quot;, 10, &quot;...&quot;) %&gt;</code></pre></div><br><br><div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>string which should be checked against cutting</div>
 <div class="param"><span class="paramName"> maxChars</span><span>
@@ -4467,11 +4526,11 @@ str.parse(&quot;12,3&quot;, 0.0) ' =&gt; 12.3
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDACICP" onclick="togg('mdetails_19IDACICP')">splitValue
+<div class="mName"><a href="#method_IDAULXP" onclick="togg('mdetails_19IDAULXP')">splitValue
 										(stringToSplit, delimiter, returnIndex)
 									</a></div>
 <div class="mDesc">splits a string and returns a specified field of the array</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDACICP">it uses the split function but immediately returns you the field you want.<br><br><div class="param"><span class="paramName"> stringToSplit</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAULXP">it uses the split function but immediately returns you the field you want.<br><br><div class="param"><span class="paramName"> stringToSplit</span><span>
 														[<span class="type">string</span>]</span><br>the string you want to split</div>
 <div class="param"><span class="paramName"> delimiter</span><span>
 														[<span class="type">string</span>]</span><br>whats the delimiter for splitting</div>
@@ -4485,12 +4544,12 @@ str.parse(&quot;12,3&quot;, 0.0) ' =&gt; 12.3
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAG1V2H" onclick="togg('mdetails_19IDAG1V2H')">SQLSafe
+<div class="mName"><a href="#method_IDAY4WP" onclick="togg('mdetails_19IDAY4WP')">SQLSafe
 										(value)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>makes a given string safe for the use within sql statements. This function is obsolete and
 <em>db.SQLSafe()</em> should be used instead.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAG1V2H">e.g. if its necessary to pass through an user input directly into a sql-query
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAY4WP">e.g. if its necessary to pass through an user input directly into a sql-query
 example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot;SELECT * FROM user WHERE login = &quot; &amp; str.SQLSafe(username) %&gt;</code></pre></div><br><br><div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>the value which should be made "safe"</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -4501,11 +4560,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA1QCP" onclick="togg('mdetails_19IDA1QCP')">startsWith
+<div class="mName"><a href="#method_IDANUXP" onclick="togg('mdetails_19IDANUXP')">startsWith
 										(str, chars)
 									</a></div>
 <div class="mDesc">Checks if the string begins with a given string. Case sensitive.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA1QCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDANUXP">
 <div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>the source string</div>
 <div class="param"><span class="paramName"> chars</span><span>
@@ -4518,11 +4577,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDALDCP" onclick="togg('mdetails_19IDALDCP')">stripTags
+<div class="mName"><a href="#method_IDA3GXP" onclick="togg('mdetails_19IDA3GXP')">stripTags
 										(inputStr)
 									</a></div>
 <div class="mDesc">removes all Tags from a given string</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDALDCP">Tags are defined as string-parts surrounded by a <em><</em> and a <em>></em>. example: <em>&lt;sample&gt;</em><br><br><div class="param"><span class="paramName"> inputStr</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA3GXP">Tags are defined as string-parts surrounded by a <em><</em> and a <em>></em>. example: <em>&lt;sample&gt;</em><br><br><div class="param"><span class="paramName"> inputStr</span><span>
 														[<span class="type">string</span>]</span><br>string where the Tags should be removed</div>
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">string</span>]
@@ -4532,11 +4591,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAG0CP" onclick="togg('mdetails_19IDAG0CP')">swapCase
+<div class="mName"><a href="#method_IDAY3XP" onclick="togg('mdetails_19IDAY3XP')">swapCase
 										(str)
 									</a></div>
 <div class="mDesc">Swaps the Case of a String. lowercase chars to uppercase and vice a versa</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAG0CP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAY3XP">
 <div class="param"><span class="paramName"> str</span><span>
 														[<span class="type">string</span>]</span><br>the source string</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -4547,11 +4606,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDASMCP" onclick="togg('mdetails_19IDASMCP')">toCharArray
+<div class="mName"><a href="#method_IDAHQXP" onclick="togg('mdetails_19IDAHQXP')">toCharArray
 										(str)
 									</a></div>
 <div class="mDesc">Converts a <em>string</em> to a CHAR <em>array</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDASMCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAHQXP">
 <div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>the string you want to convert</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -4562,11 +4621,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAJUV2H" onclick="togg('mdetails_19IDAJUV2H')">toFloat
+<div class="mName"><a href="#method_IDA1XWP" onclick="togg('mdetails_19IDA1XWP')">toFloat
 										(value, alternative)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>use <em>parse()</em> instead</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAJUV2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA1XWP">
 <div class="param"><span class="paramName"> value</span><br></div>
 <div class="param"><span class="paramName"> alternative</span><br></div>
 </div>
@@ -4574,11 +4633,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDARVV2H" onclick="togg('mdetails_19IDARVV2H')">toInt
+<div class="mName"><a href="#method_IDAGZWP" onclick="togg('mdetails_19IDAGZWP')">toInt
 										(value, alternative)
 									</a></div>
 <div class="mDesc"><span class="obsolete">This method is obsolete.</span>use <em>parse()</em> instead</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDARVV2H">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAGZWP">
 <div class="param"><span class="paramName"> value</span><br></div>
 <div class="param"><span class="paramName"> alternative</span><br></div>
 </div>
@@ -4586,11 +4645,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDANCCP" onclick="togg('mdetails_19IDANCCP')">trimComplete
+<div class="mName"><a href="#method_IDA5FXP" onclick="togg('mdetails_19IDA5FXP')">trimComplete
 										(inputStr)
 									</a></div>
 <div class="mDesc">removes all non-printable chars from the end and the beginning of the string</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDANCCP">spaces, returns, line-feeds, tabs, etc. will be removed<br><br><div class="param"><span class="paramName"> inputStr</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA5FXP">spaces, returns, line-feeds, tabs, etc. will be removed<br><br><div class="param"><span class="paramName"> inputStr</span><span>
 														[<span class="type">string</span>]</span><br>string to be trimmed</div>
 <div class="return"><span class="returnName">Returns </span>
 											[<span class="type">string</span>]
@@ -4600,11 +4659,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDALWCP" onclick="togg('mdetails_19IDALWCP')">trimEnd
+<div class="mName"><a href="#method_IDAA0XP" onclick="togg('mdetails_19IDAA0XP')">trimEnd
 										(str, n)
 									</a></div>
 <div class="mDesc">Removes a given amount of characters from the end of a string</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDALWCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAA0XP">
 <div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>the source string</div>
 <div class="param"><span class="paramName"> n</span><span>
@@ -4617,11 +4676,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA5UCP" onclick="togg('mdetails_19IDA5UCP')">trimStart
+<div class="mName"><a href="#method_IDAUYXP" onclick="togg('mdetails_19IDAUYXP')">trimStart
 										(str, n)
 									</a></div>
 <div class="mDesc">Removes a given amount of characters from the begining of a string</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDA5UCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAUYXP">
 <div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>the source string</div>
 <div class="param"><span class="paramName"> n</span><span>
@@ -4634,11 +4693,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAXXCP" onclick="togg('mdetails_19IDAXXCP')">trimString
+<div class="mName"><a href="#method_IDAM1XP" onclick="togg('mdetails_19IDAM1XP')">trimString
 										(str, stringToTrim)
 									</a></div>
 <div class="mDesc">Removes characters from a given string with all occurencies of a matching string</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAXXCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAM1XP">
 <div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>the source string</div>
 <div class="param"><span class="paramName"> stringToTrim</span><span>
@@ -4651,11 +4710,11 @@ example on a basic login scenario:<div class="code"><pre><code>&lt;% sql = &quot
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQNV2H" onclick="togg('mdetails_19IDAQNV2H')">URL
+<div class="mName"><a href="#method_IDAFRWP" onclick="togg('mdetails_19IDAFRWP')">URL
 										(path, params, anchor)
 									</a></div>
 <div class="mDesc">returns a full URL with a given file and given parameters</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAQNV2H">it encodes automatically the values of the parameters.<br><br><div class="param"><span class="paramName"> path</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAFRWP">it encodes automatically the values of the parameters.<br><br><div class="param"><span class="paramName"> path</span><span>
 														[<span class="type">string</span>]</span><br>the path to the file. e.g. <em>/file.asp</em>, <em>f.asp</em>, <em>http://domain.com/f.asp</em></div>
 <div class="param"><span class="paramName"> params</span><span>
 														[<span class="type">string</span>, <span class="type">array</span>]</span><br>the parameters for the url (querystring). if its an <em>array</em>
@@ -4670,11 +4729,11 @@ then its treated as jusst one parameter value for the URL. e.g. <em>file.asp?one
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAWKCP" onclick="togg('mdetails_19IDAWKCP')">write
+<div class="mName"><a href="#method_IDAIOXP" onclick="togg('mdetails_19IDAIOXP')">write
 										(value)
 									</a></div>
 <div class="mDesc">writes a string to the output in the same line</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAWKCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAIOXP">
 <div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>output string</div>
 </div>
@@ -4682,22 +4741,22 @@ then its treated as jusst one parameter value for the URL. e.g. <em>file.asp?one
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQ4V2H" onclick="togg('mdetails_19IDAQ4V2H')">writeEnd
+<div class="mName"><a href="#method_IDAFCXP" onclick="togg('mdetails_19IDAFCXP')">writeEnd
 										(value)
 									</a></div>
 <div class="mDesc">writes a value to the output and stops the response.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAQ4V2H">The response will be stopped after writing the value. good for debuging.<br><br><div class="param"><span class="paramName"> value</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAFCXP">The response will be stopped after writing the value. good for debuging.<br><br><div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>the value you want to write</div>
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAQ3CP" onclick="togg('mdetails_19IDAQ3CP')">writef
+<div class="mName"><a href="#method_IDAFBYY" onclick="togg('mdetails_19IDAFBYY')">writef
 										(str, values)
 									</a></div>
 <div class="mDesc">Writes a formatted string. (combination of <em>write()</em> and <em>format()</em>)</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAQ3CP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAFBYY">
 <div class="param"><span class="paramName">byVal str</span><span>
 														[<span class="type">string</span>]</span><br>the source string</div>
 <div class="param"><span class="paramName">byVal values</span><span>
@@ -4707,11 +4766,11 @@ then its treated as jusst one parameter value for the URL. e.g. <em>file.asp?one
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAULCP" onclick="togg('mdetails_19IDAULCP')">writeln
+<div class="mName"><a href="#method_IDAGPXP" onclick="togg('mdetails_19IDAGPXP')">writeln
 										(value)
 									</a></div>
 <div class="mDesc">writes a line to the output</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAULCP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_19IDAGPXP">
 <div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>output string</div>
 </div>
@@ -4752,7 +4811,7 @@ end sub
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>26.09.2008 18:50:23</td>
+<td>9/26/2008 6:50:23 PM</td>
 </tr>
 </table>
 <h2><span onclick="togg('props_20')" style="cursor:pointer">Properties</span> <a href="#class_20" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -4788,11 +4847,11 @@ Enabling this option should be done only if the test files are somehow protected
 <table id="meths_20" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAOIDP" onclick="togg('mdetails_20IDAOIDP')">assert
+<div class="mName"><a href="#method_IDAAMYY" onclick="togg('mdetails_20IDAAMYY')">assert
 										(truth, msg)
 									</a></div>
 <div class="mDesc">Expects a value to be <em>true</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAOIDP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAAMYY">
 <div class="param"><span class="paramName"> truth</span><span>
 														[<span class="type">bool</span>]</span><br>the boolean expression which should be <em>true</em> in order to pass the test</div>
 <div class="param"><span class="paramName"> msg</span><span>
@@ -4802,11 +4861,11 @@ Enabling this option should be done only if the test files are somehow protected
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDACLDP" onclick="togg('mdetails_20IDACLDP')">assertEqual
+<div class="mName"><a href="#method_IDAUOYY" onclick="togg('mdetails_20IDAUOYY')">assertEqual
 										(expected, actual, msg)
 									</a></div>
 <div class="mDesc">Expects two values to be equal</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDACLDP">You can also compare more values by providing arrays as parameters. All values are compared against each other and must be equal and on the same position.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAUOYY">You can also compare more values by providing arrays as parameters. All values are compared against each other and must be equal and on the same position.
 <div class="code"><pre><code>
 &lt;%
 'this will fail
@@ -4828,11 +4887,11 @@ assertResponse array(1, 2), array(1), &quot;arrays are not equal&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA2MDP" onclick="togg('mdetails_20IDA2MDP')">assertHas
+<div class="mName"><a href="#method_IDARQYY" onclick="togg('mdetails_20IDARQYY')">assertHas
 										(data, expected, msg)
 									</a></div>
 <div class="mDesc">Expects a value to be contained within a given data structure</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDA2MDP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDARQYY">
 <div class="param"><span class="paramName"> data</span><span>
 														[<span class="type">array</span>]</span><br>Must be an <em>array</em>. if it is not an <em>array</em> then the assert will fail.</div>
 <div class="param"><span class="paramName"> expected</span><span>
@@ -4844,11 +4903,11 @@ assertResponse array(1, 2), array(1), &quot;arrays are not equal&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDASODP" onclick="togg('mdetails_20IDASODP')">assertHasNot
+<div class="mName"><a href="#method_IDAHSYY" onclick="togg('mdetails_20IDAHSYY')">assertHasNot
 										(data, expected, msg)
 									</a></div>
 <div class="mDesc">Expects a value NOT to be contained within a given data structure</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDASODP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAHSYY">
 <div class="param"><span class="paramName"> data</span><span>
 														[<span class="type">array</span>]</span><br>Must be an <em>array</em>. If data is not an <em>array</em> then the assert will succeed (because its not in it)</div>
 <div class="param"><span class="paramName"> expected</span><span>
@@ -4860,11 +4919,11 @@ assertResponse array(1, 2), array(1), &quot;arrays are not equal&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA1WDP" onclick="togg('mdetails_20IDA1WDP')">assertInDelta
+<div class="mName"><a href="#method_IDAQ0YY" onclick="togg('mdetails_20IDAQ0YY')">assertInDelta
 										(expected, actual, delta, msg)
 									</a></div>
 <div class="mDesc">Expects two values to be equal with a given delta</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDA1WDP"><div class="code"><pre><code>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAQ0YY"><div class="code"><pre><code>
 &lt;%
 'these will pass
 assertInDelta 10, 11, 1, &quot;Something is wrong&quot;
@@ -4887,11 +4946,11 @@ assertInDelta 33, 12, 10, &quot;Something is wrong&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA5EDP" onclick="togg('mdetails_20IDA5EDP')">assertInFile
+<div class="mName"><a href="#method_IDAUIYY" onclick="togg('mdetails_20IDAUIYY')">assertInFile
 										(virtualFilePath, stringToFind, msg)
 									</a></div>
 <div class="mDesc">expects a string to exist in a given file.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDA5EDP">Will fail if the file does not exist at all. <strong>Case sensitive</strong>.<br><br><div class="param"><span class="paramName"> virtualFilePath</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAUIYY">Will fail if the file does not exist at all. <strong>Case sensitive</strong>.<br><br><div class="param"><span class="paramName"> virtualFilePath</span><span>
 														[<span class="type">string</span>]</span><br>virtual path to the file e.g. /test.txt</div>
 <div class="param"><span class="paramName"> stringToFind</span><span>
 														[<span class="type">string</span>]</span><br>The string which you expect to be in the file</div>
@@ -4902,11 +4961,11 @@ assertInDelta 33, 12, 10, &quot;Something is wrong&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAFSDP" onclick="togg('mdetails_20IDAFSDP')">assertInstanceOf
+<div class="mName"><a href="#method_IDAXVYY" onclick="togg('mdetails_20IDAXVYY')">assertInstanceOf
 										(expectedClassName, value, msg)
 									</a></div>
 <div class="mDesc">Expects a value to be of a given type (class)</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAFSDP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAXVYY">
 <div class="param"><span class="paramName"> expectedClassName</span><span>
 														[<span class="type">string</span>]</span><br>expected class name e.g. <em>User</em></div>
 <div class="param"><span class="paramName"> value</span><span>
@@ -4918,11 +4977,11 @@ assertInDelta 33, 12, 10, &quot;Something is wrong&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA1TDP" onclick="togg('mdetails_20IDA1TDP')">assertMatch
+<div class="mName"><a href="#method_IDANXYY" onclick="togg('mdetails_20IDANXYY')">assertMatch
 										(pattern, value, msg)
 									</a></div>
 <div class="mDesc">Expects a value to match a given regular expression pattern</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDA1TDP">It uses <em>str.matching()</em> internally.<br><br><div class="param"><span class="paramName"> pattern</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDANXYY">It uses <em>str.matching()</em> internally.<br><br><div class="param"><span class="paramName"> pattern</span><span>
 														[<span class="type">string</span>]</span><br>The regular expression pattern which will be used for matching.</div>
 <div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">string</span>]</span><br>The value which wil be checked against the <em>pattern</em></div>
@@ -4933,11 +4992,11 @@ assertInDelta 33, 12, 10, &quot;Something is wrong&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAYJDP" onclick="togg('mdetails_20IDAYJDP')">assertNot
+<div class="mName"><a href="#method_IDAKNYY" onclick="togg('mdetails_20IDAKNYY')">assertNot
 										(expected, msg)
 									</a></div>
 <div class="mDesc">Expects a value to be <em>false</em></div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAYJDP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAKNYY">
 <div class="param"><span class="paramName"> expected</span><span>
 														[<span class="type">bool</span>]</span><br>the boolean expression which should be <em>false</em> in order to pass the test</div>
 <div class="param"><span class="paramName"> msg</span><span>
@@ -4947,11 +5006,11 @@ assertInDelta 33, 12, 10, &quot;Something is wrong&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDALQDP" onclick="togg('mdetails_20IDALQDP')">assertNotEqual
+<div class="mName"><a href="#method_IDA3TYY" onclick="togg('mdetails_20IDA3TYY')">assertNotEqual
 										(expected, actual, msg)
 									</a></div>
 <div class="mDesc">Expects two values not to be equal</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDALQDP">You can also compare more values by providing arrays as parameters. All values are compared against each other and must be equal and on the same position.<br><br><div class="param"><span class="paramName"> expected</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDA3TYY">You can also compare more values by providing arrays as parameters. All values are compared against each other and must be equal and on the same position.<br><br><div class="param"><span class="paramName"> expected</span><span>
 														[<span class="type">variant</span>, <span class="type">array</span>]</span><br>The value(s) you expect.</div>
 <div class="param"><span class="paramName"> actual</span><span>
 														[<span class="type">variant</span>, <span class="type">array</span>]</span><br>The actal value(s).</div>
@@ -4962,11 +5021,11 @@ assertInDelta 33, 12, 10, &quot;Something is wrong&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDARVDP" onclick="togg('mdetails_20IDARVDP')">assertNothing
+<div class="mName"><a href="#method_IDAGZYY" onclick="togg('mdetails_20IDAGZYY')">assertNothing
 										(value, msg)
 									</a></div>
 <div class="mDesc">expects a value to be nothing (<em>object</em>)</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDARVDP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAGZYY">
 <div class="param"><span class="paramName"> value</span><span>
 														[<span class="type">variant</span>]</span><br>Value which will be checked</div>
 <div class="param"><span class="paramName"> msg</span><span>
@@ -4976,11 +5035,11 @@ assertInDelta 33, 12, 10, &quot;Something is wrong&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAVGDP" onclick="togg('mdetails_20IDAVGDP')">assertNotInFile
+<div class="mName"><a href="#method_IDAKKYY" onclick="togg('mdetails_20IDAKKYY')">assertNotInFile
 										(virtualFilePath, stringToFind, msg)
 									</a></div>
 <div class="mDesc">Expects a string NOT to exist in a given file.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAVGDP">Will succeed if the file does not exists. <strong>Case sensitive</strong><br><br><div class="param"><span class="paramName"> virtualFilePath</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAKKYY">Will succeed if the file does not exists. <strong>Case sensitive</strong><br><br><div class="param"><span class="paramName"> virtualFilePath</span><span>
 														[<span class="type">string</span>]</span><br>virtual path to the file e.g. /test.txt</div>
 <div class="param"><span class="paramName"> stringToFind</span><span>
 														[<span class="type">string</span>]</span><br>The string which you expect NOT to be in the file</div>
@@ -4991,11 +5050,11 @@ assertInDelta 33, 12, 10, &quot;Something is wrong&quot;
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAZCDP" onclick="togg('mdetails_20IDAZCDP')">assertResponse
+<div class="mName"><a href="#method_IDALGYY" onclick="togg('mdetails_20IDALGYY')">assertResponse
 										(url, params, pattern, msg)
 									</a></div>
 <div class="mDesc">Checks if a given url contains a given response (defined with a regex pattern)</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAZCDP"><li class="list">will fail if the <em>url</em> cannot be reached</li>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDALGYY"><li class="list">will fail if the <em>url</em> cannot be reached</li>
 <li class="list">the regular expression will run <strong>not</strong> case sensitive</li>
 <li class="list">if <em>debug</em> is on then the whole response will be shown if the assert fails</li>
 <li class="list">assert will fail if the page does not return SUCCESS status code (<em>200</em>)</li>
@@ -5025,11 +5084,11 @@ assertResponse array(&quot;POST&quot;, &quot;/login.asp&quot;), empty, &quot;&lt
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAGZDP" onclick="togg('mdetails_20IDAGZDP')">fail
+<div class="mName"><a href="#method_IDAY2YY" onclick="togg('mdetails_20IDAY2YY')">fail
 										(msg)
 									</a></div>
 <div class="mDesc">Allows to manually fail an assert</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAGZDP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAY2YY">
 <div class="param"><span class="paramName"> msg</span><span>
 														[<span class="type">string</span>]</span><br>message which describes the failure</div>
 </div>
@@ -5037,11 +5096,11 @@ assertResponse array(&quot;POST&quot;, &quot;/login.asp&quot;), empty, &quot;&lt
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAE0DP" onclick="togg('mdetails_20IDAE0DP')">info
+<div class="mName"><a href="#method_IDAW3YY" onclick="togg('mdetails_20IDAW3YY')">info
 										(msg)
 									</a></div>
 <div class="mDesc">prints an information message to the output.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAE0DP">useful e.g. on testing email. after the test you could inform the user that a specific amount
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAW3YY">useful e.g. on testing email. after the test you could inform the user that a specific amount
 of emails should be now in his inbox.<br><br><div class="param"><span class="paramName"> msg</span><span>
 														[<span class="type">string</span>]</span><br>message which contains the information</div>
 </div>
@@ -5049,11 +5108,11 @@ of emails should be now in his inbox.<br><br><div class="param"><span class="par
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHCDP" onclick="togg('mdetails_20IDAHCDP')">run
+<div class="mName"><a href="#method_IDAZFYY" onclick="togg('mdetails_20IDAZFYY')">run
 										()
 									</a></div>
 <div class="mDesc">Runs all defined tests of the test fixture</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAHCDP">Executes all subs starting with <em>test_</em> followed by a number. Numbers must start with <em>1</em>.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_20IDAZFYY">Executes all subs starting with <em>test_</em> followed by a number. Numbers must start with <em>1</em>.
 The execution will stop if no test with the next number is found. Thus is you define <em>test_1()</em>, <em>test_2()</em> and <em>test_4()</em> tests then the 4th test wont run because there is no 3rd test.
 <li class="list">if there is a <em>setup()</em> sub then its called before every test</li><br><br></div>
 </td>
@@ -5087,7 +5146,7 @@ email.body = t.getAllButFirstLine()
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>14.07.2008 03:58:02</td>
+<td>7/14/2008 3:58:02 AM</td>
 </tr>
 </table>
 <h2><span onclick="togg('props_22')" style="cursor:pointer">Properties</span> <a href="#class_22" class="notForPrint" style="text-decoration:none;">^</a></h2>
@@ -5133,11 +5192,11 @@ SET:  Provide your own content.&nbsp;</td>
 <table id="meths_22" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAVAEP" onclick="togg('mdetails_22IDAVAEP')">add
+<div class="mName"><a href="#method_IDAHEZY" onclick="togg('mdetails_22IDAHEZY')">add
 										(varName, varValue)
 									</a></div>
 <div class="mDesc">Adds a variable/block which should be replaced within the template</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDAVAEP">All placeholders in the template using this name (e.g. <em>&lt;&lt;&lt; VARNAME &gt;&gt;&gt;</em>) will be replaced by the
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDAHEZY">All placeholders in the template using this name (e.g. <em>&lt;&lt;&lt; VARNAME &gt;&gt;&gt;</em>) will be replaced by the
 value of the given variable. if the value was already added then it will be updated by the new value<br><br><div class="param"><span class="paramName"> varName</span><span>
 														[<span class="type">string</span>]</span><br>The name of your variable
 when providing a Block the varname is the name of the block you want to add.</div>
@@ -5149,11 +5208,11 @@ if its a block then provide a <em>TextTemplateBlock</em> instance</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDABCEP" onclick="togg('mdetails_22IDABCEP')">addVariable
+<div class="mName"><a href="#method_IDATFZY" onclick="togg('mdetails_22IDATFZY')">addVariable
 										(varName, varValue)
 									</a></div>
 <div class="mDesc">Alias for <em>add()</em>.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDABCEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDATFZY">
 <div class="param"><span class="paramName"> varName</span><br></div>
 <div class="param"><span class="paramName"> varValue</span><br></div>
 </div>
@@ -5161,51 +5220,51 @@ if its a block then provide a <em>TextTemplateBlock</em> instance</div>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAPFEP">delete
+<div class="mName"><a href="#method_IDAEJZY">delete
 										()
 									</a></div>
 <div class="mDesc">Deletes the text template file</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDAPFEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDAEJZY">
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDALEEP">getAllButFirstLine
+<div class="mName"><a href="#method_IDA3HZY">getAllButFirstLine
 										()
 									</a></div>
 <div class="mDesc">Returns the parsed file without the first line</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDALEEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDA3HZY">
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAZDEP" onclick="togg('mdetails_22IDAZDEP')">getFirstLine
+<div class="mName"><a href="#method_IDALHZY" onclick="togg('mdetails_22IDALHZY')">getFirstLine
 										()
 									</a></div>
 <div class="mDesc">Returns the first line of the template file</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDAZDEP">Returns the content of the first line of the template file.
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDALHZY">Returns the content of the first line of the template file.
 The place holders will be parsed as well<br><br></div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAHDEP">returnString
+<div class="mName"><a href="#method_IDAZGZY">returnString
 										()
 									</a></div>
 <div class="mDesc">Returns a string where the template and the placeholders are merged</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDAHDEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDAZGZY">
 </div>
 </td>
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA3EEP">save
+<div class="mName"><a href="#method_IDASIZY">save
 										()
 									</a></div>
 <div class="mDesc">Saves the text template to the template directory</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDA3EEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_22IDASIZY">
 </div>
 </td>
 </tr>
@@ -5232,7 +5291,7 @@ Name: &lt;&lt;&lt; NAME &gt;&gt;&gt;
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>14.07.2008 04:02:38</td>
+<td>7/14/2008 4:02:38 AM</td>
 </tr>
 <tr>
 <td class="label">Friend of:</td>
@@ -5256,11 +5315,11 @@ Name: &lt;&lt;&lt; NAME &gt;&gt;&gt;
 <table id="meths_21" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAO2DP" onclick="togg('mdetails_21IDAO2DP')">addItem
+<div class="mName"><a href="#method_IDADAZY" onclick="togg('mdetails_21IDADAZY')">addItem
 										(vars)
 									</a></div>
 <div class="mDesc">Adds an item to the block.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_21IDAO2DP">The number of items will result in the same number of copied blocks.<br><br><div class="param"><span class="paramName"> vars</span><span>
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_21IDADAZY">The number of items will result in the same number of copied blocks.<br><br><div class="param"><span class="paramName"> vars</span><span>
 														[<span class="type">array</span>]</span><br>A paired <em>array</em>. so 1st value is the name of the 1st var and 2nd value is
 is the value of the 1st var, etc. therfore number of values must be even!
 Example:<div class="code"><pre><code>&lt;% vars = array(var1, value1, var2, value2, ...) %&gt;</code></pre></div></div>
@@ -5300,7 +5359,7 @@ end if
 </tr>
 <tr>
 <td class="label" nowrap>Last modified:</td>
-<td>14.07.2008 04:05:53</td>
+<td>7/14/2008 4:05:53 AM</td>
 </tr>
 <tr>
 <td class="label">Postfix:</td>
@@ -5334,11 +5393,11 @@ end if
 <table id="meths_23" class="table methods alwaysPrint" style="display:none" cellpadding="3" cellspacing="0" border="0">
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAIKEP" onclick="togg('mdetails_23IDAIKEP')">add
+<div class="mName"><a href="#method_IDAFOZY" onclick="togg('mdetails_23IDAFOZY')">add
 										(fieldName, errorDescription)
 									</a></div>
 <div class="mDesc">Adds a new invalid field. only if it does not exists yet.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDAIKEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDAFOZY">
 <div class="param"><span class="paramName">byVal fieldName</span><span>
 														[<span class="type">string</span>]</span><br>the name of your field. leave <em>empty</em> if you want the field be auto-generated.</div>
 <div class="param"><span class="paramName"> errorDescription</span><span>
@@ -5351,11 +5410,11 @@ end if
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAIIEP" onclick="togg('mdetails_23IDAIIEP')">getDescription
+<div class="mName"><a href="#method_IDAFMZY" onclick="togg('mdetails_23IDAFMZY')">getDescription
 										(fieldName)
 									</a></div>
 <div class="mDesc">Returns the description of the error for the requested-field.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDAIIEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDAFMZY">
 <div class="param"><span class="paramName"> fieldName</span><span>
 														[<span class="type">string</span>]</span><br>the name of your field to get the error-description for.</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -5366,11 +5425,11 @@ end if
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAULEP" onclick="togg('mdetails_23IDAULEP')">getErrorSummary
+<div class="mName"><a href="#method_IDARPZY" onclick="togg('mdetails_23IDARPZY')">getErrorSummary
 										(overallPrefix, overallPostfix, itemPrefix, itemPostfix)
 									</a></div>
 <div class="mDesc">Returns a custom formatted error summary.</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDAULEP">usefull if you want to show the errors for example in a HTML list. Summary will be just
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDARPZY">usefull if you want to show the errors for example in a HTML list. Summary will be just
 returned if there is at least one error (so at least one field must be invalid).<br><br><div class="param"><span class="paramName"> overallPrefix</span><span>
 														[<span class="type">string</span>]</span><br>prefix for the whole summary e.g. <em>&lt;ul&gt;</em></div>
 <div class="param"><span class="paramName"> overallPostfix</span><span>
@@ -5387,11 +5446,11 @@ returned if there is at least one error (so at least one field must be invalid).
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDA4HEP" onclick="togg('mdetails_23IDA4HEP')">getInvalidData
+<div class="mName"><a href="#method_IDATLZY" onclick="togg('mdetails_23IDATLZY')">getInvalidData
 										()
 									</a></div>
 <div class="mDesc">Returns a <em>dictionary</em> with all invalid-fields</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDA4HEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDATLZY">
 <div class="return"><span class="returnName">Returns </span>
 											[<a class="type" href="http://www.w3schools.com/asp/asp_ref_dictionary.asp" target="_blank">dictionary</a>]
 											<br>All descriptions and fieldnames of invalid fields</div>
@@ -5400,11 +5459,11 @@ returned if there is at least one error (so at least one field must be invalid).
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAGJEP" onclick="togg('mdetails_23IDAGJEP')">isInvalid
+<div class="mName"><a href="#method_IDADNZY" onclick="togg('mdetails_23IDADNZY')">isInvalid
 										(fieldName)
 									</a></div>
 <div class="mDesc">Checks if a given fiel (or more fields) is invalid</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDAGJEP">
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDADNZY">
 <div class="param"><span class="paramName">byVal fieldName</span><span>
 														[<span class="type">string</span>, <span class="type">array</span>]</span><br>the name of your field to check (case insensitive). can also be an <em>array</em> with names</div>
 <div class="return"><span class="returnName">Returns </span>
@@ -5415,11 +5474,11 @@ returned if there is at least one error (so at least one field must be invalid).
 </tr>
 <tr>
 <td>
-<div class="mName"><a href="#method_IDAWNEP" onclick="togg('mdetails_23IDAWNEP')">reflect
+<div class="mName"><a href="#method_IDALRZY" onclick="togg('mdetails_23IDALRZY')">reflect
 										()
 									</a></div>
 <div class="mDesc">Reflection method which can be used by JSON (e.g. returning the validator as a whole on a callback)</div>
-<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDAWNEP">as the class has no real properties the status is exposed with:
+<div style="display:none" class="mdetails alwaysPrint" id="mdetails_23IDALRZY">as the class has no real properties the status is exposed with:
 <li class="list"><em>data</em>: holds a dictionary with the invalid fields</li>
 <li class="list"><em>valid</em>: indicates if its valid or not</li>
 <li class="list"><em>summary</em>: holds a summary of the invalid data (<em>reflectItemPrefix</em> and <em>reflectItemPostfix</em> can be used to format the items)</li>

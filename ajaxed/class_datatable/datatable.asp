@@ -55,6 +55,7 @@ class Datatable
 
 	'private members
 	private output, p_ID, columns, p_callback, sessionStorageName, dataLoaded, p_col, p_selection, p_row, totalRecords
+	private recordLinkPlaceholders
 	
 	'public members
 	public sql				''[string] SQL query which gets all the data. Paging, etc. is done by the control itself so
@@ -100,6 +101,34 @@ class Datatable
 							''If more words are entered (seperated with space) then all must be found within the record. Matches are highlighted
 							''with the data. Fullsearch is enabled by default.
 	public nullSign			''[string] a sign which will be shown if a data value is NULL. default = EMPTY. (The data cell gets a <em>axdDTNull</em> css class if it contains a null)
+	public recordLink		''[string] if given then each cells content will be surrounded by an a href tag whose href attribute will contain this link. Perfect if you want to make whole rows clickable quickly.
+							''<em>{field_name}</em> represents a placeholder for a data column value within your link where <em>field_name</em> must be replaced with the actual field name which has been selected.
+							''Example of a link: <em>user.asp?i={id}</em> (which means that the ID columns value will be passed into the user.asp file as a parameter called i).
+							''The link can be deactivated for specified columns by setting the <em>enableLink</em> property to FALSE.
+							''Note: Only letters, numbers and underscores are allowed for the placeholders.
+	
+	public property get recordLinkF ''[string] gets the link (if any specified with <em>recordLink</em>) for the current record (placeholders replaced). only available during runtime.
+		if not dataLoaded then lib.throwError("Datatable.recordLinkF is only accessible after draw() has been called.")
+		'if the placeholders havent been loaded yet then do it
+		'we cache them into a dictionary
+		if isEmpty(recordLinkPlaceholders) then
+			set recordLinkPlaceholders = ["D"](empty)
+			with new Regexp
+				.pattern = "{([a-z0-9_]+)}"
+				.global = true
+				.ignoreCase = true
+				for each match in .execute(recordLink)
+					ph = match.submatches(0)
+					if not recordLinkPlaceholders.exists(ph) then recordLinkPlaceholders.add ph, empty
+				next
+			end with
+		end if
+		'now replace the placeholders with the data values
+		recordLinkF = recordLink
+		for each ph in recordLinkPlaceholders.keys
+			recordLinkF = replace(recordLinkF, "{" & ph & "}", data(ph))
+		next
+	end property
 	
 	public property let selection(val) ''[string] sets if it should be possible to select records (checkbox/radio button is automatically placed in front of each record). use <em>"single"</em> to allow selection of one record (radiobutton) or <em>"multiple"</em> for the selection of more records (checkboxes). default = EMPTY. Name of the checkbox/radio is the ID of the datatable (needed if you do POST it with a form) and value is the value of the pkColumn.
 		if val <> "" and not str.matching(val, "^single|multiple$", true) then lib.throwError("Datatable.selection only allows 'single', 'multiple' or 'empty'")
@@ -149,8 +178,8 @@ class Datatable
 	end property
 	
 	private property get currentPage ''[int] gets the page number which is currently active. 
-		currentPage = str.parse(RF("page"), 1)
-		if currentPage < 1 then currentPage = 1
+		currentPage = str.parse(RF("page"), -1)
+		if currentPage < 0 then currentPage = 1
 	end property
 	
 	'**********************************************************************************************************
@@ -172,10 +201,9 @@ class Datatable
 		set p_row.dt = me
 		fullsearch = true
 		totalRecords = 0
-		''set lang = lib.newDict(empty)
-		''server.execute(path("de.asp"))
-		'll(lang)
-		'lib.logger.debug lang.count
+		'set dictionary = lib.newDict(empty)
+		'server.execute(path("de.asp"))
+		'lib.logger.debug dictionary.count
 	end sub
 	
 	'**********************************************************************************************************
@@ -275,16 +303,20 @@ class Datatable
 			typ = data.fields(c.name).type
 			if lib.contains(db.stringFieldTypes, typ) then
 				if not isEmpty(fTemplate) then fTemplate = fTemplate & " OR "
-				fTemplate = fTemplate & c.name & " LIKE '*{0}*' "
+				fTemplate = fTemplate & c.name & " LIKE '%{0}%' "
 			end if
 		next
 		for i = 0 to ubound(keywords)
-			'TODO: bug with more keywords. seems not to know AND
-			'TODO: use wildcards *
+			'TODO: bug with more keywords.
+			'	should be (c1 LIKE x OR c2 LIKE x) AND (c1 LIKE x OR c2 LIKE x)
+			'	- this would select only records which contain both keywords
+			'	- but this combination does not work within ADO!
 			'TODO: negation of the keyword with !
+			kw = keywords(i)
 			if i > 0 then fltr = fltr & " AND "
-			fltr = fltr & "(" & str.format(fTemplate, db.sqlSafe(keywords(i))) & ")"
+			fltr = fltr & "(" & str.format(fTemplate, db.sqlSafe(kw)) & ")"
 		next
+		lib.logger.debug fltr
 		data.filter = fltr
 		
 		dataLoaded = true
@@ -346,24 +378,26 @@ class Datatable
 		'NOTE: the beginning of the table is being sent directly to the response
 		'so its possible to use customControls without returning the HTML as a string.
 		'afterwards stringbuilder is used. check drawHeader() for more details
-		str.write("<thead>")
-		str.write("<tr class=""axdDTControlsRow"">")
-		str.write("<td colspan=" & tableColumnsCount & ">")
-		str.write("<div class=""axdDTCustomControls"">")
-		if not isEmpty(customControls) then lib.exec customControls, me
-		str.write("</div>")
-		str.write("<div class=""axdDTControls"">")
-		if fullsearch then
-			str.write("<input type=""text"" ")
-			str.write(attribute("value", str(str.arrayToString(fullsearchValue, " "))))
-			'TODO: works fine with enter, but if there is form outside then it gets submitted on enter
-			str.write(attribute("onchange", ID & ".search(this.value);"))
-			str.write(">")
-		end if
-		str.write("</div>")
-		str.write("</td>")
-		str.write("</tr>")
-		
+		with str
+			.write("<thead>")
+			.write("<tr class=""axdDTControlsRow"">")
+			.write("<td colspan=" & tableColumnsCount & ">")
+			.write("<div class=""axdDTCustomControls"">")
+			if not isEmpty(customControls) then lib.exec customControls, me
+			.write("</div>")
+			.write("<div class=""axdDTControls"">")
+			if fullsearch then
+				.write("<input type=""text"" ")
+				.write(attribute("value", str(.arrayToString(fullsearchValue, " "))))
+				'TODO: works fine with enter, but if there is form outside then it gets submitted on enter
+				'.write(attribute("onkeypress", "if(event.keyCode == 13) " & ID & ".search(this.value);"))
+				.write(attribute("onchange", ID & ".search(this.value)"))
+				.write(">")
+			end if
+			.write("</div>")
+			.write("</td>")
+			.write("</tr>")
+		end with
 		output("<tr>")
 		row.drawSelectionColumn true, output
 		for each c in columns
@@ -384,7 +418,7 @@ class Datatable
 		set dc = (new DataContainer)(data)
 		
 		'determine the bounds of displayed records
-		firstRecord = (currentPage - 1) * recsPerPage
+		firstRecord = (lib.iif(currentPage = 0, 1, currentPage) - 1) * recsPerPage
 		lastRecord = firstRecord + recsPerPage
 		firstRecord =  firstRecord + 1
 		if lastRecord = 0 then
@@ -406,21 +440,28 @@ class Datatable
 			output("<div class=""pagingBar"">")
 			pages = dc.paginate(recsPerPage, currentPage, 10)
 			if ubound(pages) > 0 then
-				if currentPage > 1 then output("<a href=""javascript:" & ID & ".goTo(" & currentPage - 1 & ")"">&lt; prev " & recsPerPage & "</a>")
+				if currentPage > 1 then output("<span class=""pPrev""><a href=""javascript:" & ID & ".goTo(" & currentPage - 1 & ")"">&lt; prev " & recsPerPage & "</a></span>")
 				for each p in pages
 					if p = "..." then
-						output("...")
+						output("<span class=""pMore"">...</span>")
 					elseif p = currentPage then
-						output(p)
+						output("<span class=""pCurrent"">" & p & "</span>")
 					else
-						output("<a href=""javascript:" & ID & ".goTo(" & p & ")"">" & p & "</a>")
+						output("<span class=""pPage""><a href=""javascript:" & ID & ".goTo(" & p & ")"">" & p & "</a></span>")
 					end if
 					lastPage = p
 				next
 				if lastPage = "..." then lastPage = 0
-				if currentPage < lastPage or lastPage = 0 then
-					output("<a href=""javascript:" & ID & ".goTo(" & currentPage + 1 & ")"">next " & recsPerPage & " &gt;</a>")
+				if currentPage > 0 and (currentPage < lastPage or lastPage = 0) then
+					output("<span class=""pNext""><a href=""javascript:" & ID & ".goTo(" & currentPage + 1 & ")"">next " & recsPerPage & " &gt;</a></span>")
 				end if
+				output("<span class=""pAll" & lib.iif(currentPage = 0, " pCurrent", "") & """>")
+				if currentPage = 0 then
+					output("all")
+				else
+					output("<a href=""javascript:" & ID & ".goTo(0)"">all</a>")
+				end if
+				output("</span>")
 			end if
 			output("</div>")
 		end if
@@ -435,15 +476,15 @@ class Datatable
 		if not callback then output("<tbody id=""" & ID & "_body"">")
 		num = 1
 		'if paging is enabled then prepare the recordset for paging
-		if not data.eof and recsPerPage > 0 then
+		if not data.eof and recsPerPage > 0 and currentPage > 0 then
 			data.cacheSize = recsPerPage
 			data.pageSize = recsPerPage
 			data.absolutePage = currentPage
 		end if
-		while not data.eof and (num < recsPerPage or recsPerPage = 0)
+		while not data.eof and (num <= recsPerPage or recsPerPage = 0 or currentPage = 0)
 			set p_row = new DatatableRow
 			set p_row.dt = me
-			p_row.draw num, p_col, columns, output
+			p_row.draw num + (lib.iif(currentPage = 0, 1, currentPage) - 1) * recsPerPage, p_col, columns, output
 			data.movenext()
 			num = num + 1
 		wend

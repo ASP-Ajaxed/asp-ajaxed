@@ -1,4 +1,26 @@
-﻿
+﻿v 2.0.1
+Datatable
+	BUGFIX: when paging was on, then one record to less has been displayed.
+	BUGFIX: DatatableRow.number was not set correctly on paging. It was rested back to 1 on each page. Instead should be numbered continously over all pages
+	BUGFIX: Fulltextsearch used to highlight Markup (if any) within cells if the cells value matched the query and the query was found within the markup as well
+		- this required a new property "valueF" of DatatableColumn which contains the formatted value.
+		- backwards compatibility: if a cell has a onCreated Event then no fullsearchtext highlighting is done as the original value is passed through. clients need to change it to use valueF
+			before:
+			function onCell(dt)
+				onCell = dt.col.value
+			end function
+			
+			now (so fullsearch highlighting will work fine):
+			function onCell(dt)
+				onCell = dt.col.valueF
+			end function
+	- added css classes to the paging bar. Next page link, currentpage, etc. all have classes now. makes them available for skinning as well
+	- added an "all" option in the paging bar which allows to show all data.
+	- added "attributes" to the DatatableRow class. E.g. you can hook up an onclick attribute to make whole rows clickable
+	- added a "recordLink" property which allows a quick creation of link per record. 
+		- Placeholds for data values can be used. That allows linking to specific records
+		- DatatableColumn.enableLink property can be used to disable the link on specific columns
+- added ajaxedPage.QSHas() and ajaxedPage.QST() as opposed to RFHas() and RFT(). They were missing so far.
 
 v 2.0
 BUGFIX: ajaxed loading indicator stays fixed now even if there are scrollbars and you scroll.

@@ -30,6 +30,7 @@ class DatatableRow
 	public dt			''[Datatable] the datatable which contains the row
 	public cssClass		''[string] css class which will be placed within the <em>&lt;tr&gt;</em> tag
 	public disabled		''[bool] indicates if the row is disabled or not. disabled does not allow to select the row and it wont be clickable
+	public attributes	''[string] attributes of the &lt;tr&gt;-tag. You can make e.g. whole rows clickable: onclick="window.location.href='someurl.asp'"
 	
 	public property get selected ''[bool] indicates if the row is selected or not. keeps state after postback as well. So when user changes the selection it will remember the selection after postback.
 		selected = p_selected
@@ -63,12 +64,12 @@ class DatatableRow
 	'**********************************************************************************************************
 	'* draw 
 	'**********************************************************************************************************
-	sub draw(num, byRef currentCol, byRef cols, byRef output)
-		raiseOnRowCreated()
+	sub draw(byVal num, byRef currentCol, byRef cols, byRef output)
 		p_number = num
+		raiseOnRowCreated()
 		css = lib.iif(number mod 2 = 0, "axdDTRowEven", "axdDTRowOdd") & " " & _
 			lib.iif(selected, "axdDTRowSelected " & cssClass, cssClass)
-		output("<tr id=""" & ID & """ " & dt.attribute("class", css) & ">")
+		output("<tr id=""" & ID & """ " & dt.attribute("class", css) & " " & attributes & ">")
 		drawSelectionColumn false, output
 		for each currentCol in cols
 			currentCol.drawData dt.data.fields(currentCol.name), output

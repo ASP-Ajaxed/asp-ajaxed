@@ -22,7 +22,7 @@
 class DatatableColumn
 
 	'private members
-	private cellCreatedFunc, p_value, p_nullValue
+	private cellCreatedFunc, p_value, p_nullValue, p_valueF
 	
 	'public members
 	public name				''[string], [int] name/index of the column. must exist in datatables SQL query.
@@ -38,7 +38,7 @@ class DatatableColumn
 							''<%
 							''function onFirstname(dt)
 							''.	color = lib.iif(dt.data("deleted") = 1, "#f00", "#000")
-							''.	onFirstname = "<span style=""color:" & color & """>" & dt.col & "</span>"
+							''.	onFirstname = "<span style=""color:" & color & """>" & dt.col.valueF & "</span>"
 							''end function
 							''% >
 							''</code>
@@ -55,9 +55,14 @@ class DatatableColumn
 							''}
 							''</code>
 	public encodeHTML		''[bool] should the data value encode HTML markup? default = TRUE. Set this to false if you want that HTML is recognized within the data cells
+	public link				''[bool] should the record link be enabled (if any). default = TRUE
 	
-	public default property get value ''[string] gets the data value of the column when a cell is created. Its always a string. If its a null its converted into an empty string. Use <em>nullValue</em> property to check if it was NULL
+	public default property get value ''[string] gets the RAW data value of the column when a cell is created. Its always a string. If its a NULL then its been converted into an empty string. Use <em>nullValue</em> property to check if it was NULL. Use this always if you do conditional checks on the data value.
 		value = p_value
+	end property
+	
+	public property get valueF ''[string] gets the FORMATTED data value of the column when a cell is created. This should be used when you render the value on the page (it can contain markup which marks the searches, etc).
+		valueF = p_valueF
 	end property
 	
 	public property get nullValue ''[bool] indicates if the value is actually a NULL value in the database. 
@@ -80,6 +85,7 @@ class DatatableColumn
 		set dt = nothing
 		encodeHTML = true
 		p_nullValue = false
+		link = true
 	end sub
 	
 	'**********************************************************************************************************
@@ -103,31 +109,37 @@ class DatatableColumn
 	sub drawData(val, output)
 		p_nullValue = isNull(val)
 		if p_nullValue then p_value = "" else p_value = cstr(val) end if
-		if encodeHTML and not nullValue then p_value = str(p_value)
+		p_valueF = p_value
+		if encodeHTML and not nullValue then p_valueF = str(p_value)
+		p_valueF = highlight(p_value, dt.fullsearchValue)
 		if not isEmpty(onCellCreated) then
 			if isEmpty(cellCreatedFunc) then
 				set cellCreatedFunc = lib.getFunction(onCellCreated)
 				if cellCreatedFunc is nothing then lib.throwError("DatatableColumn.onCellCreated function '" & onCellCreated & "' does not exist for column '" & name & "'")
 			end if
-			p_value = cellCreatedFunc(dt)
+			p_valueF = cellCreatedFunc(dt)
 		end if
 		output("<td class=""" & css & """>")
+		if link and dt.recordLink <> "" then output("<a href=""" & dt.recordLinkF & """>")
 		if nullValue and dt.nullSign <> "" then
 			output(dt.nullSign)
 		else
-			output(highlight(value, dt.fullsearchValue))
+			output(p_valueF)
 		end if
+		if link and dt.recordLink <> "" then output("</a>")
 		output("</td>")
 	end sub
 	
 	'**********************************************************************************************************
 	'* highlight 
 	'**********************************************************************************************************
-	private function highlight(val, keywords)
-		if ubound(keywords) = -1 then highlight = val
+	private function highlight(byVal val, keywords)
+		highlight = val
+		if ubound(keywords) = -1 then exit function
+		if isNull(val) then exit function
+		val = cStr(val)
 		for each k in keywords
-			highlight = highlight & _
-				str.rReplace(val, "(" & k & ")", _
+			highlight = str.rReplace(highlight, "(" & k & ")", _
 					"<span class=""axdDTHighlight"">$1</span>", true)
 		next
 	end function
