@@ -203,7 +203,7 @@ class Email
 		mailServerPassword = lib.init(AJAXED_MAILSERVER_PWD, empty)
 		html = lib.init(AJAXED_HTML_EMAILS, false)
 		
-		onlyValidEmails = true
+		onlyValidEmails = lib.init(AJAXED_EMAIL_ONLYVALID_EMAILS, true)
 		set p_recipients = lib.newDict(empty)
 		p_errorMsg = empty
 	end sub 
