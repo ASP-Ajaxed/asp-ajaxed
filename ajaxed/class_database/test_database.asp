@@ -140,7 +140,7 @@ sub performDBOperations()
 	mirID = db.insertOrUpdate("person", array("firstname", "mirjam", "lastname", "checker", "age", 70), mirID)
 	tf.assertEqual 70, db.getScalar("SELECT age FROM person WHERE firstname = 'mirjam' AND age = 70", 0), _
 		assertMsg("insertOrUpdate() no.1 should really update the values if it says that it did the update.")
-	tf.assertEqual "checker", db.getScalar("SELECT lastname FROM person WHERE firstname = 'mirjam'", ""), _
+	tf.assertEqual "checker", db.getScalar("SELECT lastname FROM person WHERE firstname = 'mirjam' AND age = 70", ""), _
 		assertMsg("insertOrUpdate() no.2 should really update the values if it says that it did the update.")
 	
 	on error resume next
