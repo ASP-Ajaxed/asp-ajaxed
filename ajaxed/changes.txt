@@ -1,4 +1,9 @@
-﻿v 2.0.1
+﻿v 2.0.2
+- ajaxed supports now PostgreSQL (Issue #12). Big thanks to iurisilvio who added this!
+BUGFIX: minor bug in database tests fixed (Issue #10)
+- configuration variable for Email.onlyValidEmails added: AJAXED_EMAIL_ONLYVALID_EMAILS (r57). 
+
+v 2.0.1
 Datatable
 	BUGFIX: when paging was on, then one record to less has been displayed.
 	BUGFIX: DatatableRow.number was not set correctly on paging. It was rested back to 1 on each page. Instead should be numbered continously over all pages

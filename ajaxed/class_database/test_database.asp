@@ -27,6 +27,10 @@ sub test_4()
 	testDbms TEST_DB_MSSQL, "MS Sql Server"
 end sub
 
+sub test_5()
+	testDbms TEST_DB_POSTGRESQL, "PostgreSQL"
+end sub
+
 sub testDbms(connectionString, dbmsName)
 	currentDbmsName = dbmsName
 	if isEmpty(connectionString) then

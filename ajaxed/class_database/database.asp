@@ -42,16 +42,18 @@ class Database
 		if connection is nothing then lib.throwError("Database.dbType needs an opened connection.")
 		if isEmpty(p_dbType) then
 			p_dbType = "unknown"
-			typ = connection.properties("Extended Properties")
-			if typ = "" then typ = connection.properties("Provider Friendly Name")
-			if str.matching(typ, "ms access|microsoft access|Provider for Jet", true) then
+			typ = lCase(connection.properties("Extended Properties"))
+			if typ = "" then typ = lCase(connection.properties("Provider Friendly Name"))
+			if str.matching(typ, "ms access|microsoft access|provider for jet", true) then
 				p_dbType = "access"
 			elseif str.matching(typ, "sqlite", true) then
 				p_dbType = "sqlite"
 			elseif str.matching(typ, "mysql", true) then
 				p_dbType = "mysql"
-			elseif str.matching(typ, "SQL Server", true) then
+			elseif str.matching(typ, "sql server", true) then
 				p_dbType = "sqlserver"
+			elseif str.matching(typ, "postgresql", true) then
+        		p_dbType = "postgresql"
 			end if
 		end if
 		dbType = p_dbType
@@ -161,6 +163,8 @@ class Database
 			insert = getScalar("SELECT last_insert_rowid();", 0)
 		elseif dbType = "mysql" then
 			insert = getScalar("SELECT last_insert_id();", 0)
+		elseif dbType = "postgresql" then
+        	insert = getScalar(str.format("SELECT currval('{0}_id_seq');", tablename), 0)
 		else
 			insert = aRS("id")
 		end if
