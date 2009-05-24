@@ -11,7 +11,7 @@
 ''					- the database type is automatically detected but it can also be set manually in the config (<em>AJAXED_DBTYPE</em>).
 ''					- if the database type could not be detected then the type is <em>unknown</em> and all operations are exectuted as it would be Microsoft SQL Server
 '' @STATICNAME:		db
-'' @COMPATIBLE:		Microsoft Sql Server, Microsoft Access, Sqlite, MySQL
+'' @COMPATIBLE:		Microsoft Sql Server, Microsoft Access, Sqlite, MySQL, PostgreSQL
 '' @REQUIRES:		-
 '' @VERSION:		1.0
 
