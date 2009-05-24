@@ -96,6 +96,67 @@ class DataContainer
 	end sub
 	
 	'**********************************************************************************************************
+	'' @SDESCRIPTION: 	Adds a new item to the Datacontainer and returns the <em>DataContainer</em> instance for method chaining
+	'' @DESCRIPTION:	This method allows you to quickly add an item to your DataContainer. In some cases its functionality may not
+	''					suite your needs. In that case it is recommended to use the <em>data</em> property explicitly for adding.
+	'' @PARAM:			item [array], [variant]: The item you want to add to the datasource (<em>data</em>)
+	''					- datasource is an ARRAY: The array is expanded and the item is added as the last value
+	''					- datasource is a DICTIONARY: <em>item</em> must be an ARRAY of two fields where the first represents the dictionary key and the second its value. <em>Important: </em> The item is not added if the key already exists in the datasource. It UPDATES the item with the new value!
+	''					- datasource is a RECORDSET: <em>item</em> must be an ARRAY where each field holds the value of a recordset column. The order must be the same as in the recordset (no column names can be specified).
+	''					Example of <em>item</em> for the three types of datasources
+	''					<code>
+	''					<%
+	''					'creating an empty array DataContainer and adding a value
+	''					set dc = (new DataContainer)(array())
+	''					dc.add("some value")
+	''					
+	''					'same with a dictionary
+	''					set dc = (new DataContainer)(["D"](empty))
+	''					dc.add(array(1, "first"))
+	''					
+	''					'now with a recordset
+	''					set dc = (new DataContainer)(["R"](array( _
+	''					.	array("firstname", "lastname")
+	''					)))
+	''					dc.add(array("John", "Doe"))
+	''					
+	''					'chaining to add more items in one go
+	''					dc.add(array("Tomy", "Foo")).add(array("Max", "Muster"))
+	''					% >
+	''					</code>
+	'' @RETURN:			[DataContainer] returns the DataContainer instance itself. 
+	''					This allows adding more records in one go by simply appending another <em>add()</em> call to the method (Method chaining)
+	'**********************************************************************************************************
+	public function add(item)
+		init()
+		if datasource = "array" then
+			redim preserve data(ubound(data) + 1)
+			data(ubound(data)) = item
+		elseif datasource = "dictionary" then
+			if not isArray(item) then lib.throwError("DataContainer.add() requires an array as item if the datasource is of type dictionary.")
+			if ubound(item) <> 1 then lib.throwError("DataContainer.add() item array must contain only two fields (first for key, second for value)")
+			if data.exists(item(0)) then
+				data(item(0)) = item(1)
+			else
+				data.add item(0), item(1)
+			end if
+		elseif datasource = "recordset" then
+			if not isArray(item) then lib.throwError("DataContainer.add() requires an array as item if the datasource is of type recordset.")
+			data.addNew()
+			for i = 0 to uBound(item)
+				if (i > data.fields.count - 1) then
+					lib.throwError("DataContainer.add() item array has more fields than the datasource.")
+				end if
+				data.fields(i) = item(i)
+			next
+			data.movefirst()
+		else
+			lib.throwError("DataContainer.add() not supported for this type of datasource.")
+		end if
+		set add = me
+	end function
+	
+	'**********************************************************************************************************
 	'' @SDESCRIPTION: 	STATIC! Creates a new <em>DataContainer</em> instance for a given datasource
 	'' @PARAM:			datasrc [array], [recordset], [dictionary]: datasource used for the container
 	''					<strong>Note:</strong> Only keyset, dynamic or static RECORDSET cursor types are supported. Use <em>db.getUnlockedRS()</em> for it.

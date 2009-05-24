@@ -10,23 +10,35 @@
 ''					be common name value pairs or even whole blocks which hold name value pairs and can be
 ''					duplicated several times. It's possible to create, modify and delete the templates.
 ''					Example for the usage as an email template (first line of the template is used as subject):
+''					This is how a template would look like:
+''					<code>
+''					Welcome!
+''					Dear <<< name >>>,
+''					Thanks joining us!
+''					We belive your age must be <<< age | not specified >>>.
+''					</code>
+''					The following code is required to us the template above:
 ''					<code>
 ''					<%
 ''					set t = new TextTemplate
-''					t.filename = "/sometemplatefile.txt"
+''					t.filename = "/templateFileName.txt"
 ''					t.add "name", "John Doe"
 ''					email.subject = t.getFirstLine()
 ''					email.body = t.getAllButFirstLine()
 ''					% >
 ''					</code>
+''					<strong>Note:</strong> The age placeholder has not been used in the code.
+''					For that reason the <em>TextTemplate</em> will return its default value which can be
+''					specified after the <em>|</em> (pipe) sign. It can be read as 'display age or "not specified" if no age available'
 '' @REQUIRES:		-
-'' @VERSION:		1.2
+'' @VERSION:		1.3
 
 '**************************************************************************************************************
 
 class TextTemplate
 
 	private vars, blocks, p_content, regex, blockBegin, blockEnd, validVarnamesPattern
+	private defaultValueSeparator
 	
 	public fileName				''[string] The virtual path including the filename of your template. e.g. <em>/userfiles/t.html</em>
 	public placeHolderBegin		''[string] If you want to use your own placeholder characters. this is the beginning. e.g. <em>&lt;&lt;&lt;</em>
@@ -53,6 +65,7 @@ class TextTemplate
 		p_content = ""
 		placeHolderBegin = "<<< "
 		placeHolderEnd = " >>>"
+		defaultValueSeparator = " \| "
 		blockBegin = "BLOCK"
 		blockEnd = "ENDBLOCK"
 		validVarnamesPattern = "[(a-zA-Z0-9)|_]+"
@@ -221,12 +234,13 @@ class TextTemplate
 	'* replaces a placeholder in a given string by a value. so from <<< NAME >>> will be made e.g. "Michal"
 	'******************************************************************************************************************
 	private function replacePlaceHolders(input, varName, varValue)
-		regex.pattern = placeHolderBegin & varName & placeHolderEnd
-		replacePlaceHolders = regex.replace(input & "", varValue & "")
+	    regex.pattern = placeHolderBegin & varName & "(" & defaultValueSeparator & "(.+))?" & placeHolderEnd
+	    'replace the placeholder with the value (if available) otherwise replace it with the default value ($2)
+	    replacePlaceHolders = regex.replace(input & "", str.parse(varValue, "$2") & "")
 	end function
 	
 	'******************************************************************************************************************
-	'* gets the pattern which matsches block(s). blockName can be any specifc block or even a pattern..
+	'* gets the pattern which matches block(s). blockName can be any specifc block or even a pattern..
 	'* Example <<< BLOCK X >>> .. <<< ENDBLOCK X >>>
 	'******************************************************************************************************************
 	private function getBlockPattern(blockName)
