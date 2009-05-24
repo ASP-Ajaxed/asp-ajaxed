@@ -1,4 +1,12 @@
-﻿v 2.0.2
+﻿v 2.1
+- DataContainer.add() method added. This is a useful short method which allows us adding items to a datacontainer.
+	cool e.g. when you need an extendable array: 
+	set dc = (new DataContainer)(array())
+	dc.add("a value").add("another value")
+- added lib.newRecordset() function which allows quick creation of disconnected recordsets. Alias: ["R"]()
+- TextTemplate (Thanks to  iurisilvio)
+	- supports default values for placeholders. (Issue #11). just specify <<< NAME | no name >>> and "no name" will be used if no NAME variable exists
+	- TextTemplateBlock has an addRS() method which allows you to add whole recordsets to the template block
 - ajaxed supports now PostgreSQL (Issue #12). Big thanks to iurisilvio who added this!
 BUGFIX: minor bug in database tests fixed (Issue #10)
 - configuration variable for Email.onlyValidEmails added: AJAXED_EMAIL_ONLYVALID_EMAILS (r57). 

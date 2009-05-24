@@ -26,7 +26,7 @@ class TextTemplateBlock
 	'* constructor 
 	'**********************************************************************************************************
 	public sub class_initialize()
-		set items = server.createObject("scripting.dictionary")
+		set items = ["D"](empty)
 	end sub
 	
 	'**********************************************************************************************************
@@ -37,11 +37,29 @@ class TextTemplateBlock
 	''					Example: <code><% vars = array(var1, value1, var2, value2, ...) % ></code>
 	'**********************************************************************************************************
 	public sub addItem(vars)
+		if not isArray(vars) then lib.throwError("TextTemplateBlock.addItem() requires an array.")
 		if (uBound(vars) + 1) mod 2 <> 0 then
-			lib.error("Vars must be even when using addItem(). Example: (var1, value1, var2, value2, ...)")
+			lib.throwError("TextTemplateBlock.addItem() vars must be even when using addItem(). Example: (var1, value1, var2, value2, ...)")
 		end if
 		items.add lib.getUniqueID(), vars
 	end sub
+	
+	'***********************************************************************************************************
+	'' @SDESCRIPTION: 	Adds all rows of a given recordset to the block. 
+	'' @DESCRIPTION:	- The recordset is traversed from its current position.
+	'' @PARAM: 			dataRS [recordset]: The name of the placeHolders within the block match the recordsets field names.
+	'***********************************************************************************************************
+    public sub addRS(dataRS)
+    	if dataRS.eof then exit sub
+    	while not dataRS.eof
+    		set dc = (new DataContainer)(array())
+    		for each field in dataRS.fields
+    			dc.add(field.name).add(dataRS.fields(field.name))
+    		next
+    		addItem(dc.data)
+    		dataRS.movenext()
+    	wend
+    end sub
 
 end class
 %>

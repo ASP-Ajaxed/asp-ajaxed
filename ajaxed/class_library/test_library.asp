@@ -138,4 +138,46 @@ sub test_7()
 	tf.assertEqual "y", [](array("x", "y"))(1), "Alias [] not working"
 	tf.assertEqual -1, ubound([](empty)), "Alias [] not working"
 end sub
+
+'test ["R"]()
+sub test_8()
+	set rs = ["R"](array( _
+		array("firstname", "lastname", "createdOn", "age"), _
+		array("John", "Doe", dateserial(2000, 1, 1), 80, "column ignored cause the definition does not have it"), _
+		array("Tomy", "Foo", dateserial(1999, 1, 1)) _
+	))
+	tf.assert not rs.eof, "Must be at the beginning"
+	tf.assertEqual 2, rs.recordcount, "wrong recordcount"
+	
+	tf.assertEqual "John", RS("firstname").value, "firstname column wrong value (1st record)"
+	tf.assertEqual "Doe", RS("lastname").value, "lastname column wrong value (1st record)"
+	tf.assertEqual dateserial(2000, 1, 1), RS("createdOn").value, "createdOn column wrong value (1st record)"
+	tf.assertEqual 80, RS("age").value, "age column wrong value (1st record)"
+	
+	rs.movenext()
+	tf.assertEqual "Tomy", RS("firstname").value, "firstname column wrong value (2nd record)"
+	tf.assertEqual "Foo", RS("lastname").value, "lastname column wrong value (2nd record)"
+	tf.assertEqual dateserial(1999, 1, 1), RS("createdOn").value, "createdOn column wrong value (2nd record)"
+	tf.assertEqual null, RS("age").value, "age column wrong value (2nd record) - should have no value as age is not given"
+	
+	rs.movefirst()
+	while not RS.eof
+		tf.assert RS("firstname") <> "", "firstname column missing"
+		tf.assert RS("lastname") <> "", "lastname column missing"
+		tf.assert RS("createdOn") <> "", "createdOn column missing"
+		tf.assert isDate(RS("createdOn")), "createdon column not a date"
+		RS.movenext()
+	wend
+	
+	'new one without records
+	set rs = ["R"](array( _
+		array("firstname", "lastname", "createdOn", "age") _
+	))
+	tf.assert RS.eof, "no records should work"
+	rs.addNew array(0, 1, 2), array("John", "Doe", dateserial(2000, 1, 1))
+	rs.movefirst()
+	tf.assertEqual "John", RS("firstname").value, "firstname column wrong value (custom record)"
+	tf.assertEqual "Doe", RS("lastname").value, "lastname column wrong value (custom record)"
+	tf.assertEqual dateserial(2000, 1, 1), RS("createdOn").value, "createdOn column wrong value (custom record)"
+end sub
 %>

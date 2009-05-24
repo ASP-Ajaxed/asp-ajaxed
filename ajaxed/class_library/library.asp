@@ -46,7 +46,7 @@ class Library
 	end property
 	
 	public property get version ''[string] gets the version of the whole library
-		version = "2.0.2"
+		version = "2.1"
 	end property
 	
 	public property get env ''[string] gets the current environment. <em>LIVE</em> or <em>DEV</em>
@@ -97,7 +97,7 @@ class Library
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	Creates an OPTIONSHASH out of an ARRAY.
-	'' @ALIAS:			["O"]()
+	'' @ALIAS:			["O"](optionNames, actualOptions, defaultValues)
 	'' @DESCRIPTION:	OPTIONSHASH is the term for a hash with name value pairs. Its main idea is to simulate optional parameters
 	''					for VBScript methods and transform an ARRAY into an associative ARRAY (collection of unique keys and a collection of values, where each key is associated with one value).
 	''					With this its possible to extend a methods input without changing the methods signature.
@@ -192,10 +192,10 @@ class Library
 	''					'the same as array("x", "y")
 	''					arr = lib.arrayize(array("x", "y"))
 	''					'or use the shortcut alias
-	''					arr = ["O"](array(1, 2, 3))
+	''					arr = [](array(1, 2, 3))
 	''					% >
 	''					</code>
-	'' @ALIAS:			[]()
+	'' @ALIAS:			[](value)
 	'' @PARAM:			value [variant]: The value which should be ensured to be an ARRAY
 	'' @RETURN:			[array] Resulting ARRAY
 	'**********************************************************************************************************
@@ -404,7 +404,7 @@ class Library
 	
 	'**********************************************************************************************************
 	'' @SDESCRIPTION:	Gets a new dictionary filled with a list of values
-	'' @ALIAS:			["D"]()
+	'' @ALIAS:			["D"](values)
 	'' @PARAM:			values [array]: values to fill into the dictionary. <em>array( array(key, value), arrray(key, value) )</em>.
 	''					if the fields are not arrays (name value pairs) then the key is generated automatically. if no array
 	''					provided then an empty dictionary is returned
@@ -551,6 +551,67 @@ class Library
 	public function iif(condition, expression1, expression2)
     	if condition then iif = expression1 else iif = expression2
 	end function
+	
+	'******************************************************************************************************************
+	'' @SDESCRIPTION: 	Creates a new disconnected recordset with a given set of records.
+	'' @DESCRIPTION:	Some details about the created recordset:
+	''					- Position is before the first record and therefore ready for traversing.
+	''					- It is a disconnected recordset (no database required)
+	''					<code>
+	''					<%
+	''					set users = lib.newRecordset(array( _
+	''					.	array("firstname", "lastname", "createdOn"), _
+	''					.	array("John", "Doe", now()), _
+	''					.	array("Tomy", "Foo", now()) _
+	''					))
+	''					
+	''					'this produces a recordset with columns 
+	''					'"firstname", "lastname" and "createdON"
+	''					'Additionally it contains already two records.
+	''					'and is ready for traversing:
+	''					while not user.eof
+	''					.	lib.logger.debug user("firstname")
+	''					.	users.movenext()
+	''					wend
+	''					
+	''					'Note: set users = lib.newRecordset(...)
+	''					'is the same as set users = ["R"](...)
+	''					% >
+	''					</code>
+	'' @PARAM:			records [array]: An array with records.
+	''					- each field of the array represents a record (represented as an array as well) of the recordset.
+	''					- the first record holds the field names (columns of the recordset) and therefore is not a "real record".
+	'' @ALIAS:			["R"](records)
+	'' @RETURN:			[recordset] always returns a RECORDSET with the position of BOF.
+	'******************************************************************************************************************
+	public function newRecordset(records)
+		if not isArray(records) then throwError("lib.newRecordset() requires an array as input.")
+		if uBound(records) < 0 then throwError("lib.newRecordset() field definition is missing (first field of the array must be an array with the field names of the recordset.)")
+		if uBound(records(0)) < 0 then throwError("lib.newRecordset() requires at least one field definition")
+		
+		set newRecordset = server.createObject("adodb.recordset")
+		hasAtLeastOneRecord = uBound(records) >= 1
+		for each column in records(0)
+			'ado datatypes: http://www.w3schools.com/ADO/ado_datatypes.asp
+			columnDataType = 12 'By default all columns are variant
+			newRecordset.fields.append column, columnDataType
+		next
+		newRecordset.open()
+		
+		'loop through records (if have any) and add them. skip column definition field
+		if not hasAtLeastOneRecord then exit function
+		for i = 1 to uBound(records)
+			newRecordset.addNew()
+			for j = 0 to newRecordset.fields.count - 1
+				if j <= uBound(records(i)) then
+					newRecordset.fields(j) = records(i)(j)
+				end if
+			next
+		next
+		'after adding the cursor stays at the position of the add,
+		'therefore movefirst
+		newRecordset.movefirst()
+	end function
 
 end class
 
@@ -562,5 +623,8 @@ function ["O"](optionNames, actualOptions, defaultValue)
 end function
 function ["D"](values)
 	set ["D"] = lib.newDict(values)
+end function
+function ["R"](records)
+	set ["R"] = lib.newRecordset(records)
 end function
 %>

@@ -131,4 +131,39 @@ sub test_4()
 	tf.assertEqual array("jack"), ((new DataContainer)(array("jack", "JACK", "jack"))).unique(false), "unique() case sensitive is not working"
 	tf.assertEqual array("michaL"), ((new DataContainer)(array("michaL", "michal", "MICHAL"))).unique(false), "unique() case sensitive is not working"
 end sub
+
+'test adding
+sub test_5()
+	set dc = (new DataContainer)(array())
+	dc.add("some value")
+	tf.assertEqual 0, uBound(dc.data), "array length wrong"
+	tf.assertEqual "some value", dc.last, "array field not addedd correctly (first value)"
+	tf.assertEqual "some value", dc.first, "array field not addedd correctly (last value)"
+	
+	'same with a dictionary
+	set dc = (new DataContainer)(["D"](empty))
+	dc.add(array(1, "first"))
+	tf.assertEqual 1, dc.count, "dictionary adding not working (count)"
+	tf.assertEqual "first", dc.data(1), "dictionary add not working (get)"
+	dc.add(array(2, "second"))
+	tf.assertEqual 2, dc.count, "dictionary adding of second value not working (count)"
+	tf.assert dc.contains(2), "dictionary adding not working (contains)"
+	tf.assertEqual "second", dc.data(2), "dictionary get not working (after adding)"
+	dc.add(array(2, "changed"))
+	tf.assertEqual 2, dc.count, "count should stay 2 as key 2 already exists"
+	tf.assertEqual "changed", dc.data(2), "should have updated the item with key 2"
+	
+	'now with a recordset
+	set dc = (new DataContainer)(["R"](array( _
+		array("firstname", "lastname") _
+	)))
+	dc.add(array("John", "Doe"))
+	tf.assertEqual "John", dc.data("firstname").value, "record not added correctly (firstname)"
+	tf.assertEqual "Doe", dc.data("lastname").value, "record not added correctly (lastname)"
+	
+	'chaining
+	set dc = (new DataContainer)(array())
+	dc.add("one").add("two").add("three")
+	tf.assertEqual 3, dc.count, "chaining not working"
+end sub
 %>

@@ -6,27 +6,42 @@
 </tr>
 <tr>
 	<td>Date modified:</td>
-	<td><<< MoDIFIED >>></td>
+	<td><<< MoDIFIED | not used value >>></td>
 </tr>
 <tr>
 	<td>Modified by:</td>
 	<td><<< NAME >>></td>
 </tr>
-<<< BLOCK WEEKDAYS >>>
-<tr valign="top">
-	<td><<< WEEKDAY >>>:</td>
-	<td><<< VALUE >>></td>
+<tr>
+	<td>Modified by: <<< NAME >>></td>
+	<td></td>
 </tr>
+<tr>
+	<td>Not parsed:</td>
+	<td><<<NOTPARSED>>></td>
+</tr>
+<tr>
+	<td>Approver:</td>
+	<td><<< APPROVER | John Doe >>></td>
+</tr>
+
+<<< BLOCK WEEKDAYS >>>
+	<tr valign="top">
+		<td><<< WEEKDAY >>>: <<< VALUE >>></td>
+	</tr>
 <<< ENDBLOCK WEEKDAYS >>>
 
-<<< BLOCK TEST >>>
-<tr valign="top">
-	<td><<< WEEKDAY >>>:</td>
-	<td><<< VALUE >>></td>
-</tr>
-<<< ENDBLOCK TEST >>>
+<<< BLOCK CLEANEDOUT >>>
+	<!-- this block will be cleaned out, as its not used -->
+	<tr valign="middle">
+		<td><<< WEEKDAY >>>:</td>
+		<td><<< VALUE >>></td>
+	</tr>
+<<< ENDBLOCK CLEANEDOUT >>>
+
 </table>
 
 <<< BLOCK WEEKDAYS >>>
-	<strong><<< WEEKDAY >>></strong> (<<< VALUE >>>)&nbsp;
+	<h1><<< WEEKDAY | none >>></h1>
+	<strong><<< WEEKDAY >>></strong> (<<< VALUE | not used value >>>)&nbsp;
 <<< ENDBLOCK WEEKDAYS >>>
