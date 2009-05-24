@@ -43,7 +43,7 @@ sub main() %>
 			<div class="content">
 				&nbsp;&nbsp;
 				version <strong><%= version %></strong> is available.
-				<a href="http://www.webdevbros.net/ajaxed"><strong>Update now!</strong></a>
+				<a href="http://www.ajaxed.org/"><strong>Update now!</strong></a>
 				&nbsp;&nbsp;
 			</div>
 			<b class="bottom"><b><b><b></b></b></b></b>
