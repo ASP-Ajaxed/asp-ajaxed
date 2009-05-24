@@ -20,7 +20,6 @@ set xml = server.createObject("MSXML2.DOMDocument.3.0")
 set page = new AjaxedPage
 with page
 	.plain = true
-	.onlyDev = true
 	.draw()
 end with
 set page = nothing

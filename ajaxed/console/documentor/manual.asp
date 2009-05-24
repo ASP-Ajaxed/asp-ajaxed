@@ -11,7 +11,6 @@
 set page = new AjaxedPage
 with page
 	.title = "ASP Documentor Reference"
-	.onlyDev = true
 	.defaultStructure = true
 	.draw()
 end with
