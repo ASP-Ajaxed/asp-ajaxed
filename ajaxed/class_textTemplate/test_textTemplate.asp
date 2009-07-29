@@ -2,6 +2,7 @@
 <!--#include file="textTemplate.asp"-->
 <%
 set tf = new TestFixture
+tf.debug = true
 tf.run()
 
 sub test_1()
@@ -73,5 +74,14 @@ sub test_2()
 	parsedTemplate = t.getAllButFirstLine()
 	tf.assertMatch "<td>Monday: first</td>", parsedTemplate, "block not parsed with recordset"
 	tf.assertMatch "<td>Sunday: last</td>", parsedTemplate, "block not parsed with recordset 2"
+end sub
+
+sub test_3()
+   set t = new TextTemplate
+   set b = new TextTemplateBlock
+   b.additem Array("item", "first")
+   t.add "MYBLOCK", b
+   b.additem Array("item", "another")
+   t.add "MYBLOCK", b
 end sub
 %>
