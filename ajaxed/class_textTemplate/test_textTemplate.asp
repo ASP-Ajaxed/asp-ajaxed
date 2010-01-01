@@ -1,8 +1,8 @@
-﻿<!--#include file="../class_testFixture/testFixture.asp"-->
+﻿<% on error resume next %>
+<!--#include file="../class_testFixture/testFixture.asp"-->
 <!--#include file="textTemplate.asp"-->
 <%
 set tf = new TestFixture
-tf.debug = true
 tf.run()
 
 sub test_1()
@@ -76,12 +76,44 @@ sub test_2()
 	tf.assertMatch "<td>Sunday: last</td>", parsedTemplate, "block not parsed with recordset 2"
 end sub
 
+'test invalid filename and empty content
 sub test_3()
-   set t = new TextTemplate
-   set b = new TextTemplateBlock
-   b.additem Array("item", "first")
-   t.add "MYBLOCK", b
-   b.additem Array("item", "another")
-   t.add "MYBLOCK", b
+    set t = new TextTemplate
+    t.fileName = "invalid.template"
+
+    'invalid filename and empty content
+    on error resume next
+    t.returnString()
+
+    if Err.number = 0 then
+        tf.fail("TextTemplate should throw an exception when filename is invalid and content is null")
+    end if
+    on error goto 0
+    
+    t.content = "Now, content have some text"
+    tf.assertMatch "Now, content have some text", t.returnString(), "Template content not parsed correctly"
+end sub
+
+'test default parameter value <<< TAG | default value >>>
+sub test_4()
+    set t = new TextTemplate
+    t.content = "Test <<< TEST1 | defaultvalue >>>"
+    
+    tf.assertMatch "Test defaultvalue", t.returnString(), "Template content not parsed correctly" 
+    t.add "TEST1", ""
+    tf.assertMatch "Test ", t.returnString(), "Template content not parsed correctly" 
+    
+    t.add "TEST1", "value"
+    tf.assertMatch "Test value", t.returnString(), "Template content not parsed correctly" 
+    
+    t.content = "<<< TAG1 | defaultvalue1 >>> and <<< TAG2 | defaultvalue2 >>>"    
+    
+    tf.assertMatch "defaultvalue1 and defaultvalue2", t.returnString(), "Template content not parsed correctly"
+    
+    t.add "TAG1", "value1"
+    tf.assertMatch "value1 and defaultvalue2", t.returnString(), "Template content not parsed correctly"
+    t.add "TAG2", "value2"
+    tf.assertMatch "value1 and value2", t.returnString(), "Template content not parsed correctly"
 end sub
 %>
+

@@ -111,7 +111,7 @@ class TextTemplate
 		end if
 		
 		'we need to update (remove and add again) the value if the name already exists
-		if container.exists(var) then container.remove(var)
+		if container.exists(var) then vars.remove(var)
 		container.add var, varValue
 	end sub
 	
@@ -234,7 +234,7 @@ class TextTemplate
 	'* replaces a placeholder in a given string by a value. so from <<< NAME >>> will be made e.g. "Michal"
 	'******************************************************************************************************************
 	private function replacePlaceHolders(input, varName, varValue)
-	    regex.pattern = placeHolderBegin & varName & "(" & defaultValueSeparator & "(.+))?" & placeHolderEnd
+	    regex.pattern = placeHolderBegin & varName & "(" & defaultValueSeparator & "(.+?))?" & placeHolderEnd
 	    'replace the placeholder with the value (if available) otherwise replace it with the default value ($2)
 	    replacePlaceHolders = regex.replace(input & "", str.parse(varValue, "$2") & "")
 	end function
@@ -273,8 +273,9 @@ class TextTemplate
 				myfile.close()
 				set myfile = nothing
 			end if
+        else
+            lib.throwError "Template file do not exists: " & fileToOpen
 		end if
 	end function
-
 end class
 %>
