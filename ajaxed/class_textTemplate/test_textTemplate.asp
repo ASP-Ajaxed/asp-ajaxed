@@ -115,5 +115,17 @@ sub test_4()
     t.add "TAG2", "value2"
     tf.assertMatch "value1 and value2", t.returnString(), "Template content not parsed correctly"
 end sub
+
+' Regression test to issue #15
+' Replacing a block, we get an exception! It's wrong
+sub test_5()
+	set t = new TextTemplate
+	set b = new TextTemplateBlock
+	b.additem Array("item", "first")
+	t.add "MYBLOCK", b
+	b.additem Array("item", "another")
+	t.add "MYBLOCK", b
+    t.add "MYBLOCK", "value"
+end sub
 %>
 

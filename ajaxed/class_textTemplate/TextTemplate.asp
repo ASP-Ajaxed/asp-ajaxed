@@ -111,7 +111,7 @@ class TextTemplate
 		end if
 		
 		'we need to update (remove and add again) the value if the name already exists
-		if container.exists(var) then vars.remove(var)
+		if container.exists(var) then container.remove(var)
 		container.add var, varValue
 	end sub
 	
