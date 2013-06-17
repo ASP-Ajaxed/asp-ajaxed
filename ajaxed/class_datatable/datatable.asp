@@ -286,10 +286,16 @@ class Datatable
 			if callback and RF("sort") <> "" then sort = RF("sort")
 			setState "sort", sort
 		end if
+		If UCase(Left(sql,4)) = "EXEC" Then
+			'Is likely a stored proceedure, or some other T-SQL command.
+			Set data = db.getSproc(sql, empty)
+			If sort <> "" Then data.Sort = "" & sort & ""
+		Else
 		'now execute the final sql. it is actually a subselect
 		'so all columns are passed through and can be accessed by filters, etc.
 		sqlFinal = "SELECT * FROM (" & sql & ") datatable" & lib.iif(sort <> "", " ORDER BY " & db.SqlSafe(sort), "")
 		set data = db.getUnlockedRS(sqlFinal, empty)
+		End If
 		totalRecords = data.recordCount
 		autoGenerateColumns()
 		
@@ -378,8 +384,9 @@ class Datatable
 		'NOTE: the beginning of the table is being sent directly to the response
 		'so its possible to use customControls without returning the HTML as a string.
 		'afterwards stringbuilder is used. check drawHeader() for more details
+		str.write("<thead>")
+		If Not isEmpty(customControls) Or fullsearch Then 
 		with str
-			.write("<thead>")
 			.write("<tr class=""axdDTControlsRow"">")
 			.write("<td colspan=" & tableColumnsCount & ">")
 			.write("<div class=""axdDTCustomControls"">")
@@ -398,7 +405,8 @@ class Datatable
 			.write("</td>")
 			.write("</tr>")
 		end with
-		output("<tr>")
+		End If
+		output("<tr class=""axdDTHeaderRow"">")
 		row.drawSelectionColumn true, output
 		for each c in columns
 			output(c.draw(output))
