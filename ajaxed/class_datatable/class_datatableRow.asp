@@ -51,7 +51,9 @@ class DatatableRow
 	
 	public property get PK ''[int] gets the primary key value of the rows record
 		'TODO: check if the PK is a number and throw a nice understandable error
-		PK = cLng(dt.data.fields(dt.pkColumn))
+		'PK = cLng(dt.data.fields(dt.pkColumn)) 
+		' ^ Commented out while troubleshooting sprocs - fixed, but wondering what the side-effects might be...
+		PK = dt.data.fields(dt.pkColumn)
 	end property
 	
 	'**********************************************************************************************************

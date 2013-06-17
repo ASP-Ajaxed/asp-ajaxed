@@ -166,7 +166,7 @@ class Database
 		elseif dbType = "postgresql" then
         	insert = getScalar(str.format("SELECT currval('{0}_id_seq');", tablename), 0)
 		else
-			insert = aRS("id")
+			insert = aRS(0) 'Was aRS("id"), want to reference the first field instead of making all my ID's "id"
 		end if
 		aRS.close()
 		set aRS = nothing
@@ -325,6 +325,30 @@ class Database
 			errdesc = err.description
 			on error goto 0
 			lib.throwError(array(101, "Database.getRS()", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
+		end if
+		on error goto 0
+		p_numberOfDBAccess = p_numberOfDBAccess + 1
+	end function
+	
+	'******************************************************************************************************************
+	'' @DESCRIPTION: 	Gets an UNLOCKED recordset from the currently opened database, using a stored procedure
+	'' @PARAM:			sql [string]: The stored procedure to execute
+	'' @PARAM:			params [array], [string]: any paramaters that need to be passed to the stored procedure
+	'' @RETURN:			[recordset] recordset with data from the stored procedure
+	'******************************************************************************************************************
+	public function getSproc(byVal sql, params)
+		''TODO: Search doesn't work quite right... it does the search, but doesn't highlight or go to anything
+		sql = parametrizeSQL(sql, params, "Database.getSproc()")
+		debug(sql)
+		on error resume next
+		set getSproc = server.createObject("ADODB.RecordSet")
+		getSproc.cursorLocation = adUseClient '3
+		getSproc.cursorType = 3
+		getSproc.open sql, connection
+		if err <> 0 then
+			errdesc = err.description
+			on error goto 0
+			lib.throwError(array(101, "Database.getSproc()", "Could not execute '" & sql & "'. Reason: " & errdesc, sql))
 		end if
 		on error goto 0
 		p_numberOfDBAccess = p_numberOfDBAccess + 1
