@@ -1,0 +1,36 @@
+- DataTable
+	- grouping ermoeglichen
+	- quersummen?
+	- wie bei google adsense
+- XMLRPC
+	- POST is eh klar
+	- bei GET kann man eine description liefern siehe wie das eine .net component macht http://www.xml-rpc.net/
+		http://www.cookcomputing.com/xmlrpcsamples/math.rem
+	- documentation sollte erstellt werden
+	- logging
+- Dropdown
+	- grouping des recordset ... mit optselect oder so &auml;hnlich
+- alle config vars listen (AJAXED_)
+- url erkennen in der doku (lange in der mitte k&uuml;rzen)
+- nachdenken wie man die merhzahl ins str.format() einbringen koennte
+
+
+====================================================================================
+
+translate.google.com says:
+
+- DataTable
+	- Allow grouping
+	- Cross-hum?
+	- As with google adsense
+- XMLRPC
+	- POST is clear anyway
+	- GET can provide a description see how that makes a net component http://www.xml-rpc.net/.
+		http://www.cookcomputing.com/xmlrpcsamples/math.rem
+	- Documentation should be created
+	- logging
+- dropdown
+	- Grouping of recordset ... with optselect or something like that
+- All config vars list (AJAXED_)
+- Recognize url in the documentary (long cut in the middle)
+- Think how one could bring into the merhzahl str.format ()
