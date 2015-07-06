@@ -8,7 +8,7 @@
 ''					a third party component (automatically detected).
 ''					- Create a new instance, set the properties and send or use <em>newWith(template)</em> and create a new instance with a template which will set the body and the subject of the email automatically from the <em>TextTemplate</em>
 ''					- You should send an email whereever you want to send an email in your application despite if you dont know if an email component will be installed. 
-'' @COMPATIBLE:		Dimac JMail.Message, ASPEmail Persists.MailSender, Microsoft cdo.message
+'' @COMPATIBLE:		Dimac JMail.Message, ASPEmail Persits.MailSender, Microsoft cdo.message
 '' @VERSION:		0.9
 
 '**************************************************************************************************************
@@ -74,7 +74,7 @@ class Email
 	
 	public property let html(val) ''[bool] sets the value indicating if the email body should be interpreted as html
 		p_html = val
-		if component = "persists.mailsender" then
+		if component = "persits.mailsender" then
 			mailer.isHtml = p_html
 		else
 			exit property
@@ -260,7 +260,7 @@ class Email
 		if sendersEmail = "" then p_errorMsg = "no sender email given"
 		if isEmpty(p_errorMsg) then
 			send = true
-			if component = "persists.mailsender" then
+			if component = "persits.mailsender" then
 				if dispatch then send = sendWithAspEmail()
 			elseif component = "jmail.message" then
 				if dispatch then send = sendWithJmail()
