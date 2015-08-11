@@ -312,6 +312,9 @@ class Email
 	'******************************************************************************************************************
 	private function sendWithAspEmail()
 		mailer.charset = "utf-8"
+		if mailServer <> "" then
+			mailer.Host = mailServer
+		end if
 		on error resume next
 			sendWithAspEmail = mailer.send()
 			if err <> 0 then
